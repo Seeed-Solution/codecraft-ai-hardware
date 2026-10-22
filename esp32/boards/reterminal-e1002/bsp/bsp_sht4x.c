@@ -19,6 +19,7 @@
  * plumbing are dropped in favour of a plain single-shot API.
  */
 #include "bsp_sht4x.h"
+#include "bsp_i2c0_internal.h"
 #include "bsp_pins.h"
 
 #include <math.h>
@@ -52,18 +53,9 @@ static uint8_t sht4x_crc(const uint8_t *data, size_t len)
 
 esp_err_t bsp_sht4x_init(void)
 {
-    i2c_master_bus_config_t bus_cfg = {
-        .i2c_port = -1,
-        .sda_io_num = BSP_PIN_I2C0_SDA,
-        .scl_io_num = BSP_PIN_I2C0_SCL,
-        .clk_source = I2C_CLK_SRC_DEFAULT,
-        .glitch_ignore_cnt = 7,
-        .flags.enable_internal_pullup = true,
-    };
-    esp_err_t err = i2c_new_master_bus(&bus_cfg, &s_bus);
+    esp_err_t err = bsp_i2c0_bus_get(&s_bus);
     if (err != ESP_OK) return err;
     if (i2c_master_probe(s_bus, BSP_I2C_ADDR_SHT4X, 100) != ESP_OK) {
-        i2c_del_master_bus(s_bus);
         return ESP_ERR_NOT_FOUND;
     }
     i2c_device_config_t dev_cfg = {
