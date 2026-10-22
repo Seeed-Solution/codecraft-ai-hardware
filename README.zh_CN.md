@@ -34,14 +34,15 @@
 
 | 板卡 | 平台 | 状态 |
 |---|---|---|
-| SenseCAP Watcher | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
-| SenseCAP Indicator | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
-| reTerminal E1001 | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
-| reTerminal E1002 | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
+| SenseCAP Watcher | ESP32-S3 | BSP 功能完整（摄像头、显示、触摸、音频、旋钮、电池、microSD）+ 8 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
+| SenseCAP Indicator | ESP32-S3 | BSP（RGB 显示、IO 扩展、按键、触摸）+ 示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
+| reTerminal E1001 | ESP32-S3 | BSP 功能完整（墨水屏、按键、LED、SHT4x、电池、RTC、充电器、蜂鸣器、PDM 麦克风、microSD）+ 4 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
+| reTerminal E1002 | ESP32-S3 | 与 E1001 相同 BSP，面板换为 Spectra 6 彩色；构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reTerminal (CM4) | Linux | 外设 overlay + 演示（按键/LED/蜂鸣器/传感器/RTC）；待上机验证 |
 
 能力矩阵和抽取来源见 [docs/inventory.md](docs/inventory.md)，
+上机验证清单见 [docs/on-device-validation.md](docs/on-device-validation.md)，
 每块板的权威上游参考见 [docs/vendor-sources.md](docs/vendor-sources.md)。
 
 ## 验证门禁

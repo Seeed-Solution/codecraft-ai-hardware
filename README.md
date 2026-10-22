@@ -37,10 +37,10 @@ system — firmware built from this repository runs entirely on the device.
 
 | Board | Platform | Status |
 |---|---|---|
-| SenseCAP Watcher | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
-| SenseCAP Indicator | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
-| reTerminal E1001 | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
-| reTerminal E1002 | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
+| SenseCAP Watcher | ESP32-S3 | BSP feature-complete (camera, display, touch, audio, knob, battery, microSD) + 8 examples build-verified (IDF v6.0.2); on-device test pending |
+| SenseCAP Indicator | ESP32-S3 | BSP (RGB display, IO expander, button, touch) + examples build-verified (IDF v6.0.2); on-device test pending |
+| reTerminal E1001 | ESP32-S3 | BSP feature-complete (EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD) + 4 examples build-verified (IDF v6.0.2); on-device test pending |
+| reTerminal E1002 | ESP32-S3 | Same BSP as E1001 with the Spectra 6 color panel; build-verified (IDF v6.0.2); on-device test pending |
 | reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 examples build-verified (IDF v6.0.2); on-device test pending |
 | reTerminal (CM4) | Linux | Peripherals overlay + demos (buttons/LEDs/buzzer/sensors/RTC); hardware verification pending |
 
