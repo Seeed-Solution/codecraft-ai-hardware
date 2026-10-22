@@ -1,8 +1,8 @@
 # SenseCAP Watcher
 
-Status: **Phase 4** — camera, display, touch, audio, battery and knob
-landed and are build-verified. The SD card is still pending; pin facts are
-already in `bsp/include/bsp_pins.h`.
+Status: **feature-complete (build-verified)** — camera, display, touch,
+audio, battery, knob and SD card all landed. Remaining: on-hardware
+verification (builds pass; electrical behavior unverified).
 
 Audio note: esp_codec_dev is pinned at 1.6.2 (needs the IDF v6
 `i2c_master` bus_handle support); the vendor-pinned 1.2.0 only drives the
@@ -52,6 +52,9 @@ sensecap-watcher board is a second reference.
   sweep; replays every 5 s.
 - `mic_level` — RMS level meter from the ES7243/ES7243E mic ADC (variant
   auto-detected on I2C0), with a dBFS bar graph.
+- `sdcard_test` — mounts the microSD slot (SDSPI, second device on the
+  shared SPI2 bus next to the camera; CS=GPIO46, detect on expander pin 4,
+  rail on pin 8), writes and reads back a file, unmounts.
 
 Build (ESP-IDF v6.0.2):
 
@@ -65,10 +68,7 @@ idf.py build flash monitor
 > the Watcher's `nvsfactory` region (0x9000-0x3B000); back it up first if you
 > want to restore it later.
 
-## Remaining extraction plan
+## Remaining work
 
-1. SD card: SPI2 device 2 (CS=GPIO46, detect on expander pin 4, rail on pin
-   8), sharing the camera's bus — the camera driver tolerates an
-   already-initialized bus.
-2. On-hardware verification of everything above (builds pass; electrical
-   behavior unverified).
+1. On-hardware verification of every peripheral above (builds pass;
+   electrical behavior unverified).
