@@ -1,8 +1,8 @@
 # SenseCAP Watcher
 
-Status: **Phase 2** — camera, display, battery and knob landed and are
-build-verified. Touch, audio (ES8311 + ES7243) and SD card are still pending;
-pin facts for all of them are already in `bsp/include/bsp_pins.h`.
+Status: **Phase 3** — camera, display, touch, battery and knob landed and
+are build-verified. Audio (ES8311 + ES7243) and the SD card are still
+pending; pin facts for both are already in `bsp/include/bsp_pins.h`.
 
 ## Verified facts
 
@@ -38,6 +38,9 @@ sensecap-watcher board is a second reference.
   second (gated 62k/20k divider onto ADC1 channel 2).
 - `knob_input` — quadrature wheel via PCNT (GPIO41/42) and the push on
   expander pin 3 (active low).
+- `touch_read` — polls the SPD2010 touch controller (I2C1, SDA=GPIO39,
+  SCL=GPIO38) and logs press coordinates; the interrupt line is expander
+  pin 5, not a real GPIO, so the driver polls.
 
 Build (ESP-IDF v6.0.2):
 
@@ -53,12 +56,10 @@ idf.py build flash monitor
 
 ## Remaining extraction plan
 
-1. Touch: SPD2010 touch controller on I2C1 (SDA=GPIO39, SCL=GPIO38, INT on
-   expander pin 5) — vendor uses espressif/esp_lcd_touch_spd2010 0.0.1.
-2. Audio: ES8311 DAC @0x30 + ES7243 ADC @0x13/0x14 on I2C0, I2S0 at 16 kHz /
+1. Audio: ES8311 DAC @0x30 + ES7243 ADC @0x13/0x14 on I2C0, I2S0 at 16 kHz /
    16-bit mono (vendor DRV_AUDIO_* facts).
-3. SD card: SPI2 device 2 (CS=GPIO46, detect on expander pin 4, rail on pin
+2. SD card: SPI2 device 2 (CS=GPIO46, detect on expander pin 4, rail on pin
    8), sharing the camera's bus — the camera driver tolerates an
    already-initialized bus.
-4. On-hardware verification of everything above (builds pass; electrical
+3. On-hardware verification of everything above (builds pass; electrical
    behavior unverified).
