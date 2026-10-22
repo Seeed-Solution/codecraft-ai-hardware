@@ -62,8 +62,13 @@
 #define BSP_EXP_IO_RP2040_RESET     8  /* RP2040 co-processor reset */
 #define BSP_EXP_IO_BMP_PWR         10  /* BMP3xx pressure sensor power */
 
-/* ---- Touch (I2C; vendor probes FT6336U @0x48/0x38, GT911 @0x5D) ---- */
+/* ---- Touch (I2C, on the shared board bus) ----
+ * Vendor probe order (indev_tp.c): FT6336U @0x48 (GX screen), @0x38,
+ * then GT911 @0x5D or @0x14. Reset pulse on expander IO7: low 5 ms, high. */
 #define BSP_I2C_ADDR_TOUCH_FT6x36   0x48
+#define BSP_I2C_ADDR_TOUCH_FT6x36_ALT 0x38
+#define BSP_I2C_ADDR_TOUCH_GT911    0x5D
+#define BSP_I2C_ADDR_TOUCH_GT911_ALT 0x14
 
 /* ---- Panel geometry / timing (GX screen, vendor Kconfig defaults) ---- */
 #define BSP_LCD_H_RES             480

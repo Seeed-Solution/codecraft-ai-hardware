@@ -6,6 +6,7 @@
 
 #include <stdbool.h>
 #include "esp_err.h"
+#include "driver/i2c_master.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,6 +24,11 @@ esp_err_t bsp_io_expander_set_level(int pin, int level);
 
 /* pin: 0-15. Reads the input register regardless of direction. */
 esp_err_t bsp_io_expander_get_level(int pin, int *level);
+
+/* Returns the shared board I2C bus (SDA=39, SCL=40, 100 kHz) created by
+ * bsp_io_expander_init(). Other on-board I2C devices (touch, sensors)
+ * attach to this bus. Calls bsp_io_expander_init() if needed. */
+esp_err_t bsp_i2c_get_bus(i2c_master_bus_handle_t *out_bus);
 
 #ifdef __cplusplus
 }

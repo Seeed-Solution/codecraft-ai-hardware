@@ -85,6 +85,14 @@ esp_err_t bsp_io_expander_init(void)
     return ESP_OK;
 }
 
+esp_err_t bsp_i2c_get_bus(i2c_master_bus_handle_t *out_bus)
+{
+    ESP_RETURN_ON_FALSE(out_bus, ESP_ERR_INVALID_ARG, TAG, "out_bus");
+    ESP_RETURN_ON_ERROR(bsp_io_expander_init(), TAG, "init");
+    *out_bus = s_bus;
+    return ESP_OK;
+}
+
 esp_err_t bsp_io_expander_set_direction(int pin, int output)
 {
     ESP_RETURN_ON_FALSE(s_dev && s_shadow_valid, ESP_ERR_INVALID_STATE, TAG,
