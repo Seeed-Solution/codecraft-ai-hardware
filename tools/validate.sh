@@ -68,12 +68,18 @@ check_esp32_board() {
   echo "== esp32 board: $board =="
   [[ -d "$dir" ]] || fail "unknown ESP32 board '$board' (have: ${ESP32_BOARDS[*]:-none})"
 
-  if [[ ! -f "$dir/CMakeLists.txt" ]]; then
-    note "$board has no firmware project yet — build skipped (not a failure)"
+  local examples=()
+  while IFS= read -r d; do examples+=("$d"); done < <(find "$dir/examples" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
+  if [[ ${#examples[@]} -eq 0 ]]; then
+    note "$board has no firmware examples yet — build skipped (not a failure)"
     return 0
   fi
   command -v idf.py >/dev/null 2>&1 || fail "ESP-IDF not activated; see $dir/README.md for the required version"
-  ( cd "$dir" && idf.py build )
+  for ex in "${examples[@]}"; do
+    [[ -f "$ex/CMakeLists.txt" ]] || continue
+    echo "  building $ex"
+    ( cd "$ex" && idf.py build )
+  done
   echo "$board build: PASS"
 }
 

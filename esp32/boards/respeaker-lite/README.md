@@ -1,6 +1,6 @@
 # Seeed reSpeaker Lite (XIAO ESP32-S3)
 
-Status: **Phase 0** — facts verified, BSP extraction pending.
+Status: **BSP landed** — `bsp/` (audio/LED/button) and three examples build clean on ESP-IDF v6.0.2 (muse doc pins v6.0.1 as the reference version). On-device verification not yet performed.
 
 ## Verified facts
 
@@ -23,8 +23,26 @@ Status: **Phase 0** — facts verified, BSP extraction pending.
 [respeaker/reSpeaker_Lite](https://github.com/respeaker/reSpeaker_Lite):
 `doc/images/pinout.png`, I2C examples, `xmos_firmwares/`.
 
-## Extraction plan
+## Layout
 
-1. `bsp/include/bsp_pins.h` — pin map from the vendor pinout + muse sdkconfig.
-2. `bsp/` — I2S audio in (16 kHz), RGB LED, button.
-3. `examples/` — `audio_meter`, `button_led`, `wifi_scan`.
+- `bsp/include/bsp_pins.h` — authoritative pin map with per-fact citations.
+- `bsp/` — `bsp_audio` (XMOS + AIC3204 over I2C, 16 kHz I2S slave),
+  `bsp_led` (WS2812), `bsp_button` (BOOT with debounce task).
+- `examples/` — `audio_meter`, `button_led`, `wifi_scan`. Each is a
+  standalone IDF project sharing the board `sdkconfig.defaults` via symlink.
+
+## Pin map (verified, see `bsp/include/bsp_pins.h` for citations)
+
+| Function | GPIO | XIAO pin |
+|---|---|---|
+| WS2812 data | 1 | D0 |
+| XMOS reset | 2 | D1 |
+| I2C SDA | 5 | D4 |
+| I2C SCL | 6 | D5 |
+| I2S WS | 7 | D8 |
+| I2S BCLK | 8 | D9 |
+| I2S DOUT (to AIC3204 DAC) | 43 | D6 |
+| I2S DIN (from XMOS mic) | 44 | D7 |
+| BOOT button (active low) | 0 | — |
+
+I2C devices: XMOS `0x42`, AIC3204 codec `0x18`.

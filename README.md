@@ -41,7 +41,7 @@ system — firmware built from this repository runs entirely on the device.
 | SenseCAP Indicator | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
 | reTerminal E1001 | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
 | reTerminal E1002 | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
-| reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | Phase 0: facts gathered, BSP extraction pending |
+| reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 examples build-verified (IDF v6.0.2); on-device test pending |
 | reTerminal (CM4) | Linux | Planned |
 
 See [docs/inventory.md](docs/inventory.md) for the capability matrix and

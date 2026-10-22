@@ -38,7 +38,7 @@
 | SenseCAP Indicator | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
 | reTerminal E1001 | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
 | reTerminal E1002 | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
-| reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | Phase 0：事实已收集，BSP 抽取待进行 |
+| reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reTerminal (CM4) | Linux | 计划中 |
 
 能力矩阵和抽取来源见 [docs/inventory.md](docs/inventory.md)，
