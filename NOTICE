@@ -16,6 +16,12 @@ were derived from the following open source projects:
   required agent skills, validation gate structure, and bilingual
   documentation convention.
 
+- Seeed-Solution/SenseCAP_Indicator_ESP32 (Apache License 2.0)
+  https://github.com/Seeed-Solution/SenseCAP_Indicator_ESP32
+  Used for: SenseCAP Indicator pin map, TCA9535 expander assignments, and
+  the ST7701S register init sequence (transcribed as a data table in
+  esp32/boards/sensecap-indicator/bsp/bsp_display.c).
+
 - Seeed Studio vendor repositories (see docs/vendor-sources.md for the
   per-board authoritative source and its license).
 

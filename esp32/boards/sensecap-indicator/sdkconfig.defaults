@@ -1,0 +1,15 @@
+# SenseCAP Indicator (D1/D1S/D1Pro/D1L): 8 MB flash, 8 MB octal PSRAM.
+# Field-verified memory config: Meta muse-gadget-sdk
+# esp32/devices/sdkconfig.sensecap-indicator (Apache 2.0) — QIO flash @80 MHz,
+# octal PSRAM @80 MHz. (Vendor SenseCAP_Indicator_ESP32 runs 120 MHz with an
+# IDF 5.x patch; 80 MHz is the conservative, field-tested option.)
+CONFIG_IDF_TARGET="esp32s3"
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
