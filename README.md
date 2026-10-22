@@ -45,7 +45,9 @@ system — firmware built from this repository runs entirely on the device.
 | reTerminal (CM4) | Linux | Peripherals overlay + demos (buttons/LEDs/buzzer/sensors/RTC); hardware verification pending |
 
 See [docs/inventory.md](docs/inventory.md) for the capability matrix and
-extraction sources, and [docs/vendor-sources.md](docs/vendor-sources.md) for
+extraction sources, [docs/on-device-validation.md](docs/on-device-validation.md)
+for the field-test checklist, and
+[docs/vendor-sources.md](docs/vendor-sources.md) for
 the authoritative upstream reference for every board.
 
 ## Validation gate
