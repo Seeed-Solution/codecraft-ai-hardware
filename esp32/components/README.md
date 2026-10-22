@@ -3,8 +3,9 @@
 Components placed here must be used by at least two boards. Single-board
 drivers belong in the board's own `bsp/` directory.
 
-Planned:
+Landed:
 
-- `sscma_client/` — Himax camera client for SenseCAP Watcher, extracted from
-  muse-gadget-sdk `esp32/components/camera/` (Apache 2.0, Meta copyright
-  headers retained). Shared if a second SSCMA board lands.
+- `sscma_client/` — generic still-camera abstraction plus the SSCMA-over-SPI
+  backend (Seeed Himax WiseEye2 on the SenseCAP Watcher; also fits a Grove
+  Vision AI V2). Extracted from muse-gadget-sdk `esp32/components/camera/`
+  (Apache 2.0, Meta copyright headers retained, modifications marked).
