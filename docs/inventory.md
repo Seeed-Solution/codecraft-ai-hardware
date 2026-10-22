@@ -37,19 +37,28 @@ relative to the muse-gadget-sdk repository (Apache 2.0, Meta Platforms), and
 
 | Capability | Fact | Source | Extraction status |
 |---|---|---|---|
-| SoC / memory | ESP32-S3, 16 MB flash (DIO 80 MHz), octal PSRAM 80 MHz | `muse:esp32/devices/sdkconfig.reterminal-e1001` | confirmed |
-| Display | UC8179-driven mono e-ink | same (`LED_BACKEND_RETERMINAL_UC8179`) | pending (waveform + refresh driver) |
-| Input | green button, GPIO 3 | same | confirmed |
-| IDF version | verify | vendor sources | verify |
+| SoC / memory | ESP32-S3R8 (8 MB octal PSRAM), **32 MB flash** (W25Q256JV, DIO 80 MHz). muse configures 16 MB; the schematic + Zephyr dts confirm 32 MB | vendor schematic E1001 V1.2 + `zephyr:boards/seeed/reterminal_e1001` + `muse:esp32/devices/sdkconfig.reterminal-e1001` | confirmed |
+| Display | UC8179 800x480 mono, SPI2 (SCLK=7, MOSI=9, CS=10, DC=11, RST=12, BUSY=13 low=busy), 10 MHz; 1 bpp MSB-leftmost 1=white; full + fast refresh, no partial waveform | `muse:esp32/main/epd_uc8179.c` + Zephyr dts | **extracted** (`bsp_epd`) |
+| Input | three top keys: green/Refresh=GPIO 3, Left=4, Right=5; active low with internal pull-up | Zephyr dts + muse sdkconfig | **extracted** (`bsp_button`) |
+| Status LED | green, GPIO 6, active low | Zephyr dts | **extracted** (`bsp_led`) |
+| Sensors | SHT4x @0x44 on I2C0 (SDA=19, SCL=20) | `muse:esp32/main/reterminal_sht4x.c` + Zephyr dts | **extracted** (`bsp_sht4x`) |
+| Battery | ADC1_CH0 (GPIO 1), 10k/10k divider (VBAT = 2x ADC), enable GPIO 21 active high, 10 ms settle | Zephyr dts | **extracted** (`bsp_battery`) |
+| RTC | PCF8563 @0x51 on I2C0 | Zephyr dts | pending (pins documented in `bsp_pins.h`) |
+| Charger | SY6974B @0x6B on I2C1 (SDA=39, SCL=40) | Zephyr dts | pending (pins documented) |
+| Audio / SD / buzzer | PDM mic CLK=42 DATA=41 EN=38; buzzer LEDC GPIO 45; microSD CS=14 DET=15 EN=16 | Zephyr dts + schematic | pending (pins documented) |
+| IDF version | BSP + examples build clean on ESP-IDF v6.0.2 | local build | confirmed |
 
 ### reTerminal E1002 (7.3" Spectra 6 color e-ink)
 
+Same mainboard as the E1001 (same pin map, 32 MB flash, SHT4x, RTC, charger,
+battery sense, keys, LED); only the panel differs.
+
 | Capability | Fact | Source | Extraction status |
 |---|---|---|---|
-| SoC / memory | ESP32-S3, 16 MB flash (DIO 80 MHz), octal PSRAM 80 MHz | `muse:esp32/devices/sdkconfig.reterminal-e1002` | confirmed |
-| Display | Spectra 6 color e-ink | same (`LED_BACKEND_RETERMINAL_SPECTRA6`) | pending (color waveform handling) |
-| Input | green button, GPIO 3 | same | confirmed |
-| IDF version | verify | vendor sources | verify |
+| SoC / memory | as E1001: ESP32-S3R8, 32 MB flash | as E1001 | confirmed |
+| Display | Spectra 6 (GDEP073E01) 800x480 six-color; 4 bpp, 2 px/byte, left pixel in high nibble; ink codes 0 black, 1 white, 2 yellow, 3 red, 4 blue, 5 green; full refresh only (~30 s, busy timeout 60 s) | `muse:esp32/main/epd_spectra6.c` + Zephyr dts color palette | **extracted** (`bsp_epd`) |
+| Input / LED / sensors / battery / RTC / charger | identical to E1001 (shared `bsp_pins.h` values) | as E1001 | **extracted** (same drivers copied) |
+| IDF version | BSP + examples build clean on ESP-IDF v6.0.2 | local build | confirmed |
 
 ### Seeed reSpeaker Lite (XIAO ESP32-S3)
 
