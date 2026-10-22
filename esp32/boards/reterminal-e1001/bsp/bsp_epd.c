@@ -105,7 +105,9 @@ esp_err_t bsp_epd_init(void)
     const spi_bus_config_t bus = {
         .sclk_io_num = BSP_PIN_EPD_SCLK,
         .mosi_io_num = BSP_PIN_EPD_MOSI,
-        .miso_io_num = -1,
+        /* The SD slot shares this bus and needs MISO (GPIO 8); route it
+         * here too so bus init order between panel and SD does not matter. */
+        .miso_io_num = BSP_PIN_SD_MISO,
         .quadwp_io_num = -1,
         .quadhd_io_num = -1,
         .max_transfer_sz = EPD_CHUNK_BYTES,

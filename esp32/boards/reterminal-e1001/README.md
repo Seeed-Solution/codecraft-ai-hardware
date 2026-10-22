@@ -16,10 +16,13 @@ keys and a green status LED.
 | `bsp_led.h` | green status LED (GPIO 6, active low) |
 | `bsp_sht4x.h` | temperature/humidity, single-shot, CRC-checked |
 | `bsp_battery.h` | battery millivolts (ADC1 CH0, 10k/10k divider, enable GPIO 21) |
+| `bsp_rtc.h` | PCF8563 real-time clock on I2C0 |
+| `bsp_charger.h` | SY6974B charger status/limit control on I2C1 |
+| `bsp_buzzer.h` | buzzer tones (LEDC PWM, GPIO 45) |
+| `bsp_mic.h` | PDM microphone capture (CLK 42 / DATA 41 / EN 38) |
+| `bsp_sdcard.h` | microSD over SDSPI on SPI2 (shared with the panel), rail + card-detect |
 
 Pin facts with sources: `bsp/include/bsp_pins.h`.
-Pending drivers (pins documented, code TODO): PCF8563 RTC, SY6974B charger,
-PDM mic, buzzer, microSD.
 
 ## Examples
 
@@ -27,6 +30,9 @@ PDM mic, buzzer, microSD.
   the framebuffer format and the refresh cycle.
 - `sht4x_battery` — 10 s sampling loop of sensor + battery, LED blink per
   sample, key press samples immediately.
+- `board_health` — exercises every peripheral once and prints a summary.
+- `sdcard_test` — mounts the microSD slot, writes and reads back a file;
+  insert a FAT-formatted card first.
 
 Build (ESP-IDF v6.0.2):
 

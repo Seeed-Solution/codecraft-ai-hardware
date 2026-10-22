@@ -46,7 +46,7 @@ relative to the muse-gadget-sdk repository (Apache 2.0, Meta Platforms), and
 | RTC | PCF8563 @0x51 on I2C0 (shares the bus with SHT4x via `bsp_i2c0_internal`) | Zephyr dts + `zephyr:drivers/rtc/rtc_pcf8563.c` | **extracted** (`bsp_rtc`) |
 | Charger | SY6974B @0x6B on I2C1 (SDA=39, SCL=40); board defaults 1000 mA / 4208 mV from Zephyr dts; part-ID verified at init | `zephyr:drivers/charger/charger_sy6974b.c` + Zephyr dts | **extracted** (`bsp_charger`) |
 | Audio / buzzer | PDM mic CLK=42 DATA=41 EN=38; buzzer LEDC GPIO 45 | Zephyr dts + schematic | **extracted** (`bsp_mic`, `bsp_buzzer`) — build-verified, mic levels need on-device validation |
-| microSD | CS=14 DET=15 EN=16; SPI MOSI/MISO/SCLK routing not yet confirmed from the schematic | schematic (partial) | pending — do not guess the SPI pins |
+| microSD | SDSPI on SPI2 shared with the panel: SCLK=7, MOSI=9, MISO=8, CS=14; TF_CARD_PWR rail via TPS22916 load switch, EN=16 active high; card-detect switch GPIO 15, low = inserted | vendor schematic E1001 V1.2 sheet 06 Peripherals (J5 ST-TF-003J, U13 TPS22916) | **extracted** (`bsp_sdcard`) — E1002 identical (shared mainboard) |
 | IDF version | BSP + examples build clean on ESP-IDF v6.0.2 | local build | confirmed |
 
 ### reTerminal E1002 (7.3" Spectra 6 color e-ink)

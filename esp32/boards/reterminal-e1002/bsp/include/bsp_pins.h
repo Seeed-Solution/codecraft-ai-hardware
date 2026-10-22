@@ -59,10 +59,13 @@
 /* ---- Buzzer (LEDC PWM) ---- */
 #define BSP_PIN_BUZZER          45
 
-/* ---- microSD card ---- */
+/* ---- microSD card (SDSPI, shares SPI2 with the e-paper panel) ---- */
+#define BSP_PIN_SD_SCLK         7   /* shared with EPD */
+#define BSP_PIN_SD_MOSI         9   /* shared with EPD */
+#define BSP_PIN_SD_MISO         8   /* SD only; the panel never drives MISO */
 #define BSP_PIN_SD_CS           14
-#define BSP_PIN_SD_DET          15
-#define BSP_PIN_SD_EN           16
+#define BSP_PIN_SD_DET          15  /* low = card inserted (internal pull-up) */
+#define BSP_PIN_SD_EN           16  /* high = TF_CARD_PWR rail on (TPS22916) */
 
 /* ---- Expansion UART1 ---- */
 #define BSP_PIN_UART1_TX        17
