@@ -35,6 +35,21 @@ transfer goes through the esp_lcd io handle on the new bus driver.
 `examples/factory_firmware/` is the shipping firmware. xiaozhi-esp32's
 sensecap-watcher board is a second reference.
 
+## BSP
+
+| Header | Capability |
+|---|---|
+| `bsp_camera.h` | Himax WiseEye2 over SSCMA/SPI2: rail power, boot, JPEG capture |
+| `bsp_display.h` | SPD2010 QSPI panel (esp_lcd), backlight |
+| `bsp_touch.h` | SPD2010 touch (I2C1, polled; IRQ is an expander pin) |
+| `bsp_audio.h` | ES8311 DAC + ES7243 mic ADC via esp_codec_dev 1.6.2 (I2S0) |
+| `bsp_knob.h` | quadrature wheel (PCNT) + push button |
+| `bsp_battery.h` | presence + terminal voltage (gated divider, ADC1 CH2) |
+| `bsp_sdcard.h` | microSD over SDSPI, shared SPI2 (CS=46, detect/rail on expander) |
+| `bsp_io_expander.h` | PCA9535 IO expander |
+
+Pin facts with sources: `bsp/include/bsp_pins.h`.
+
 ## Examples
 
 - `camera_capture` — one JPEG over SSCMA: powers the Himax rail, boots the

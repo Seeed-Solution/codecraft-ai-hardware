@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2026 CodeCraft AI Hardware contributors.
+ * SPDX-License-Identifier: Apache-2.0
+ *
  * SenseCAP Indicator (D1/D1S/D1Pro/D1L) pin map — the board's source of truth.
  *
  * Sources, highest priority first (see docs/vendor-sources.md):

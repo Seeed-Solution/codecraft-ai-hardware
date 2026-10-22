@@ -23,6 +23,16 @@ Status: **BSP landed** — `bsp/` (audio/LED/button) and three examples build cl
 [respeaker/reSpeaker_Lite](https://github.com/respeaker/reSpeaker_Lite):
 `doc/images/pinout.png`, I2C examples, `xmos_firmwares/`.
 
+## BSP
+
+| Header | Capability |
+|---|---|
+| `bsp_audio.h` | XMOS + AIC3204 over I2C, 16 kHz I2S slave capture/playback |
+| `bsp_led.h` | WS2812 RGB LED |
+| `bsp_button.h` | BOOT button with debounce task |
+
+Pin facts with sources: `bsp/include/bsp_pins.h`.
+
 ## Layout
 
 - `bsp/include/bsp_pins.h` — authoritative pin map with per-fact citations.
@@ -30,6 +40,17 @@ Status: **BSP landed** — `bsp/` (audio/LED/button) and three examples build cl
   `bsp_led` (WS2812), `bsp_button` (BOOT with debounce task).
 - `examples/` — `audio_meter`, `button_led`, `wifi_scan`. Each is a
   standalone IDF project sharing the board `sdkconfig.defaults` via symlink.
+
+## Examples
+
+- `audio_meter` — XMOS mic RMS level, mirrored on the WS2812 (needs the
+  16 kHz I2S XMOS firmware v1.0.9, see Verified facts).
+- `button_led` — hold XIAO BOOT to cycle the WS2812 through red/green/blue.
+- `wifi_scan` — 2.4 GHz AP scan, blinks the LED green each round (attach
+  the external antenna).
+
+Each is a standalone IDF project sharing the board `sdkconfig.defaults`
+via symlink.
 
 ## Pin map (verified, see `bsp/include/bsp_pins.h` for citations)
 

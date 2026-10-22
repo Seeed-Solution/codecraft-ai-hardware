@@ -54,7 +54,12 @@ check_static() {
 
   # Host tests (if any are present).
   if compgen -G "tests/test_*.py" >/dev/null 2>&1; then
-    python3 -m pytest tests/ || rc=1
+    if python3 -c "import pytest" >/dev/null 2>&1; then
+      python3 -m pytest tests/ || rc=1
+    else
+      note "pytest not installed; using the zero-dependency fallback runner"
+      python3 tests/run_tests.py || rc=1
+    fi
   else
     note "no host tests yet"
   fi

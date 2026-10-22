@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2026 CodeCraft AI Hardware contributors.
+ * SPDX-License-Identifier: Apache-2.0
+ *
  * reSpeaker Lite (XIAO ESP32-S3) pin map — the board's source of truth.
  *
  * Sources, highest priority first (see docs/vendor-sources.md):

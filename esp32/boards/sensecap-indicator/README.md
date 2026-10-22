@@ -36,6 +36,17 @@ Canonical SDK: [Seeed-Solution/SenseCAP_Indicator_ESP32](https://github.com/Seee
 (Apache 2.0, targets ESP-IDF 5.1.1). This BSP is a fresh ESP-IDF v6
 implementation using the vendor's pin/timing/register facts.
 
+## BSP
+
+| Header | Capability |
+|---|---|
+| `bsp_display.h` | ST7701S RGB panel init + esp_lcd RGB handle + backlight |
+| `bsp_io_expander.h` | TCA9535 IO expander (shadowed output/config regs) |
+| `bsp_button.h` | GPIO 38 button, debounced task |
+| `bsp_touch.h` | FT6336U/GT911 auto-probe touch (esp_lcd_touch) |
+
+Pin facts with sources: `bsp/include/bsp_pins.h`.
+
 ## Layout
 
 - `bsp/include/bsp_pins.h` — every pin and timing constant, cited.
@@ -48,6 +59,12 @@ implementation using the vendor's pin/timing/register facts.
 - `examples/display_color_bars` — 8 vertical color bars + backlight on.
 - `examples/button_backlight` — white screen, button toggles backlight.
 - `examples/touch_read` — logs touch coordinates as you press the screen.
+
+## Examples
+
+- `display_color_bars` — 8 vertical color bars + backlight on.
+- `button_backlight` — white screen, button toggles backlight.
+- `touch_read` — logs touch coordinates as you press the screen.
 
 ## Build
 
