@@ -130,6 +130,11 @@ case "$mode" in
   "" )
     check_static
     for b in "${ESP32_BOARDS[@]}"; do check_esp32_board "$b"; done
+    if [[ -d linux/boards ]]; then
+      while IFS= read -r d; do
+        check_linux_board "$(basename "$d")"
+      done < <(find linux/boards -mindepth 1 -maxdepth 1 -type d | sort)
+    fi
     ;;
   -h|--help)
     usage
