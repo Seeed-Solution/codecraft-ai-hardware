@@ -10,6 +10,7 @@
 #pragma once
 
 #include "esp_err.h"
+#include "driver/i2c_master.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,6 +19,10 @@ extern "C" {
 /* Initializes the board I2C0 bus and probes the expander at 0x21.
  * Safe to call more than once; later calls return ESP_OK immediately. */
 esp_err_t bsp_io_expander_init(void);
+
+/* Returns the board I2C0 master bus (shared with the audio codecs), after
+ * initializing it if needed. */
+esp_err_t bsp_i2c0_get_bus(i2c_master_bus_handle_t *out_bus);
 
 /* pin: 0-15. direction: 1 = output, 0 = input. */
 esp_err_t bsp_io_expander_set_direction(int pin, int output);

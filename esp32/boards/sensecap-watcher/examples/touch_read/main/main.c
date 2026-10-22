@@ -23,16 +23,17 @@ void app_main(void)
     bool was_pressed = false;
     while (true) {
         esp_lcd_touch_read_data(touch);
-        uint16_t x[1] = {0}, y[1] = {0}, strength[1] = {0};
+        esp_lcd_touch_point_data_t point;
         uint8_t count = 0;
-        bool pressed = esp_lcd_touch_get_coordinates(touch, x, y, strength, &count, 1);
-        if (pressed && count > 0) {
+        bool pressed = esp_lcd_touch_get_data(touch, &point, &count, 1) == ESP_OK &&
+                       count > 0;
+        if (pressed) {
             ESP_LOGI(TAG, "press x=%u y=%u strength=%u points=%u",
-                     x[0], y[0], strength[0], count);
+                     point.x, point.y, point.strength, count);
         } else if (was_pressed) {
             ESP_LOGI(TAG, "released");
         }
-        was_pressed = pressed && count > 0;
+        was_pressed = pressed;
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }

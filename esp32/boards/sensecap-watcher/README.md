@@ -1,8 +1,15 @@
 # SenseCAP Watcher
 
-Status: **Phase 3** — camera, display, touch, battery and knob landed and
-are build-verified. Audio (ES8311 + ES7243) and the SD card are still
-pending; pin facts for both are already in `bsp/include/bsp_pins.h`.
+Status: **Phase 4** — camera, display, touch, audio, battery and knob
+landed and are build-verified. The SD card is still pending; pin facts are
+already in `bsp/include/bsp_pins.h`.
+
+Audio note: esp_codec_dev is pinned at 1.6.2 (needs the IDF v6
+`i2c_master` bus_handle support); the vendor-pinned 1.2.0 only drives the
+legacy I2C driver. The touch component (esp_lcd_touch_spd2010 0.0.1, kept
+at the vendor-pinned version) still `#include`s the legacy `driver/i2c.h`,
+so builds print IDF's EOL warning; it never calls the legacy API — every
+transfer goes through the esp_lcd io handle on the new bus driver.
 
 ## Verified facts
 
@@ -41,6 +48,10 @@ sensecap-watcher board is a second reference.
 - `touch_read` — polls the SPD2010 touch controller (I2C1, SDA=GPIO39,
   SCL=GPIO38) and logs press coordinates; the interrupt line is expander
   pin 5, not a real GPIO, so the driver polls.
+- `audio_tone` — 1 kHz sine on the ES8311 DAC + PA (I2S0), then a volume
+  sweep; replays every 5 s.
+- `mic_level` — RMS level meter from the ES7243/ES7243E mic ADC (variant
+  auto-detected on I2C0), with a dBFS bar graph.
 
 Build (ESP-IDF v6.0.2):
 
@@ -56,10 +67,8 @@ idf.py build flash monitor
 
 ## Remaining extraction plan
 
-1. Audio: ES8311 DAC @0x30 + ES7243 ADC @0x13/0x14 on I2C0, I2S0 at 16 kHz /
-   16-bit mono (vendor DRV_AUDIO_* facts).
-2. SD card: SPI2 device 2 (CS=GPIO46, detect on expander pin 4, rail on pin
+1. SD card: SPI2 device 2 (CS=GPIO46, detect on expander pin 4, rail on pin
    8), sharing the camera's bus — the camera driver tolerates an
    already-initialized bus.
-3. On-hardware verification of everything above (builds pass; electrical
+2. On-hardware verification of everything above (builds pass; electrical
    behavior unverified).

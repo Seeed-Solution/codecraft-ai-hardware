@@ -75,6 +75,16 @@ esp_err_t bsp_io_expander_init(void)
     return ESP_OK;
 }
 
+esp_err_t bsp_i2c0_get_bus(i2c_master_bus_handle_t *out_bus)
+{
+    ESP_RETURN_ON_FALSE(out_bus != NULL, ESP_ERR_INVALID_ARG, TAG, "out_bus");
+    /* The audio codecs (ES8311 DAC @0x30, ES7243 ADC @0x13/0x14) share the
+     * board I2C0 bus with this expander. */
+    ESP_RETURN_ON_ERROR(bsp_io_expander_init(), TAG, "init");
+    *out_bus = s_bus;
+    return ESP_OK;
+}
+
 esp_err_t bsp_io_expander_set_direction(int pin, int output)
 {
     ESP_RETURN_ON_FALSE(s_dev && s_shadow_valid, ESP_ERR_INVALID_STATE, TAG,
