@@ -1,8 +1,8 @@
 # SenseCAP Watcher
 
-Status: **Phase 1** — camera pipeline landed and build-verified. Display,
-touch, knob, audio, battery and SD card are still pending (see the backlog in
-docs/). Pin facts for all of them are already in `bsp/include/bsp_pins.h`.
+Status: **Phase 2** — camera, display, battery and knob landed and are
+build-verified. Touch, audio (ES8311 + ES7243) and SD card are still pending;
+pin facts for all of them are already in `bsp/include/bsp_pins.h`.
 
 ## Verified facts
 
@@ -32,6 +32,12 @@ sensecap-watcher board is a second reference.
 
 - `camera_capture` — one JPEG over SSCMA: powers the Himax rail, boots the
   chip, samples at 640x480, logs size/dimensions, powers back off.
+- `display_color_bars` — raw esp_lcd on the SPD2010: vertical color bands
+  drawn one row at a time, then a backlight fade. No LVGL.
+- `battery_status` — presence (expander BAT_DET) + terminal voltage every
+  second (gated 62k/20k divider onto ADC1 channel 2).
+- `knob_input` — quadrature wheel via PCNT (GPIO41/42) and the push on
+  expander pin 3 (active low).
 
 Build (ESP-IDF v6.0.2):
 
@@ -47,8 +53,12 @@ idf.py build flash monitor
 
 ## Remaining extraction plan
 
-1. `bsp/` — display (SPD2010 QSPI 412x412), touch, knob, audio
-   (ES8311 + ES7243), battery (ADC on GPIO3 via the divider rail).
-2. SD card: SPI2 device 2 (CS=GPIO46, detect on expander pin 4), sharing the
-   camera's bus — the camera driver tolerates an already-initialized bus.
-3. More examples: `display_demo`, `battery_status`, `knob_input`.
+1. Touch: SPD2010 touch controller on I2C1 (SDA=GPIO39, SCL=GPIO38, INT on
+   expander pin 5) — vendor uses espressif/esp_lcd_touch_spd2010 0.0.1.
+2. Audio: ES8311 DAC @0x30 + ES7243 ADC @0x13/0x14 on I2C0, I2S0 at 16 kHz /
+   16-bit mono (vendor DRV_AUDIO_* facts).
+3. SD card: SPI2 device 2 (CS=GPIO46, detect on expander pin 4, rail on pin
+   8), sharing the camera's bus — the camera driver tolerates an
+   already-initialized bus.
+4. On-hardware verification of everything above (builds pass; electrical
+   behavior unverified).

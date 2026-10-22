@@ -1,0 +1,7 @@
+# Copyright (c) 2026 CodeCraft AI Hardware contributors.
+# SPDX-License-Identifier: Apache-2.0
+
+# The SPD2010 panel driver; the same version the vendor BSP pins
+# (SenseCAP-Watcher-Firmware components/sensecap-watcher/idf_component.yml).
+dependencies:
+  espressif/esp_lcd_spd2010: "^1.0.1"
