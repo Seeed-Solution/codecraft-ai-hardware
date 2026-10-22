@@ -77,7 +77,7 @@ battery sense, keys, LED); only the panel differs.
 
 | Board | Capability notes | Source | Status |
 |---|---|---|---|
-| reTerminal (CM4) | display, buttons, buzzer, RTC, light sensor via dtoverlay + sysfs | vendor wiki (see vendor-sources.md) | planned |
+| reTerminal (CM4) | buttons/LEDs/buzzer/RTC/light sensor/accelerometer via mainline dtoverlay + sysfs/evdev/IIO; display via vendor overlay | seeed-linux-dtoverlays @1d53c3c (see vendor-sources.md) | Phase 1: overlay + demos written, hardware verification pending |
 | reComputer series | Jetson-based; GPIO header maps | vendor wiki | planned |
 
 ## Cross-cutting dependencies to resolve during extraction

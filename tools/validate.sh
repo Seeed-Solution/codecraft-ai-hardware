@@ -89,7 +89,24 @@ check_linux_board() {
   echo "== linux board: $board =="
   [[ -d "$dir" ]] || fail "unknown Linux board '$board'"
   [[ -f "$dir/README.md" ]] || fail "$dir/README.md missing"
-  note "$board: structural checks only (no Linux CI target yet)"
+
+  # Python demos must at least parse.
+  local rc=0 f
+  while IFS= read -r f; do
+    python3 -m py_compile "$f" || { echo "  FAIL py_compile $f"; rc=1; }
+  done < <(find "$dir" -name "*.py" -not -path "*/build/*" 2>/dev/null | sort)
+
+  # Overlays must compile when dtc is available (plain-constant overlays
+  # need no kernel headers).
+  if command -v dtc >/dev/null 2>&1; then
+    while IFS= read -r f; do
+      dtc -@ -I dts -O dtb -o /dev/null "$f" >/dev/null 2>&1 || { echo "  FAIL dtc $f"; rc=1; }
+    done < <(find "$dir" -name "*.dts" 2>/dev/null | sort)
+  else
+    note "$board: dtc not found — overlay compile check skipped"
+  fi
+
+  [[ $rc -eq 0 ]] && echo "$board linux checks: PASS" || fail "$board linux checks"
 }
 
 mode="${1:-}"

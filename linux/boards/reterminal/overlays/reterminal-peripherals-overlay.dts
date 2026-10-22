@@ -1,0 +1,190 @@
+// Copyright (c) 2026 CodeCraft AI Hardware contributors.
+// SPDX-License-Identifier: Apache-2.0
+//
+// reTerminal (CM4) peripherals-only overlay: IO expander keys/LEDs/buzzer,
+// accelerometer, light sensor and RTC. Excludes the ILI9881x DSI panel and
+// its touch, which need Seeed's out-of-tree kernel modules — use the
+// vendor overlay for those (see README.md).
+//
+// Hardware facts (pin/address/irq/timing) from Seeed-Studio/seeed-linux-
+// dtoverlays overlays/rpi/reTerminal-overlay.dts (file header: MIT License),
+// commit 1d53c3cf2c96 (2026-10-21). This is a fresh implementation with
+// plain numeric constants so it compiles with a bare dtc (no cpp /
+// kernel headers needed).
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709", "brcm,bcm2711";
+
+	/* Pin muxing: GPIO13 = power key (input, pull-up),
+	 * GPIO6 = MCP23008 interrupt (input, pull-up).
+	 * brcm,function: 0 = input. brcm,pull: 2 = pull-up. */
+	fragment@0 {
+		target = <&gpio>;
+		__overlay__ {
+			power_key: power_key {
+				brcm,pins = <13>;
+				brcm,function = <0>;
+				brcm,pull = <2>;
+			};
+
+			mcp23008_pins: mcp23008_pins {
+				brcm,pins = <6>;
+				brcm,function = <0>;
+				brcm,pull = <2>;
+			};
+		};
+	};
+
+	/* Board I2C bus (i2c1), 300 kHz: LIS331DLH accelerometer @0x19,
+	 * MCP23008 IO expander @0x38 (irq on GPIO6, falling edge),
+	 * LTR-303ALS light sensor @0x29. */
+	fragment@1 {
+		target = <&i2c1>;
+		__overlay__ {
+			status = "okay";
+			clock-frequency = <300000>;
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			lis331dlh@19 {
+				compatible = "st,lis331dlh";
+				reg = <0x19>;
+				status = "okay";
+			};
+
+			mcp23008: mcp@38 {
+				compatible = "microchip,mcp23008";
+				reg = <0x38>;
+				status = "okay";
+
+				gpio-controller;
+				#gpio-cells = <2>;
+
+				interrupt-parent = <&gpio>;
+				interrupts = <6 2>; /* GPIO6, IRQ_TYPE_EDGE_FALLING */
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			ltr303@29 {
+				compatible = "liteon,ltr303";
+				reg = <0x29>;
+				status = "okay";
+			};
+		};
+	};
+
+	/* RTC bus (i2c3), 100 kHz: PCF8563 @0x51. */
+	fragment@2 {
+		target = <&i2c3>;
+		__overlay__ {
+			status = "okay";
+			clock-frequency = <100000>;
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			pcf8563@51 {
+				compatible = "nxp,pcf8563";
+				reg = <0x51>;
+			};
+		};
+	};
+
+	/* MCP23008 pin map (from the vendor overlay):
+	 *   pin 0 usr_btn0  KEY_A 30   pin 4 usr_led0 (active low)
+	 *   pin 1 usr_btn2  KEY_D 32   pin 5 usr_led1 (active low)
+	 *   pin 2 usr_btn1  KEY_S 31   pin 6 usr_led2 (active low)
+	 *   pin 3 usr_btn3  KEY_F 33   pin 7 usr_buzzer (active high)
+	 * Buttons and LEDs are active low (flag 1); the buzzer is active
+	 * high (flag 0). The power key is GPIO13, KEY_SLEEP 142. */
+	fragment@3 {
+		target-path = "/";
+		__overlay__ {
+			gpio_keys: gpio-keys {
+				compatible = "gpio-keys";
+				pinctrl-names = "default";
+				status = "okay";
+
+				usr_btn0: usr_btn0 {
+					debounce-interval = <5>;
+					linux,code = <30>; /* KEY_A */
+					label = "usr_btn0";
+					gpios = <&mcp23008 0 1>;
+					gpio-key,wakeup;
+					autorepeat;
+				};
+
+				usr_btn1: usr_btn1 {
+					debounce-interval = <5>;
+					linux,code = <31>; /* KEY_S */
+					label = "usr_btn1";
+					gpios = <&mcp23008 2 1>;
+					gpio-key,wakeup;
+					autorepeat;
+				};
+
+				usr_btn2: usr_btn2 {
+					debounce-interval = <5>;
+					linux,code = <32>; /* KEY_D */
+					label = "usr_btn2";
+					gpios = <&mcp23008 1 1>;
+					gpio-key,wakeup;
+					autorepeat;
+				};
+
+				usr_btn3: usr_btn3 {
+					debounce-interval = <5>;
+					linux,code = <33>; /* KEY_F */
+					label = "usr_btn3";
+					gpios = <&mcp23008 3 1>;
+					gpio-key,wakeup;
+					autorepeat;
+				};
+
+				pwr_btn: pwr_btn {
+					debounce-interval = <5>;
+					linux,code = <142>; /* KEY_SLEEP */
+					label = "power_key";
+					gpios = <&gpio 13 1>;
+					gpio-key,wakeup;
+					autorepeat;
+				};
+			};
+
+			gpio_leds: gpio-leds {
+				compatible = "gpio-leds";
+				status = "okay";
+
+				usr_led0: usr_led0 {
+					label = "usr_led0";
+					gpios = <&mcp23008 4 1>;
+					linux,default-trigger = "default-off";
+				};
+
+				usr_led1: usr_led1 {
+					label = "usr_led1";
+					gpios = <&mcp23008 5 1>;
+					linux,default-trigger = "default-off";
+				};
+
+				usr_led2: usr_led2 {
+					label = "usr_led2";
+					gpios = <&mcp23008 6 1>;
+					linux,default-trigger = "default-off";
+				};
+
+				usr_buzzer: usr_buzzer {
+					label = "usr_buzzer";
+					gpios = <&mcp23008 7 0>;
+					linux,default-trigger = "default-off";
+					default-state = "off";
+				};
+			};
+		};
+	};
+};
