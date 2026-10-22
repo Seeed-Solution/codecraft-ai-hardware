@@ -1,0 +1,22 @@
+CodeCraft AI Hardware
+Copyright (c) 2026 CodeCraft AI Hardware contributors
+
+This repository's board facts, porting notes, and selected BSP-level code
+were derived from the following open source projects:
+
+- Meta Platforms' muse-gadget-sdk (Apache License 2.0)
+  https://github.com/meta/muse-gadget-sdk (mirror: local muse-gadget-sdk)
+  Used for: per-board sdkconfig facts, power-profiling findings for
+  SenseCAP Watcher, SSCMA camera client structure, and the vendor-source
+  citation discipline in docs/vendor-sources.md.
+
+- FoloToy's ai-passport (MIT License)
+  https://github.com/FoloToy/ai-passport
+  Used for: repository governance pattern — AGENTS.md routing table,
+  required agent skills, validation gate structure, and bilingual
+  documentation convention.
+
+- Seeed Studio vendor repositories (see docs/vendor-sources.md for the
+  per-board authoritative source and its license).
+
+All derived files retain their original copyright headers.
