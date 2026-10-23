@@ -37,7 +37,7 @@
 #define BSP_EXP_PIN_SD_DET         4   /* in: SD card detect */
 #define BSP_EXP_PIN_TOUCH_INT      5   /* in: touch interrupt */
 #define BSP_EXP_PIN_CAM_SYNC       6   /* in: high while the Himax has a reply waiting */
-#define BSP_EXP_PIN_CAM_RST        7   /* vendor SSCMA_RST; unused — see camera notes */
+#define BSP_EXP_PIN_CAM_RST        7   /* out: Himax reset, active low; pulse only after it has booted */
 #define BSP_EXP_PIN_PWR_SDCARD     8   /* out: SD card rail */
 #define BSP_EXP_PIN_PWR_LCD        9   /* out: display rail */
 #define BSP_EXP_PIN_PWR_SYSTEM     10  /* out: holds the board on from battery */

@@ -79,9 +79,21 @@ cd esp32/boards/sensecap-watcher/examples/camera_capture
 idf.py build flash monitor
 ```
 
-> **Note** — flashing erases the vendor firmware. The factory image lives in
-> the Watcher's `nvsfactory` region (0x9000-0x3B000); back it up first if you
-> want to restore it later.
+> **Note** — flashing erases the vendor firmware. Back it up first if you
+> want to restore it later. Measured on a retail unit (2026-10): the vendor
+> partition table sits at **0x10000** (not the usual 0x8000) with
+> `ota_0`@0x20000 (4 MB), `ota_1`@0x420000 (4 MB), plus `prod_data`/`prod_bak`
+> near 0x820000; the bootloader is at 0x1000. A full-image backup is the
+> safest option:
+>
+> ```sh
+> esptool --port PORT --baud 230400 read-flash 0x0 0x2000000 watcher-factory-full-32mb.bin
+> # restore later with:
+> esptool --port PORT --baud 230400 write-flash 0x0 watcher-factory-full-32mb.bin
+> ```
+>
+> This unit's backup is stored at `~/watcher-backup/watcher-factory-full-32mb.bin`.
+> High baud rates are unreliable on this USB link — stay at 230400 or below.
 
 ## Remaining work
 

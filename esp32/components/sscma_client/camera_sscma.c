@@ -43,14 +43,19 @@
 
 static const char *TAG = "camera_sscma";
 
-#define SPI_HZ (12 * 1000 * 1000)
+/* The vendor BSP runs this link at 12 MHz, but on the field unit MISO reads
+ * degraded with speed (clean at 100 kHz, bit errors by 400 kHz, all-0xFF at
+ * 1 MHz) while a 50 kHz GPIO bit-bang of the same pins was perfect. Until
+ * that gap is understood, run conservatively: a 640x480 capture takes ~7 s. */
+#define SPI_HZ (100 * 1000)
 #define GAP_MS 2                 /* between transfers, as Seeed's client waits */
 #define RESET_HOLD_MS 100
 #define RESET_START_MS 200
 #define BOOT_MS 5000             /* power-up to its first answer */
+#define RAIL_BLEED_MS 500        /* off this long so the rail bleeds and the chip truly PORs */
 #define BOOT_RETRY_MS 250        /* asks again this often while it boots */
-#define REPLY_MS 3000
-#define SAMPLE_MS 8000           /* the SAMPLE event, with the image */
+#define REPLY_MS 12000           /* first cold-start SAMPLE can take seconds */
+#define SAMPLE_MS 15000          /* the SAMPLE event, with the image */
 #define POLL_MS 10
 #define RX_MAX (512 * 1024)      /* a reply with a 640x480 JPEG in base64 fits well under this */
 
@@ -61,6 +66,21 @@ static uint8_t *s_rx;            /* one read, DMA-capable, while powered */
 static sscma_rx_t s_replies = { .max = RX_MAX };
 
 static void power_down(void);
+
+/* Waits until the chip signals a waiting reply (it queues INIT@STAT? at the end
+ * of its boot) or `ms` passes. Returns true if the pin asserted. */
+static bool wait_sync(int ms)
+{
+    int64_t deadline = esp_timer_get_time() + ms * 1000LL;
+    while (!s_cfg.has_data()) {
+        if (esp_timer_get_time() >= deadline) {
+            return false;
+        }
+        vTaskDelay(pdMS_TO_TICKS(POLL_MS));
+    }
+    return true;
+}
+
 #if CONFIG_PM_ENABLE
 static esp_pm_lock_handle_t s_awake;   /* light sleep would stop the bus mid-capture */
 #endif
@@ -103,7 +123,7 @@ static esp_err_t receive(size_t *got)
     ESP_RETURN_ON_ERROR(send_packet(SSCMA_CMD_AVAILABLE, NULL, 0), TAG, "available");
     ESP_RETURN_ON_ERROR(transfer(NULL, s_rx, 2), TAG, "available length");
     size_t len = s_rx[0] << 8 | s_rx[1];
-    if (len == 0xffff) {
+    if (len == 0xffff) {  /* 0xffff = empty */
         len = 0;
     }
     while (*got < len) {
@@ -186,6 +206,8 @@ static esp_err_t sscma_init(void)
     const spi_device_interface_config_t dev = {
         .clock_speed_hz = SPI_HZ,
         .mode = 0,
+        .input_delay_ns = 20,   /* GPIO-matrix MISO path delay */
+        .cs_ena_pretrans = 8,   /* CS low this many APB cycles before the first clock */
         .spics_io_num = s_cfg.cs,
         .queue_size = 1,
     };
@@ -233,16 +255,24 @@ static esp_err_t power_up(int resolution)
     /* Internal DMA RAM is scarce, so these are only held while it's on. */
     s_tx = heap_caps_malloc(SSCMA_PACKET, MALLOC_CAP_DMA);
     s_rx = heap_caps_malloc(SSCMA_MAX_READ + 1, MALLOC_CAP_DMA);
+    /* The rail's capacitance keeps the chip alive across a short off, so it
+     * never power-on resets and can stay wedged; bleed it first. */
+    s_cfg.power(false);
+    vTaskDelay(pdMS_TO_TICKS(RAIL_BLEED_MS));
     esp_err_t err = s_tx && s_rx ? s_cfg.power(true) : ESP_ERR_NO_MEM;
+    /* The vendor sequence: let the chip boot off the rail (SYNC asserts),
+     * then pulse reset. Pulsing before the boot finished broke captures. */
     if (err == ESP_OK && s_cfg.reset) {
+        wait_sync(BOOT_MS);
         s_cfg.reset(true);
         vTaskDelay(pdMS_TO_TICKS(RESET_HOLD_MS));
         s_cfg.reset(false);
         vTaskDelay(pdMS_TO_TICKS(RESET_START_MS));
+        wait_sync(BOOT_MS);
     }
     if (err == ESP_OK) {
-        /* The Watcher's Himax doesn't announce itself (no INIT@STAT), so ask
-         * until it answers: the first answer is the end of its boot. */
+        /* The chip queues INIT@ events at the end of its boot; asking until
+         * it answers covers the units whose SYNC line we can't see. */
         char at[32];
         snprintf(at, sizeof(at), "AT+SENSOR=1,1,%d\r\n", resolution);
         int64_t booted_by = esp_timer_get_time() + BOOT_MS * 1000LL;
