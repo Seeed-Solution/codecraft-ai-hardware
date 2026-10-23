@@ -1,3 +1,7 @@
+<p align="right">
+  <a href="README.zh_CN.md">简体中文</a> · <strong>English</strong>
+</p>
+
 # CodeCraft Agent Skills
 
 Five skills govern AI-assisted development in this repository. Each lives in

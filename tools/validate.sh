@@ -28,12 +28,23 @@ check_static() {
   echo "== static checks =="
   local rc=0
 
-  # Bilingual baseline: root README and AGENTS pairs.
-  for base in README AGENTS; do
+  # Bilingual baseline: root README, AGENTS, and CLAUDE pairs.
+  for base in README AGENTS CLAUDE; do
     [[ -f "$base.md" ]] || { echo "  MISSING $base.md"; rc=1; }
     [[ -f "$base.zh_CN.md" ]] || { echo "  MISSING $base.zh_CN.md"; rc=1; }
   done
   [[ -f NOTICE ]] || { echo "  MISSING NOTICE"; rc=1; }
+
+  # Skills contract: every skill has a bilingual SKILL pair; the index and
+  # validation checklist are bilingual too.
+  if [[ -d skills ]]; then
+    [[ -f skills/README.md && -f skills/README.zh_CN.md ]] || { echo "  MISSING skills/README(.zh_CN).md"; rc=1; }
+    [[ -f skills/validation.md && -f skills/validation.zh_CN.md ]] || { echo "  MISSING skills/validation(.zh_CN).md"; rc=1; }
+    while IFS= read -r d; do
+      [[ -f "$d/SKILL.md" ]] || { echo "  MISSING $d/SKILL.md"; rc=1; }
+      [[ -f "$d/SKILL.zh_CN.md" ]] || { echo "  MISSING $d/SKILL.zh_CN.md"; rc=1; }
+    done < <(find skills -mindepth 1 -maxdepth 1 -type d | sort)
+  fi
 
   # Board directory contract: every board has a README.
   for b in "${ESP32_BOARDS[@]}"; do
