@@ -5,8 +5,8 @@
 # (SenseCAP-Watcher-Firmware components/sensecap-watcher/idf_component.yml).
 dependencies:
   espressif/esp_lcd_spd2010: "^1.0.1"
-  # Touch half of the SPD2010; same version the vendor BSP pins.
-  espressif/esp_lcd_touch_spd2010: "0.0.1"
+  # Touch half of the SPD2010 is vendored at esp32/components/
+  # esp_lcd_touch_spd2010 (0.0.1 + bounds-check patches; see its README).
   # Codec abstraction for the ES8311/ES7243. 1.6.x supports the IDF v6
   # i2c_master bus_handle; the vendor-pinned 1.2.0 only supports legacy I2C.
   espressif/esp_codec_dev: "1.6.2"

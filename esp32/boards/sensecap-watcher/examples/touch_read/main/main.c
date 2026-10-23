@@ -4,8 +4,13 @@
  *
  * SenseCAP Watcher touch example: polls the SPD2010 touch controller and
  * logs press coordinates. Touch the round screen to see output.
+ *
+ * The SPD2010 is one chip for display and touch: its touch side answers no
+ * I2C until the display side has been initialized, so the display comes up
+ * first (the vendor BSP inits them in the same order).
  */
 
+#include "bsp_display.h"
 #include "bsp_touch.h"
 
 #include "esp_log.h"
@@ -16,6 +21,8 @@ static const char *TAG = "touch_read";
 
 void app_main(void)
 {
+    ESP_ERROR_CHECK(bsp_display_init(NULL, NULL));
+
     esp_lcd_touch_handle_t touch = NULL;
     ESP_ERROR_CHECK(bsp_touch_init(&touch));
 
