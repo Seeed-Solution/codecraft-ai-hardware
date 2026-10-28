@@ -1,0 +1,3 @@
+# No external component dependencies; the SSD1677 panel driver is in-tree
+# (ported from muse-gadget-sdk, MIT — see bsp_epd.c header).
+dependencies: {}

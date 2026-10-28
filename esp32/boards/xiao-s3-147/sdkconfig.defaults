@@ -1,0 +1,20 @@
+# Seeed XIAO ESP32-S3 1.47" Touch Display: XIAO ESP32-S3 Plus,
+# 16 MB flash (DIO 80 MHz), 8 MB octal PSRAM (80 MHz).
+# Source: Meta muse-gadget-sdk esp32/devices/sdkconfig.muse-seeed-xiao-s3-147
+# (Apache 2.0), field-verified on one unit.
+CONFIG_IDF_TARGET="esp32s3"
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+
+# UART0's GPIO43/44 carry the SD chip-select and the touch interrupt, so
+# the console runs on the chip's native USB (muse sdkconfig and
+# devices/seeed-xiao-s3-147.md).
+CONFIG_ESP_CONSOLE_UART_DEFAULT=n
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y

@@ -25,4 +25,16 @@ were derived from the following open source projects:
 - Seeed Studio vendor repositories (see docs/vendor-sources.md for the
   per-board authoritative source and its license).
 
+- muse-gadget-sdk esp32/main/epd_ssd1677.c (MIT License,
+  Copyright (c) 2026 JoJang2u, limengdu)
+  Used for: the reTerminal Sticky SSD1677 panel driver ported as
+  esp32/boards/reterminal-sticky/bsp/bsp_epd.c (protocol, refresh
+  sequences, portrait transpose). The file retains its MIT header.
+
+- Seeed-Studio/Seeed_GFX2 (MIT License)
+  https://github.com/Seeed-Studio/Seeed_GFX2
+  Used for: the JD9853A register initialization sequence in
+  esp32/boards/xiao-s3-147/bsp/bsp_display.c and the AXS5106L touch
+  facts in the board's bsp_pins.h.
+
 All derived files retain their original copyright headers.
