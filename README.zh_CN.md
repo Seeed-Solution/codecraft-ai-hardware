@@ -51,6 +51,8 @@ AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节�
 | reTerminal E1001 | ESP32-S3 | BSP 功能完整（墨水屏、按键、LED、SHT4x、电池、RTC、充电器、蜂鸣器、PDM 麦克风、microSD）+ 4 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reTerminal E1002 | ESP32-S3 | 与 E1001 相同 BSP，面板换为 Spectra 6 彩色；构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
+| reTerminal Sticky | ESP32-S3 | BSP（SSD1677 墨水屏、按键、SHT4x）+ 3 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
+| XIAO ESP32-S3 1.47" 触摸显示屏 | ESP32-S3 | BSP（JD9853A LCD、按键、PDM 麦克风）+ 3 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reTerminal (CM4) | Linux | 外设 overlay + 演示（按键/LED/蜂鸣器/传感器/RTC）；待上机验证 |
 
 能力矩阵和抽取来源见 [docs/inventory.md](docs/inventory.md)，

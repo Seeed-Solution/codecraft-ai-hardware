@@ -1,0 +1,4 @@
+# No external component dependencies; the JD9853A panel runs on IDF's
+# built-in ST7789 driver plus the vendor register sequence in
+# bsp_display.c (Seeed_GFX2, MIT).
+dependencies: {}
