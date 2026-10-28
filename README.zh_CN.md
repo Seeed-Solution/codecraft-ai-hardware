@@ -44,16 +44,16 @@ AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节�
 
 ## 支持的板卡
 
-| 板卡 | 平台 | BSP 范围 | 示例数 |
-|---|---|---|---|
-| SenseCAP Watcher | `ESP32-S3` | 摄像头、显示、触摸、音频、旋钮、电池、microSD | 8 |
-| SenseCAP Indicator | `ESP32-S3` | RGB 显示、IO 扩展、按键、触摸 | 3 |
-| reTerminal E1001 | `ESP32-S3` | 墨水屏、按键、LED、SHT4x、电池、RTC、充电器、蜂鸣器、PDM 麦克风、microSD | 4 |
-| reTerminal E1002 | `ESP32-S3` | 与 E1001 相同 BSP，面板为 Spectra 6 彩色 | 4 |
-| reSpeaker Lite (XIAO ESP32-S3) | `ESP32-S3` | XMOS I2S 音频、BOOT 按键、WS2812 LED | 3 |
-| reTerminal Sticky | `ESP32-S3` | SSD1677 墨水屏、按键、SHT4x | 3 |
-| XIAO ESP32-S3 1.47" 触摸显示屏 | `ESP32-S3` | JD9853A LCD、按键、PDM 麦克风 | 3 |
-| reTerminal (CM4) | `Linux` | 外设 overlay + 演示：按键、LED、蜂鸣器、传感器、RTC | — |
+| 板卡 | 平台 | BSP 范围 |
+|---|---|---|
+| SenseCAP Watcher | <code>ESP32&#8209;S3</code> | 摄像头、显示、触摸、音频、旋钮、电池、microSD |
+| SenseCAP Indicator | <code>ESP32&#8209;S3</code> | RGB 显示、IO 扩展、按键、触摸 |
+| reTerminal E1001 | <code>ESP32&#8209;S3</code> | 墨水屏、按键、LED、SHT4x、电池、RTC、充电器、蜂鸣器、PDM 麦克风、microSD |
+| reTerminal E1002 | <code>ESP32&#8209;S3</code> | 与 E1001 相同 BSP，面板为 Spectra 6 彩色 |
+| reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S 音频、BOOT 按键、WS2812 LED |
+| reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 墨水屏、按键、SHT4x |
+| XIAO ESP32-S3 1.47" 触摸显示屏 | <code>ESP32&#8209;S3</code> | JD9853A LCD、按键、PDM 麦克风 |
+| reTerminal (CM4) | <code>Linux</code> | 外设 overlay + 演示：按键、LED、蜂鸣器、传感器、RTC |
 
 所有 ESP32-S3 板卡均在 ESP-IDF v6.0.2 上构建验证通过；所有板卡尚未上机验证。
 
