@@ -25,7 +25,7 @@ not implement it.
 When the user wants to upload firmware for online flashing or sharing,
 use `sensecraft-cli` from the published npm package:
 
-- Install a missing CLI with `npx @seeed-studio/sensecraft-cli install`.
+- Install the CLI with `npx @seeed-studio/sensecraft-cli install`.
 - Update an existing installation with `sensecraft-cli update`.
 - Verify the installation with `sensecraft-cli --version`.
 
