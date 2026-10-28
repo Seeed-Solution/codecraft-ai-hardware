@@ -49,16 +49,16 @@ only when asked to upload, flash online, or share firmware.
 
 ## Supported boards
 
-| Board | Platform | BSP scope | Examples |
-|---|---|---|---|
-| SenseCAP Watcher | `ESP32-S3` | camera, display, touch, audio, knob, battery, microSD | 8 |
-| SenseCAP Indicator | `ESP32-S3` | RGB display, IO expander, button, touch | 3 |
-| reTerminal E1001 | `ESP32-S3` | EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD | 4 |
-| reTerminal E1002 | `ESP32-S3` | E1001 BSP with the Spectra 6 color panel | 4 |
-| reSpeaker Lite (XIAO ESP32-S3) | `ESP32-S3` | XMOS I2S audio, BOOT button, WS2812 LED | 3 |
-| reTerminal Sticky | `ESP32-S3` | SSD1677 EPD, keys, SHT4x | 3 |
-| XIAO ESP32-S3 1.47" Touch Display | `ESP32-S3` | JD9853A LCD, buttons, PDM mic | 3 |
-| reTerminal (CM4) | `Linux` | peripherals overlay + demos: buttons, LEDs, buzzer, sensors, RTC | — |
+| Board | Platform | BSP scope |
+|---|---|---|
+| SenseCAP Watcher | <code>ESP32&#8209;S3</code> | camera, display, touch, audio, knob, battery, microSD |
+| SenseCAP Indicator | <code>ESP32&#8209;S3</code> | RGB display, IO expander, button, touch |
+| reTerminal E1001 | <code>ESP32&#8209;S3</code> | EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD |
+| reTerminal E1002 | <code>ESP32&#8209;S3</code> | E1001 BSP with the Spectra 6 color panel |
+| reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S audio, BOOT button, WS2812 LED |
+| reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 EPD, keys, SHT4x |
+| XIAO ESP32-S3 1.47" Touch Display | <code>ESP32&#8209;S3</code> | JD9853A LCD, buttons, PDM mic |
+| reTerminal (CM4) | <code>Linux</code> | peripherals overlay + demos: buttons, LEDs, buzzer, sensors, RTC |
 
 All ESP32-S3 boards are build-verified on ESP-IDF v6.0.2; on-device
 validation is pending for every board.
