@@ -39,11 +39,15 @@ root `AGENTS.md` is the mandatory entry point; this guide is the long form.
 1. Add the vendor source row to `docs/vendor-sources.md` first.
 2. Gather facts with citations: chip and module (target, flash size, PSRAM
    size and mode), display, touch, audio path, power chip, buttons/LEDs,
-   USB-UART path, and the required ESP-IDF version.
-3. Create `esp32/boards/<board>/` with `sdkconfig.defaults`, `bsp/`,
-   `examples/`, and a README recording the facts and their sources.
+   USB-UART path, and the required toolchain version (ESP-IDF version for
+   `esp32/`; core and library versions for `arduino/`).
+3. Create the board directory under the matching platform —
+   `esp32/boards/<board>/`, `linux/boards/<board>/`, or
+   `arduino/boards/<board>/` — following that platform's `AGENTS.md`
+   directory contract.
 4. Register the board in `tools/validate.sh` and the root README table.
-5. Add the board's IDF version to the CI matrix when CI lands.
+5. Register the board in CI: ESP32 boards join the build matrix; Arduino
+   boards are discovered automatically from `arduino/boards/`.
 
 ## Delivery format
 
@@ -55,3 +59,13 @@ Every final report states separately:
    performed.
 
 A successful build is not hardware validation.
+
+Commits use an English imperative Conventional Commit subject
+(`type(scope): description`); keep each commit independently reviewable and
+exclude credentials, generated firmware, and unrelated files. Creating a
+commit does not authorize pushing, opening a PR, or merging.
+
+Pull requests fill in `.github/PULL_REQUEST_TEMPLATE.md` and follow
+`.github/CONTRIBUTING.md`. Report static checks, per-board builds, and
+on-device verification separately in the PR body; list unperformed hardware
+work under `Unverified`.

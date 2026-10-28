@@ -1,6 +1,6 @@
 ---
 name: codecraft-build
-description: 为 codecraft-ai-hardware 的板卡构建并验证固件/示例，含静态检查与经 tools/validate.sh 的逐板 ESP-IDF 构建。用于构建与测试请求；不烧录、不提交、不发布。
+description: 为 codecraft-ai-hardware 的板卡构建并验证固件/示例，含静态检查与经 tools/validate.sh 的逐板 ESP-IDF 或 arduino-cli 构建。用于构建与测试请求；不烧录、不提交、不发布。
 ---
 
 <p align="right"><strong>简体中文</strong> · <a href="SKILL.md">English</a></p>
@@ -15,6 +15,7 @@ description: 为 codecraft-ai-hardware 的板卡构建并验证固件/示例，�
    ```bash
    ./tools/validate.sh --static
    ./tools/validate.sh --esp32 <board>
+   ./tools/validate.sh --arduino <board>
    ```
 
 4. 构建通过不等于硬件验证通过——报告中必须写明这一点。

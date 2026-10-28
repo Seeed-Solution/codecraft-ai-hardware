@@ -35,9 +35,10 @@ requirements for flashing, Git writes, and publishing.
 
 ## Project and safety baseline
 
-- This is a multi-board, dual-platform repository. ESP32 firmware lives under
-  `esp32/`; Linux device support lives under `linux/`. Never mix the two
-  build systems.
+- This is a multi-board, multi-platform repository. ESP32 firmware lives
+  under `esp32/`, Linux device support under `linux/`, and
+  Arduino-framework boards under `arduino/` (see `arduino/AGENTS.md`).
+  Never mix build systems across platforms.
 - Hardware facts follow this priority: **vendor specifications and measured
   results → the board's pins header → BSP implementation → hardware guide →
   README/demo code**. If a task requires a hardware detail not defined by
@@ -69,11 +70,12 @@ requirements for flashing, Git writes, and publishing.
 | Environment bootstrap or missing toolchain | `skills/codecraft-setup/SKILL.md` |
 | ESP32 board work (pins, buses, display, audio, battery) | `esp32/AGENTS.md`, the board's `esp32/boards/<board>/README.md`, `docs/vendor-sources.md` |
 | Linux board work | `linux/AGENTS.md`, the board's `linux/boards/<board>/README.md` |
+| Arduino board work | `arduino/AGENTS.md`, the board's `arduino/boards/<board>/README.md`, `docs/vendor-sources.md` |
 | Adding a new board | `docs/development/ai-guide.md` (board onboarding section), `docs/vendor-sources.md` |
 | Build, test, dependencies, partitions | `skills/codecraft-build/SKILL.md`, the board's sdkconfig defaults |
 | Flashing or on-device testing | `skills/codecraft-device-test/SKILL.md` |
 | Documentation | this file's bilingual rule, `docs/README.md` |
-| Commit or PR | `docs/development/ai-guide.md` (delivery format section) |
+| Commit or PR | `docs/development/ai-guide.md` (delivery format section), `.github/CONTRIBUTING.md`, `.github/PULL_REQUEST_TEMPLATE.md` |
 
 ## Required validation and delivery
 

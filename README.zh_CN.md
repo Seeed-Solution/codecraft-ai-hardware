@@ -25,6 +25,7 @@
 | `esp32/boards/<board>/` | 每块 ESP32 板卡的 sdkconfig、板级 BSP 和独立示例 |
 | `esp32/components/` | 跨 ESP32 板卡共享的组件 |
 | `linux/boards/<board>/` | Linux 设备（设备树 overlay、GPIO 映射、Python/C 示例） |
+| `arduino/boards/<board>/` | Arduino 框架板卡（arduino-cli 草图）；见 `arduino/AGENTS.md` |
 | `skills/` | 管理 develop / setup / build / device-test / debug 工作流的 agent skills |
 | `docs/` | 硬件指南、厂商来源引用、开发规范 |
 | `tools/validate.sh` | 每次交付必须通过的验证门禁 |
@@ -53,6 +54,11 @@
 ./tools/validate.sh --linux <board>    # Linux 板卡检查
 ./tools/validate.sh                    # 完整门禁
 ```
+
+## 贡献
+
+提交、拉取请求和 issue 规范见 [`.github/CONTRIBUTING.zh_CN.md`](.github/CONTRIBUTING.zh_CN.md)。
+AI agent 从 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 开始。
 
 ## 许可证与署名
 

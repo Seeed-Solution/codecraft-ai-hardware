@@ -10,13 +10,19 @@ if [[ -d esp32/boards ]]; then
   while IFS= read -r d; do ESP32_BOARDS+=("$(basename "$d")"); done < <(find esp32/boards -mindepth 1 -maxdepth 1 -type d | sort)
 fi
 
+ARDUINO_BOARDS=()
+if [[ -d arduino/boards ]]; then
+  while IFS= read -r d; do ARDUINO_BOARDS+=("$(basename "$d")"); done < <(find arduino/boards -mindepth 1 -maxdepth 1 -type d | sort)
+fi
+
 usage() {
   cat <<'USAGE'
-Usage: tools/validate.sh [--static] [--esp32 <board>] [--linux <board>]
+Usage: tools/validate.sh [--static] [--esp32 <board>] [--linux <board>] [--arduino <board>]
 
   --static          repository checks + host tests
   --esp32 <board>   ESP-IDF build for one board (requires activated IDF)
   --linux <board>   Linux board checks
+  --arduino <board> arduino-cli compile for one board (requires arduino-cli + the board's core)
   (no arguments)    complete gate: static + every board with firmware
 USAGE
 }
@@ -54,6 +60,14 @@ check_static() {
     while IFS= read -r d; do
       [[ -f "$d/README.md" ]] || { echo "  MISSING $d/README.md"; rc=1; }
     done < <(find linux/boards -mindepth 1 -maxdepth 1 -type d | sort)
+  fi
+
+  # Arduino board directory contract: README + fqbn.txt per board.
+  if [[ -d arduino/boards ]]; then
+    while IFS= read -r d; do
+      [[ -f "$d/README.md" ]] || { echo "  MISSING $d/README.md"; rc=1; }
+      [[ -f "$d/fqbn.txt" ]] || { echo "  MISSING $d/fqbn.txt"; rc=1; }
+    done < <(find arduino/boards -mindepth 1 -maxdepth 1 -type d | sort)
   fi
 
   # Secret scan (tracked files, common key/token forms).
@@ -125,6 +139,31 @@ check_linux_board() {
   [[ $rc -eq 0 ]] && echo "$board linux checks: PASS" || fail "$board linux checks"
 }
 
+check_arduino_board() {
+  local board="$1"
+  local dir="arduino/boards/$board"
+  echo "== arduino board: $board =="
+  [[ -d "$dir" ]] || fail "unknown Arduino board '$board' (have: ${ARDUINO_BOARDS[*]:-none})"
+  [[ -f "$dir/README.md" ]] || fail "$dir/README.md missing"
+  [[ -f "$dir/fqbn.txt" ]] || fail "$dir/fqbn.txt missing (one line: the arduino-cli FQBN, e.g. Seeeduino:samd:seeed_wio_terminal)"
+  local fqbn
+  fqbn="$(head -n1 "$dir/fqbn.txt" | tr -d '[:space:]')"
+  [[ -n "$fqbn" ]] || fail "$dir/fqbn.txt is empty"
+
+  local sketches=()
+  while IFS= read -r f; do sketches+=("$f"); done < <(find "$dir/examples" -mindepth 2 -maxdepth 2 -name "*.ino" 2>/dev/null | sort)
+  if [[ ${#sketches[@]} -eq 0 ]]; then
+    note "$board has no sketches yet — compile skipped (not a failure)"
+    return 0
+  fi
+  command -v arduino-cli >/dev/null 2>&1 || fail "arduino-cli not found; see $dir/README.md for the required core and index URL"
+  for sk in "${sketches[@]}"; do
+    echo "  compiling $sk ($fqbn)"
+    arduino-cli compile --fqbn "$fqbn" "$(dirname "$sk")"
+  done
+  echo "$board compile: PASS"
+}
+
 mode="${1:-}"
 case "$mode" in
   --static)
@@ -138,6 +177,10 @@ case "$mode" in
     [[ $# -eq 2 ]] || { usage; exit 2; }
     check_linux_board "$2"
     ;;
+  --arduino)
+    [[ $# -eq 2 ]] || { usage; exit 2; }
+    check_arduino_board "$2"
+    ;;
   "" )
     check_static
     for b in "${ESP32_BOARDS[@]}"; do check_esp32_board "$b"; done
@@ -145,6 +188,9 @@ case "$mode" in
       while IFS= read -r d; do
         check_linux_board "$(basename "$d")"
       done < <(find linux/boards -mindepth 1 -maxdepth 1 -type d | sort)
+    fi
+    if [[ ${#ARDUINO_BOARDS[@]} -gt 0 ]]; then
+      for b in "${ARDUINO_BOARDS[@]}"; do check_arduino_board "$b"; done
     fi
     ;;
   -h|--help)

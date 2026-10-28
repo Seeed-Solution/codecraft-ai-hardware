@@ -28,6 +28,7 @@ system — firmware built from this repository runs entirely on the device.
 | `esp32/boards/<board>/` | Per-board sdkconfig, board-level BSP, and standalone examples for ESP32 targets |
 | `esp32/components/` | Components shared across ESP32 boards |
 | `linux/boards/<board>/` | Linux-based devices (device tree overlays, GPIO maps, Python/C demos) |
+| `arduino/boards/<board>/` | Arduino-framework boards (arduino-cli sketches); see `arduino/AGENTS.md` |
 | `skills/` | Agent skills governing develop / setup / build / device-test / debug workflows |
 | `docs/` | Hardware guides, vendor-source citations, development conventions |
 | `tools/validate.sh` | The validation gate every delivery must pass |
@@ -58,6 +59,11 @@ the authoritative upstream reference for every board.
 ./tools/validate.sh --linux <board>    # Linux board checks
 ./tools/validate.sh                    # complete gate
 ```
+
+## Contributing
+
+See [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) for commit, pull
+request, and issue conventions. AI agents start at [AGENTS.md](AGENTS.md).
 
 ## License and attribution
 

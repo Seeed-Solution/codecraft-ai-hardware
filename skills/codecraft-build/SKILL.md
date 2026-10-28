@@ -1,6 +1,6 @@
 ---
 name: codecraft-build
-description: Build and validate firmware/examples for a board in codecraft-ai-hardware, including static checks and per-board ESP-IDF builds via tools/validate.sh. Use for build and test requests; does not flash, commit, or publish.
+description: Build and validate firmware/examples for a board in codecraft-ai-hardware, including static checks and per-board ESP-IDF or arduino-cli builds via tools/validate.sh. Use for build and test requests; does not flash, commit, or publish.
 ---
 
 # Build
@@ -13,6 +13,7 @@ description: Build and validate firmware/examples for a board in codecraft-ai-ha
    ```bash
    ./tools/validate.sh --static
    ./tools/validate.sh --esp32 <board>
+   ./tools/validate.sh --arduino <board>
    ```
 
 4. A clean build is not hardware validation — say so in the report.

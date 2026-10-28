@@ -28,8 +28,9 @@ Seeed 设备的纯硬件能力参考仓库。包含板级支持包、独立示�
 
 ## 项目与安全基线
 
-- 本仓库是多板卡、双平台仓库。ESP32 固件位于 `esp32/`；Linux 设备
-  支持位于 `linux/`。两套构建系统绝不混用。
+- 本仓库是多板卡、多平台仓库。ESP32 固件位于 `esp32/`，Linux 设备
+  支持位于 `linux/`，Arduino 框架板卡位于 `arduino/`（见
+  `arduino/AGENTS.md`）。各平台构建系统绝不混用。
 - 硬件事实遵循以下优先级：**厂商规格书与实测结果 → 板卡引脚头文件 →
   BSP 实现 → 硬件指南 → README/示例代码**。如果任务所需的硬件细节在
   这些来源中均未定义，向用户提问，不要猜测。绝不编造引脚号。
@@ -54,11 +55,12 @@ Seeed 设备的纯硬件能力参考仓库。包含板级支持包、独立示�
 | 环境引导或工具链缺失 | `skills/codecraft-setup/SKILL.md` |
 | ESP32 板卡工作（引脚、总线、显示、音频、电池） | `esp32/AGENTS.md`、对应板的 `esp32/boards/<board>/README.md`、`docs/vendor-sources.md` |
 | Linux 板卡工作 | `linux/AGENTS.md`、对应板的 `linux/boards/<board>/README.md` |
+| Arduino 板卡工作 | `arduino/AGENTS.md`、对应板的 `arduino/boards/<board>/README.md`、`docs/vendor-sources.md` |
 | 新增板卡 | `docs/development/ai-guide.md`（板卡接入章节）、`docs/vendor-sources.md` |
 | 构建、测试、依赖、分区表 | `skills/codecraft-build/SKILL.md`、该板的 sdkconfig 默认值 |
 | 刷机或设备上测试 | `skills/codecraft-device-test/SKILL.md` |
 | 文档 | 本文件的双语规则、`docs/README.md` |
-| 提交或 PR | `docs/development/ai-guide.md`（交付格式章节） |
+| 提交或 PR | `docs/development/ai-guide.md`（交付格式章节）、`.github/CONTRIBUTING.md`、`.github/PULL_REQUEST_TEMPLATE.md` |
 
 ## 必需的验证与交付
 
