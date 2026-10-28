@@ -7,7 +7,7 @@
 面向 AI agent 驱动开发的 Seeed 设备硬件能力参考仓库。
 
 这是一个**纯硬件**仓库：板级支持包（BSP）、独立示例、经过验证的硬件事实，
-以及面向 agent 的开发指引。没有云服务、没有设备配对、没有账户体系——
+以及面向 agent 的开发指引。本仓库不包含云运行时、设备配对或账户体系——
 用本仓库构建的固件完全在设备本地运行。
 
 ## 面向对象
@@ -17,6 +17,17 @@
   干预。入口是 [AGENTS.md](AGENTS.md)。
 - **人类开发者**：以每块板的示例为起点开发自己的固件。
   入口是 [docs/README.md](docs/README.md)。
+
+## CodeCraft Hub
+
+[CodeCraft Hub](https://test-sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
+是固件分享的云平台，不属于本仓库。
+
+若要上传固件做线上烧录或分享，使用
+[`@seeed-studio/sensecraft-cli`](https://test-sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
+生成并上传。安装和用法见该页面，其中包括 CLI 自带的 agent skill。
+AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节，
+并且只在用户要求上传、线上烧录或分享固件时这样做。
 
 ## 仓库结构
 
