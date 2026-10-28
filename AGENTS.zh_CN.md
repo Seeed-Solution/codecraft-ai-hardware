@@ -25,7 +25,7 @@ npm 发布包中的 `sensecraft-cli`：
 - 更新已有安装时，运行 `sensecraft-cli update`。
 - 运行 `sensecraft-cli --version` 验证安装。
 
-按照[安装指南](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/guides/getting-started/setting-up/)
+按照 [CLI 文档](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
 完成授权，并加载 CLI 随包提供的 agent skill。使用上面的 npm 发布版本命令，
 不要通过克隆或构建 CLI 的 GitHub 仓库来安装。仅在用户提出上传请求时这样做：
 普通的构建、刷机或板级改动不是上传请求。硬件事实仍以本仓库为准。
@@ -76,7 +76,7 @@ npm 发布包中的 `sensecraft-cli`：
 | 新增板卡 | `docs/development/ai-guide.md`（板卡接入章节）、`docs/vendor-sources.md` |
 | 构建、测试、依赖、分区表 | `skills/codecraft-build/SKILL.md`、该板的 sdkconfig 默认值 |
 | 刷机或设备上测试 | `skills/codecraft-device-test/SKILL.md` |
-| 通过 CodeCraft Hub 上传、线上烧录或分享固件 | 本文件的 CodeCraft Hub 一节，然后阅读 [CLI 安装指南](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/guides/getting-started/setting-up/)。不要在此添加云运行时。 |
+| 通过 CodeCraft Hub 上传、线上烧录或分享固件 | 本文件的 CodeCraft Hub 一节，然后阅读 [CLI 文档](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/)。不要在此添加云运行时。 |
 | 文档 | 本文件的双语规则、`docs/README.md` |
 | 提交或 PR | `docs/development/ai-guide.md`（交付格式章节）、`.github/CONTRIBUTING.md`、`.github/PULL_REQUEST_TEMPLATE.md` |
 

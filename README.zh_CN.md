@@ -24,7 +24,7 @@
 是固件分享的云平台，不属于本仓库。
 
 若要上传固件做线上烧录或分享，使用
-[`@seeed-studio/sensecraft-cli`](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/guides/getting-started/setting-up/)
+[`@seeed-studio/sensecraft-cli`](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
 生成并上传。安装和用法见该页面，其中包括 CLI 自带的 agent skill。
 AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节，
 并且只在用户要求上传、线上烧录或分享固件时这样做。

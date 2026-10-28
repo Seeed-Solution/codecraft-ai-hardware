@@ -28,7 +28,7 @@ is a cloud platform for sharing firmware. It lives outside this
 repository.
 
 To upload firmware for online flashing or sharing, use
-[`@seeed-studio/sensecraft-cli`](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/guides/getting-started/setting-up/)
+[`@seeed-studio/sensecraft-cli`](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
 to generate and upload it. Install and usage are documented on that
 page, including the agent skill that ships with the CLI. AI agents
 follow the CodeCraft Hub section in [AGENTS.md](AGENTS.md) and do this
