@@ -1,0 +1,47 @@
+name: Usage question / 使用问题
+description: Ask for help building, flashing, or using a board example or BSP.
+title: "[Question] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please search existing issues first. Check the board README and docs/README.md before asking.
+        请先搜索已有 issue，并查看板卡 README 和 docs/README.md。
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question / 问题
+      description: What are you trying to do, and where are you blocked?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: board
+    attributes:
+      label: Board / 板卡
+      options:
+        - SenseCAP Watcher (ESP32-S3)
+        - SenseCAP Indicator (ESP32-S3)
+        - reTerminal E1001 (ESP32-S3)
+        - reTerminal E1002 (ESP32-S3)
+        - reSpeaker Lite (XIAO ESP32-S3)
+        - reTerminal (CM4, Linux)
+        - Not board-specific / 与板卡无关
+    validations:
+      required: true
+
+  - type: input
+    id: idf
+    attributes:
+      label: ESP-IDF version / ESP-IDF 版本
+      description: Required for ESP32 questions; write N/A otherwise.
+      placeholder: For example, v6.0.2
+    validations:
+      required: false
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you tried / 已尝试的方法
+      description: List commands you ran and their sanitized output.

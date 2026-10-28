@@ -1,0 +1,59 @@
+name: Feature request / 功能建议
+description: Suggest a new board, BSP capability, example, or documentation improvement.
+title: "[Feature] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Do not include credentials, private device data, or personal data.
+        感谢你的建议。请勿提交凭证、私密设备数据或个人数据。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case / 问题或使用场景
+      description: What problem should this solve, and who benefits from it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior / 期望行为
+      description: Describe the expected outcome and acceptance criteria.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area / 涉及范围
+      options:
+        - New board support / 新板卡支持
+        - ESP32 BSP or example / ESP32 BSP 或示例
+        - Linux board support / Linux 板卡支持
+        - Documentation or tooling / 文档或工具
+        - Agent skills / Agent skills
+        - Not sure / 不确定
+    validations:
+      required: true
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Vendor sources / 厂商资料
+      description: For new boards or hardware facts, link the vendor schematic, datasheet, or reference BSP.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context / 补充信息
+      description: Add diagrams, links, or alternatives you considered.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety check / 安全确认
+      options:
+        - label: I removed credentials, private device data, and personal data. / 我已移除凭证、私密设备数据和个人数据。
+          required: true

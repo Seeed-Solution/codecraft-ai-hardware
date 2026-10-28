@@ -1,0 +1,59 @@
+name: Arduino board builds
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arduino-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    name: Discover Arduino boards
+    runs-on: ubuntu-latest
+    outputs:
+      boards: ${{ steps.list.outputs.boards }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - id: list
+        run: |
+          boards="$(find arduino/boards -mindepth 1 -maxdepth 1 -type d 2>/dev/null -exec basename {} \; | jq -R -s -c 'split("\n") | map(select(length > 0))')"
+          echo "boards=${boards:-[]}" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Compile ${{ matrix.board }}
+    needs: discover
+    if: needs.discover.outputs.boards != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        board: ${{ fromJSON(needs.discover.outputs.boards) }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Install arduino-cli
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+          echo "$PWD/bin" >> "$GITHUB_PATH"
+
+      - name: Install the board's Arduino core
+        run: |
+          fqbn="$(cat "arduino/boards/${{ matrix.board }}/fqbn.txt")"
+          core="${fqbn%:*}"
+          arduino-cli config init --overwrite
+          arduino-cli core update-index \
+            --additional-urls https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+          arduino-cli core install "$core" \
+            --additional-urls https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+
+      - name: Compile all sketches for ${{ matrix.board }}
+        run: ./tools/validate.sh --arduino ${{ matrix.board }}

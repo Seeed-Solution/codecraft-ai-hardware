@@ -1,0 +1,77 @@
+name: Bug report / 缺陷报告
+description: Report a defect in a BSP, example, tool, or document.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Do not include credentials, private device data, or personal data.
+        感谢你的报告。请勿提交凭证、私密设备数据或个人数据。
+
+  - type: dropdown
+    id: board
+    attributes:
+      label: Affected board / 受影响板卡
+      options:
+        - SenseCAP Watcher (ESP32-S3)
+        - SenseCAP Indicator (ESP32-S3)
+        - reTerminal E1001 (ESP32-S3)
+        - reTerminal E1002 (ESP32-S3)
+        - reSpeaker Lite (XIAO ESP32-S3)
+        - reTerminal (CM4, Linux)
+        - Not board-specific / 与板卡无关
+    validations:
+      required: true
+
+  - type: input
+    id: idf
+    attributes:
+      label: ESP-IDF version / ESP-IDF 版本
+      description: Required for ESP32 issues; write N/A otherwise.
+      placeholder: For example, v6.0.2
+    validations:
+      required: false
+
+  - type: input
+    id: revision
+    attributes:
+      label: Hardware revision / 硬件版本
+      description: Production board or PCB revision; write Unknown if unsure.
+      placeholder: For example, production board or PCB revision
+    validations:
+      required: false
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened / 发生了什么
+      description: Describe the observed behavior and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce / 复现步骤
+      description: Include the exact commands, example path, and configuration used.
+      placeholder: |
+        1. cd esp32/boards/<board>/examples/<example>
+        2. idf.py build flash monitor
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and evidence / 日志与证据
+      description: Attach sanitized logs, measurements, or photos. Remove credentials and personal data.
+      render: text
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety check / 安全确认
+      options:
+        - label: I removed credentials, private device data, and personal data. / 我已移除凭证、私密设备数据和个人数据。
+          required: true

@@ -1,0 +1,38 @@
+name: ESP32 board builds
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: esp32-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build ${{ matrix.board }} (ESP-IDF v6.0.2)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        board:
+          - respeaker-lite
+          - reterminal-e1001
+          - reterminal-e1002
+          - sensecap-indicator
+          - sensecap-watcher
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Build all examples for ${{ matrix.board }}
+        uses: espressif/esp-idf-ci-action@9d38657f3d789ca759b2b37aaf5ceffbc42c4f0d # v1
+        with:
+          esp_idf_version: v6.0.2
+          target: esp32s3
+          command: ./tools/validate.sh --esp32 ${{ matrix.board }}
