@@ -23,12 +23,12 @@ system — firmware built from this repository runs entirely on the device.
 
 ## CodeCraft Hub
 
-[CodeCraft Hub](https://test-sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
+[CodeCraft Hub](https://codecraft.seeed.cc/hub/)
 is a cloud platform for sharing firmware. It lives outside this
 repository.
 
 To upload firmware for online flashing or sharing, use
-[`@seeed-studio/sensecraft-cli`](https://test-sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
+[`@seeed-studio/sensecraft-cli`](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
 to generate and upload it. Install and usage are documented on that
 page, including the agent skill that ships with the CLI. AI agents
 follow the CodeCraft Hub section in [AGENTS.md](AGENTS.md) and do this
