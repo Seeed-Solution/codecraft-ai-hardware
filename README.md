@@ -49,16 +49,19 @@ only when asked to upload, flash online, or share firmware.
 
 ## Supported boards
 
-| Board | Platform | Status |
-|---|---|---|
-| SenseCAP Watcher | ESP32-S3 | BSP feature-complete (camera, display, touch, audio, knob, battery, microSD) + 8 examples build-verified (IDF v6.0.2); on-device test pending |
-| SenseCAP Indicator | ESP32-S3 | BSP (RGB display, IO expander, button, touch) + examples build-verified (IDF v6.0.2); on-device test pending |
-| reTerminal E1001 | ESP32-S3 | BSP feature-complete (EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD) + 4 examples build-verified (IDF v6.0.2); on-device test pending |
-| reTerminal E1002 | ESP32-S3 | Same BSP as E1001 with the Spectra 6 color panel; build-verified (IDF v6.0.2); on-device test pending |
-| reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 examples build-verified (IDF v6.0.2); on-device test pending |
-| reTerminal Sticky | ESP32-S3 | BSP (SSD1677 EPD, keys, SHT4x) + 3 examples build-verified (IDF v6.0.2); on-device test pending |
-| XIAO ESP32-S3 1.47" Touch Display | ESP32-S3 | BSP (JD9853A LCD, buttons, PDM mic) + 3 examples build-verified (IDF v6.0.2); on-device test pending |
-| reTerminal (CM4) | Linux | Peripherals overlay + demos (buttons/LEDs/buzzer/sensors/RTC); hardware verification pending |
+| Board | Platform | BSP scope | Examples |
+|---|---|---|---|
+| SenseCAP Watcher | `ESP32-S3` | camera, display, touch, audio, knob, battery, microSD | 8 |
+| SenseCAP Indicator | `ESP32-S3` | RGB display, IO expander, button, touch | 3 |
+| reTerminal E1001 | `ESP32-S3` | EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD | 4 |
+| reTerminal E1002 | `ESP32-S3` | E1001 BSP with the Spectra 6 color panel | 4 |
+| reSpeaker Lite (XIAO ESP32-S3) | `ESP32-S3` | XMOS I2S audio, BOOT button, WS2812 LED | 3 |
+| reTerminal Sticky | `ESP32-S3` | SSD1677 EPD, keys, SHT4x | 3 |
+| XIAO ESP32-S3 1.47" Touch Display | `ESP32-S3` | JD9853A LCD, buttons, PDM mic | 3 |
+| reTerminal (CM4) | `Linux` | peripherals overlay + demos: buttons, LEDs, buzzer, sensors, RTC | — |
+
+All ESP32-S3 boards are build-verified on ESP-IDF v6.0.2; on-device
+validation is pending for every board.
 
 See [docs/inventory.md](docs/inventory.md) for the capability matrix and
 extraction sources, [docs/on-device-validation.md](docs/on-device-validation.md)
