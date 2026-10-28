@@ -11,7 +11,18 @@
 
 Seeed 设备的纯硬件能力参考仓库。包含板级支持包、独立示例和经过验证的
 硬件事实。刻意**不包含云运行时**：没有设备配对、没有账户体系、没有远程
-协议、没有遥测。也不要引入这些内容。
+协议、没有遥测。不要把这些内容引进本仓库。
+
+## CodeCraft Hub
+
+[CodeCraft Hub](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme)
+是独立的固件分享云平台。本仓库不实现它。
+
+当用户希望上传固件、做线上烧录或分享时，使用
+[`@seeed-studio/sensecraft-cli`](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme)
+生成并上传。按该文档安装 CLI 及其 agent skill，然后再使用工具。仅在
+用户提出该请求时这样做：普通的构建、刷机或板级改动不是上传请求。
+硬件事实仍以本仓库为准。
 
 ## 必需的 AI skills
 
@@ -59,6 +70,7 @@ Seeed 设备的纯硬件能力参考仓库。包含板级支持包、独立示�
 | 新增板卡 | `docs/development/ai-guide.md`（板卡接入章节）、`docs/vendor-sources.md` |
 | 构建、测试、依赖、分区表 | `skills/codecraft-build/SKILL.md`、该板的 sdkconfig 默认值 |
 | 刷机或设备上测试 | `skills/codecraft-device-test/SKILL.md` |
+| 通过 CodeCraft Hub 上传、线上烧录或分享固件 | 本文件的 CodeCraft Hub 一节，然后阅读 [`@seeed-studio/sensecraft-cli` 文档](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme)。不要在此添加云运行时。 |
 | 文档 | 本文件的双语规则、`docs/README.md` |
 | 提交或 PR | `docs/development/ai-guide.md`（交付格式章节）、`.github/CONTRIBUTING.md`、`.github/PULL_REQUEST_TEMPLATE.md` |
 

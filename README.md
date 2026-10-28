@@ -9,7 +9,7 @@ development on Seeed devices.
 
 This is a **pure hardware** repository: board support packages (BSPs),
 standalone demos, verified hardware facts, and agent-facing development
-guidance. There is no cloud service, no device pairing, and no account
+guidance. It contains no cloud runtime, device pairing, or account
 system — firmware built from this repository runs entirely on the device.
 
 ## Who this is for
@@ -20,6 +20,19 @@ system — firmware built from this repository runs entirely on the device.
   Start at [AGENTS.md](AGENTS.md).
 - **Human developers**: use the per-board examples as a starting point for
   your own firmware. Start at [docs/README.md](docs/README.md).
+
+## CodeCraft Hub
+
+[CodeCraft Hub](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme)
+is a cloud platform for sharing firmware. It lives outside this
+repository.
+
+To upload firmware for online flashing or sharing, use
+[`@seeed-studio/sensecraft-cli`](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme)
+to generate and upload it. Install and usage are documented on that
+page, including the agent skill that ships with the CLI. AI agents
+follow the CodeCraft Hub section in [AGENTS.md](AGENTS.md) and do this
+only when asked to upload, flash online, or share firmware.
 
 ## Repository layout
 

@@ -13,7 +13,21 @@ load every README by default.
 A pure hardware capability reference for Seeed devices. It contains board
 support packages, standalone demos, and verified hardware facts. It
 deliberately contains **no cloud runtime**: no device pairing, no account
-system, no remote protocol, no telemetry. Do not introduce any of these.
+system, no remote protocol, no telemetry. Do not introduce any of these
+into this repository.
+
+## CodeCraft Hub
+
+[CodeCraft Hub](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme)
+is a separate cloud platform for sharing firmware. This repository does
+not implement it.
+
+When the user wants to upload firmware for online flashing or sharing,
+use [`@seeed-studio/sensecraft-cli`](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme)
+to generate and upload it. Install the CLI and its agent skill by
+following that documentation, then use the tool. Do this only for that
+request: an ordinary build, flash, or board change is not a request to
+upload. Hardware facts still come from this repository.
 
 ## Required AI skills
 
@@ -74,6 +88,7 @@ requirements for flashing, Git writes, and publishing.
 | Adding a new board | `docs/development/ai-guide.md` (board onboarding section), `docs/vendor-sources.md` |
 | Build, test, dependencies, partitions | `skills/codecraft-build/SKILL.md`, the board's sdkconfig defaults |
 | Flashing or on-device testing | `skills/codecraft-device-test/SKILL.md` |
+| Upload, online flashing, or sharing firmware through CodeCraft Hub | This file's CodeCraft Hub section, then the [`@seeed-studio/sensecraft-cli` documentation](https://www.npmjs.com/package/@seeed-studio/sensecraft-cli?activeTab=readme). Do not add cloud runtime here. |
 | Documentation | this file's bilingual rule, `docs/README.md` |
 | Commit or PR | `docs/development/ai-guide.md` (delivery format section), `.github/CONTRIBUTING.md`, `.github/PULL_REQUEST_TEMPLATE.md` |
 
