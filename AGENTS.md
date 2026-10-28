@@ -18,16 +18,23 @@ into this repository.
 
 ## CodeCraft Hub
 
-[CodeCraft Hub](https://test-sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
+[CodeCraft Hub](https://codecraft.seeed.cc/hub/)
 is a separate cloud platform for sharing firmware. This repository does
 not implement it.
 
 When the user wants to upload firmware for online flashing or sharing,
-use [`@seeed-studio/sensecraft-cli`](https://test-sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
-to generate and upload it. Install the CLI and its agent skill by
-following that documentation, then use the tool. Do this only for that
-request: an ordinary build, flash, or board change is not a request to
-upload. Hardware facts still come from this repository.
+use `sensecraft-cli` from the published npm package:
+
+- Install a missing CLI with `npx @seeed-studio/sensecraft-cli install`.
+- Update an existing installation with `sensecraft-cli update`.
+- Verify the installation with `sensecraft-cli --version`.
+
+Follow the [setup guide](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/guides/getting-started/setting-up/)
+for authorization and loading the CLI's packaged agent skill. Use the npm
+release commands above; do not clone or build the CLI's GitHub repository as
+an installation method. Do this only for the upload request: an ordinary
+build, flash, or board change is not a request to upload. Hardware facts
+still come from this repository.
 
 ## Required AI skills
 
@@ -88,7 +95,7 @@ requirements for flashing, Git writes, and publishing.
 | Adding a new board | `docs/development/ai-guide.md` (board onboarding section), `docs/vendor-sources.md` |
 | Build, test, dependencies, partitions | `skills/codecraft-build/SKILL.md`, the board's sdkconfig defaults |
 | Flashing or on-device testing | `skills/codecraft-device-test/SKILL.md` |
-| Upload, online flashing, or sharing firmware through CodeCraft Hub | This file's CodeCraft Hub section, then the [`@seeed-studio/sensecraft-cli` documentation](https://test-sensecraft.seeed.cc/wiki/en/sensecraft-cli/). Do not add cloud runtime here. |
+| Upload, online flashing, or sharing firmware through CodeCraft Hub | This file's CodeCraft Hub section, then the [CLI setup guide](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/guides/getting-started/setting-up/). Do not add cloud runtime here. |
 | Documentation | this file's bilingual rule, `docs/README.md` |
 | Commit or PR | `docs/development/ai-guide.md` (delivery format section), `.github/CONTRIBUTING.md`, `.github/PULL_REQUEST_TEMPLATE.md` |
 
