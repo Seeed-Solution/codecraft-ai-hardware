@@ -53,9 +53,13 @@ AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节�
 | reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S 音频、BOOT 按键、WS2812 LED |
 | reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 墨水屏、按键、SHT4x |
 | XIAO ESP32-S3 1.47" 触摸显示屏 | <code>ESP32&#8209;S3</code> | JD9853A LCD、按键、PDM 麦克风 |
+| Wio Terminal | <code>SAMD51</code> | 显示、按键、IMU、光传感器、麦克风、蜂鸣器、microSD、IR 发射、Grove、Wi-Fi/BLE |
 | reTerminal (CM4) | <code>Linux</code> | 外设 overlay + 演示：按键、LED、蜂鸣器、传感器、RTC |
 
 所有 ESP32-S3 板卡均在 ESP-IDF v6.0.2 上构建验证通过；所有板卡尚未上机验证。
+
+Wio Terminal 示例在 `Seeeduino:samd@1.8.6` 上构建；其中 8 个的上机结果记录在
+[docs/on-device-validation.md](docs/on-device-validation.md)。
 
 能力矩阵和抽取来源见 [docs/inventory.md](docs/inventory.md)，
 上机验证清单见 [docs/on-device-validation.md](docs/on-device-validation.md)，
@@ -67,6 +71,7 @@ AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节�
 ./tools/validate.sh --static           # 仓库检查 + 宿主机测试
 ./tools/validate.sh --esp32 <board>    # 单板 ESP-IDF 构建
 ./tools/validate.sh --linux <board>    # Linux 板卡检查
+./tools/validate.sh --arduino <board>  # 单板 arduino-cli 构建
 ./tools/validate.sh                    # 完整门禁
 ```
 

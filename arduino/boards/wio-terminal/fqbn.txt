@@ -1,0 +1,1 @@
+Seeeduino:samd:seeed_wio_terminal

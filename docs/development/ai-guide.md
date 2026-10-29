@@ -54,7 +54,8 @@ root `AGENTS.md` is the mandatory entry point; this guide is the long form.
 Every final report states separately:
 
 1. Static check result (`tools/validate.sh --static`).
-2. Build result per affected board (`tools/validate.sh --esp32 <board>`).
+2. Build result per affected board (`tools/validate.sh --esp32 <board>` or
+   `tools/validate.sh --arduino <board>`).
 3. On-device verification result, or an explicit statement that it was not
    performed.
 

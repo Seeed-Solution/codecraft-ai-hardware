@@ -58,10 +58,14 @@ only when asked to upload, flash online, or share firmware.
 | reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S audio, BOOT button, WS2812 LED |
 | reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 EPD, keys, SHT4x |
 | XIAO ESP32-S3 1.47" Touch Display | <code>ESP32&#8209;S3</code> | JD9853A LCD, buttons, PDM mic |
+| Wio Terminal | <code>SAMD51</code> | display, buttons, IMU, light sensor, mic, buzzer, microSD, IR emitter, Grove, Wi-Fi/BLE |
 | reTerminal (CM4) | <code>Linux</code> | peripherals overlay + demos: buttons, LEDs, buzzer, sensors, RTC |
 
 All ESP32-S3 boards are build-verified on ESP-IDF v6.0.2; on-device
 validation is pending for every board.
+
+Wio Terminal demos build on `Seeeduino:samd@1.8.6`; eight of ten have
+on-device results recorded in [docs/on-device-validation.md](docs/on-device-validation.md).
 
 See [docs/inventory.md](docs/inventory.md) for the capability matrix and
 extraction sources, [docs/on-device-validation.md](docs/on-device-validation.md)
@@ -75,6 +79,7 @@ the authoritative upstream reference for every board.
 ./tools/validate.sh --static           # repository checks + host tests
 ./tools/validate.sh --esp32 <board>    # ESP-IDF build for one board
 ./tools/validate.sh --linux <board>    # Linux board checks
+./tools/validate.sh --arduino <board>  # arduino-cli build for one board
 ./tools/validate.sh                    # complete gate
 ```
 
