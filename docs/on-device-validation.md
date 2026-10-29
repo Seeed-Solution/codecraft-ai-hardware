@@ -5,7 +5,8 @@ Seeeduino SAMD 1.8.6 / Arduino AVR 1.8.8 / Raspberry Pi OS), but most drivers
 have not yet run on real hardware.
 This checklist is the gate for moving a board from "build-verified" to
 "field-tested". The Wio Terminal section includes results recorded on
-2026-10-28; other board sections remain build-verified unless noted. Run each
+2026-10-28, and the Grove Beginner Kit section includes results recorded on
+2026-10-29; other board sections remain build-verified unless noted. Run each
 item, record the OS image / IDF version and the result, and update the board
 README's Status line.
 
@@ -111,3 +112,79 @@ Recorded results (2026-10-28):
   user confirmed the LCD. The blocking `BLEScan::start` overload froze the UI
   on this unit, so the demo uses the non-blocking overload.
 
+## Grove Beginner Kit for Arduino (ATmega328P, Arduino)
+
+Required toolchain: `arduino:avr@1.8.8` with FQBN `arduino:avr:uno`, plus the
+exact libraries pinned in `arduino/boards/grove-beginner-kit/libraries.txt`.
+Target hardware: **post-October-2025 kit revision only**. Run `i2c_scan`
+first and require DHT20 at 0x38 plus an SPA06-003 ACK at 0x77/0x76; the
+SPA06 sketch additionally verifies device ID 0x11. The 2020 DHT11/BMP280
+revision is out of scope and has no sketch in this directory.
+
+| # | Check | Example / how | Expected |
+|---|-------|---------------|----------|
+| 1 | I2C inventory | `i2c_scan` | 0x19, 0x38, 0x3C/0x3D and 0x77/0x76 appear; record the exact addresses |
+| 2 | LED | `led_blink` | steady 1 Hz on/off; serial prints both phases |
+| 3 | Button | `button_led` | LED follows D6; one line per debounced transition |
+| 4 | Potentiometer | `potentiometer` | raw range spans a useful part of 0-1023; LED switches near midpoint with hysteresis |
+| 5 | Passive buzzer | `buzzer_tones` | four ascending tones (440/880/1760/2000 Hz) and a silent gap |
+| 6 | Light sensor | `light_sensor` | raw value falls when covered and the LED turns on below the dark threshold |
+| 7 | Sound sensor | `sound_sensor` | clap/speech raises the 50 ms peak; LED lights above raw 400 and releases after the hold |
+| 8 | OLED | `oled_status` | four text rows and a once-per-second uptime counter; note orientation |
+| 9 | DHT20 | `temperature_humidity_dht20` | `DHT20 on I2C 0x38`; plausible readings every second |
+| 10 | SPA06-003 | `air_pressure_spa06` | detection at 0x77 or 0x76; pressure/temperature/altitude lines repeat |
+| 11 | Accelerometer | `accelerometer` | `LIS3DHTR on I2C 0x19`; still magnitude near 1 g; axes change with tilt; LED indicates motion |
+
+Record the USB bridge (CH340 on Lotus v1.0, CP2102N on v1.1), the power
+source, and the `arduino:avr` core version. The board revision must still be
+confirmed by the 0x38 I2C result. A compile is not an on-device pass.
+
+When reporting results, note: board revision, power source, and the relevant
+toolchain version (Arduino core, ESP-IDF `idf.py --version`, or OS/kernel
+`uname -a`).
+
+Recorded results (2026-10-29, Seeeduino Lotus v1.1, CP2102N, USB-powered,
+`arduino:avr@1.8.8`):
+
+- ✅ `i2c_scan` — 9600-baud serial reported 0x19 LIS3DHTR, 0x38 DHT20,
+  0x3C OLED and 0x77 SPA06-003, repeated across scans. This confirms the
+  post-October-2025 revision and the expected four-device I2C inventory.
+- ✅ `led_blink` — serial repeatedly printed `LED=ON` and `LED=OFF` at the
+  500 ms half-period after reset. LED emission itself was not captured by an
+  instrument.
+- ✅ `button_led` — boot state was `Button=RELEASED LED=OFF`; four physical
+  press/release cycles produced matching `Button=PRESSED LED=ON` and
+  `Button=RELEASED LED=OFF` lines.
+- ✅ `potentiometer` — turning A0 through its full travel swept `raw` from 0
+  to 1023 (0-100 %, 0-5000 mV). The LED switched on above the 532 threshold
+  and off below 492, and held its state at `raw=503` and `526`, inside the
+  hysteresis band.
+- ✅ `buzzer_tones` — serial continuously cycled `440`, `880`, `1760` and
+  `2000 Hz` followed by `silence 1500 ms`. Audible output was not captured by
+  an instrument.
+- ✅ `light_sensor` — ambient light read `raw=776-781` (`3.8 V`) with
+  `LED=OFF`. Covering the photoresistor drove `raw` to 0-26 and printed
+  `LED=ON`; removing the hand returned to `raw=779` and `LED=OFF`. The pass
+  through `raw=21-26` stayed `LED=ON`, confirming the 200/260 hysteresis. The
+  user confirmed the LED lit and went out. A first covering attempt produced
+  no change because the wrong module was covered; a six-pin analog probe then
+  showed A6 responding (777 to 0) while A7 tracked it down to about 80.
+- ✅ `sound_sensor` — ambient 50 ms peaks stayed at 100-170 with `LED=OFF`.
+  Two hand claps next to the module produced `peak=561 LED=ON` and later
+  `peak=686 LED=ON`; the next sample held `LED=ON` at `peak=162`/`282` and
+  then released to `LED=OFF`, confirming the 100 ms hold. The user confirmed
+  the LED effect.
+- ✅ `oled_status` — serial printed monotonically increasing `uptime` values
+  from 2 s onward after the OLED initialized. The user confirmed that the
+  panel displayed correctly on 2026-10-29.
+- ✅ `temperature_humidity_dht20` — initialized at 0x38 and reported
+  43.8–44.0 %RH at 26.2 C with about one sample per second.
+- ✅ `air_pressure_spa06` — the library accepted SPA06-003 (device ID 0x11)
+  at 0x77 and reported approximately 101170 Pa, 27.4 C and 12.8 m
+  barometric altitude.
+- ✅ `accelerometer` — initialized at 0x19 and rested at `X≈-0.01`,
+  `Y≈0.14`, `Z≈0.98`, `|a|≈1.00 g`, `LED=REST`. Tilting and shaking drove
+  the axes through X -0.82 to +1.16 g, Z 0.05 to 1.40 g and |a| 0.14 to
+  1.60 g, and every sample during the motion printed `LED=ACTIVE`; the board
+  returned to `LED=REST` once still. The rest offset shifted slightly after
+  the shake (X -0.03 g, Y 0.12 g), consistent with the LIS3DHTR offset.

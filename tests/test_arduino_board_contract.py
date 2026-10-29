@@ -53,14 +53,11 @@ def test_board_metadata_is_bilingual_and_complete():
             assert path.read_text().strip(), f"{board}: empty {name}"
 
         fqbn = board.joinpath("fqbn.txt").read_text().strip()
-        assert re.fullmatch(
-            r"[^:\s]+:[^:\s]+:[^:\s]+(?::[^:\s=]+=[^:\s]+)*", fqbn
-        ), f"{board}: malformed FQBN {fqbn!r}"
-        fqbn_core = ":".join(fqbn.split(":")[:2])
+        assert fqbn.count(":") == 2, f"{board}: malformed FQBN {fqbn!r}"
         core = board.joinpath("core-version.txt").read_text().strip()
         core_id, separator, version = core.partition("@")
         assert separator and version, f"{board}: core-version.txt must be ID@version"
-        assert core_id == fqbn_core, (
+        assert core_id == fqbn.rsplit(":", 1)[0], (
             f"{board}: core-version {core_id} does not match FQBN core"
         )
 

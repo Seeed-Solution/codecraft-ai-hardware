@@ -58,14 +58,21 @@ only when asked to upload, flash online, or share firmware.
 | reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S audio, BOOT button, WS2812 LED |
 | reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 EPD, keys, SHT4x |
 | XIAO ESP32-S3 1.47" Touch Display | <code>ESP32&#8209;S3</code> | JD9853A LCD, buttons, PDM mic |
+| Grove Beginner Kit for Arduino (post-2025) | <code>ATmega328P</code> | Grove LED, buzzer, OLED, button, pot, light, sound, DHT20, SPA06-003, IMU |
 | Wio Terminal | <code>SAMD51</code> | display, buttons, IMU, light sensor, mic, buzzer, microSD, IR emitter, Grove, Wi-Fi/BLE |
 | reTerminal (CM4) | <code>Linux</code> | peripherals overlay + demos: buttons, LEDs, buzzer, sensors, RTC |
 
 All ESP32-S3 boards are build-verified on ESP-IDF v6.0.2; on-device
-validation is pending for every board.
+validation is pending for them.
 
 Wio Terminal demos build on `Seeeduino:samd@1.8.6`; eight of ten have
 on-device results recorded in [docs/on-device-validation.md](docs/on-device-validation.md).
+
+Post-2025 Grove Beginner Kit demos build on `arduino:avr@1.8.8`; all 10
+device demos plus `i2c_scan` are on-device verified, including the physical
+actions for the button, potentiometer, light, sound and motion modules.
+Results are recorded in
+[docs/on-device-validation.md](docs/on-device-validation.md).
 
 See [docs/inventory.md](docs/inventory.md) for the capability matrix and
 extraction sources, [docs/on-device-validation.md](docs/on-device-validation.md)

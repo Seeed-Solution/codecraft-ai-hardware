@@ -120,6 +120,29 @@ battery sense, keys, LED); only the panel differs.
 | Wireless | RTL8720DN, 2.4/5 GHz 802.11 a/b/g/n + BLE 5.0; CHIP_PU=80, IRQ0=11; RTL eRPC firmware required | schematic sheet 06 + core `variant.h` + product page + Wi-Fi firmware guide | **extracted + Wi-Fi and BLE measured** (`wifi_scan` and `ble_scan` passed on firmware 2.1.3) |
 | Arduino toolchain | `Seeeduino:samd@1.8.6`; exact libraries in `arduino/boards/wio-terminal/libraries.txt`; all 10 sketches compile | local arduino-cli build | build-verified; on-device results in `docs/on-device-validation.md` |
 
+### Grove Beginner Kit for Arduino
+
+Scope: **post-October-2025 kit revision only**. The supported sensor set is
+DHT20 at I2C 0x38 and SPA06-003 at I2C 0x77/0x76; the 2020 DHT11/BMP280
+revision is not part of this board directory.
+
+| Capability | Fact | Source | Extraction status |
+|---|---|---|---|
+| MCU / memory | ATmega328P-MU, 16 MHz, 32,256-byte sketch maximum, 2 KB SRAM, 1 KB EEPROM, 5 V logic | Seeeduino Lotus wiki + Lotus v1.1 schematic + `arduino:avr@1.8.8` UNO board definition | confirmed |
+| Board identity | Vendor core defines `Seeeduino:avr:Lotus`; repository builds the function-equivalent `arduino:avr:uno` target. The legacy 1.2.1 core bundles an i386-only avr-gcc and its indexed 1.3.0 archive is missing | Seeeduino AVR 1.2.1 archive + ArduinoCore-avr 1.8.8 + local build | build-verified only |
+| I2C bus | Hardware I2C: A4/PC4/pin 18 SDA, A5/PC5/pin 19 SCL, 5 V logic | Lotus v1.1 schematic + core `standard` variant | **extracted** (`i2c_scan`) |
+| Digital output | Grove LED on D4, active high, not PWM | kit wiki default-pin table + Lesson 1/4 | **extracted** (`led_blink`) |
+| Digital input | Grove Button on D6, pressed HIGH; module has an external pull-down | kit wiki Lesson 2 | **extracted** (`button_led`) |
+| Analog input | Rotary potentiometer on A0; 10-bit ADC | kit wiki Lesson 3 | **extracted** (`potentiometer`) |
+| Tone output | Passive piezo buzzer on D5; driven with `tone()` | kit wiki Lesson 4 | **extracted** (`buzzer_tones`) |
+| Analog light | Grove Light on A6; raw ADC, not lux | kit wiki Lesson 5 | **extracted** (`light_sensor`, raw only) |
+| Analog sound | Grove Sound on A2; analog envelope, not dB SPL or audio | kit wiki Lesson 6 | **extracted** (`sound_sensor`, envelope only) |
+| Display | 0.96-inch 128x64 SSD1306/SSD1315-compatible OLED on I2C 0x3C (0x3D alternate); 0x78 in the vendor table is the 8-bit write address | kit wiki + Grove OLED wiki | **extracted** (`oled_status`) |
+| Temperature/humidity | DHT20 on I2C 0x38; black detector identifies this revision; confirm 0x38 with `i2c_scan` because the published kit schematic predates this sensor | kit wiki version notes + Grove DHT library 2.0.2 | **extracted** (`temperature_humidity_dht20`; confirm 0x38) |
+| Pressure | SPA06-003 on I2C 0x77/0x76; library checks device ID 0x11 | SPA06-003 wiki + Seeed Arduino SPA06 1.0.1 | **extracted** (`air_pressure_spa06`) |
+| Motion | LIS3DHTR on I2C 0x19; the library default 0x18 must be overridden | kit wiki Lesson 10 + LIS3DHTR 1.2.4 | **extracted** (`accelerometer`) |
+| Arduino toolchain | `arduino:avr@1.8.8`; exact libraries in `arduino/boards/grove-beginner-kit/libraries.txt`; all 10 device demos plus `i2c_scan` compile | local arduino-cli build | build-verified; on-device serial/readout checks recorded in `docs/on-device-validation.md` |
+
 ## Linux boards
 
 | Board | Capability notes | Source | Status |
