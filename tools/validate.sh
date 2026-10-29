@@ -62,11 +62,23 @@ check_static() {
     done < <(find linux/boards -mindepth 1 -maxdepth 1 -type d | sort)
   fi
 
-  # Arduino board directory contract: README + fqbn.txt per board.
+  # Arduino board directory contract: bilingual board docs, an FQBN, the
+  # pinned core/library metadata, and one reproducible AGENTS pair per sketch.
   if [[ -d arduino/boards ]]; then
     while IFS= read -r d; do
-      [[ -f "$d/README.md" ]] || { echo "  MISSING $d/README.md"; rc=1; }
-      [[ -f "$d/fqbn.txt" ]] || { echo "  MISSING $d/fqbn.txt"; rc=1; }
+      for f in README.md README.zh_CN.md AGENTS.md AGENTS.zh_CN.md fqbn.txt core-version.txt libraries.txt; do
+        [[ -s "$d/$f" ]] || { echo "  MISSING or empty $d/$f"; rc=1; }
+      done
+      if [[ -f "$d/fqbn.txt" ]]; then
+        fqbn_lines="$(grep -cve '^[[:space:]]*$' "$d/fqbn.txt" || true)"
+        [[ "$fqbn_lines" -eq 1 ]] || { echo "  $d/fqbn.txt must contain exactly one non-empty line"; rc=1; }
+      fi
+      while IFS= read -r ex; do
+        name="$(basename "$ex")"
+        [[ -f "$ex/$name.ino" ]] || { echo "  MISSING $ex/$name.ino"; rc=1; }
+        [[ -s "$ex/AGENTS.md" ]] || { echo "  MISSING or empty $ex/AGENTS.md"; rc=1; }
+        [[ -s "$ex/AGENTS.zh_CN.md" ]] || { echo "  MISSING or empty $ex/AGENTS.zh_CN.md"; rc=1; }
+      done < <(find "$d/examples" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
     done < <(find arduino/boards -mindepth 1 -maxdepth 1 -type d | sort)
   fi
 
