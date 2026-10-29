@@ -73,6 +73,8 @@ battery sense, keys, LED); only the panel differs.
 | RF | attach XIAO external antenna; 2.4 GHz Wi-Fi only | doc above | confirmed |
 | IDF version | ESP-IDF v6.0.1 per muse doc; examples build clean on v6.0.2 | doc above + local build | confirmed |
 
+## Arduino boards
+
 ## Linux boards
 
 | Board | Capability notes | Source | Status |

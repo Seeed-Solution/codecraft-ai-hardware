@@ -40,6 +40,7 @@
 | reTerminal E1001 | ESP32-S3 | BSP 功能完整（墨水屏、按键、LED、SHT4x、电池、RTC、充电器、蜂鸣器、PDM 麦克风、microSD）+ 4 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reTerminal E1002 | ESP32-S3 | 与 E1001 相同 BSP，面板换为 Spectra 6 彩色；构建验证通过（IDF v6.0.2）；尚未上机验证 |
 | reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
+| Wio Terminal | SAMD51（Arduino） | 10 个硬件示例构建验证通过（Seeeduino SAMD 1.8.6）；8 个示例上机通过、IR 发射已观察；外部 Grove 检测待验证；Wi-Fi/BLE 需 RTL8720 eRPC 固件 |
 | reTerminal (CM4) | Linux | 外设 overlay + 演示（按键/LED/蜂鸣器/传感器/RTC）；待上机验证 |
 
 能力矩阵和抽取来源见 [docs/inventory.md](docs/inventory.md)，
@@ -52,6 +53,7 @@
 ./tools/validate.sh --static           # 仓库检查 + 宿主机测试
 ./tools/validate.sh --esp32 <board>    # 单板 ESP-IDF 构建
 ./tools/validate.sh --linux <board>    # Linux 板卡检查
+./tools/validate.sh --arduino <board>  # 单板 arduino-cli 构建
 ./tools/validate.sh                    # 完整门禁
 ```
 

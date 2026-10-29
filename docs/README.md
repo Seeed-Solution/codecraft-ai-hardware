@@ -5,5 +5,6 @@
 - [development/ai-guide.md](development/ai-guide.md) — AI development workflow, source-of-truth priority, delivery format.
 
 Board-level hardware guides live next to each board under
-`esp32/boards/<board>/` or `linux/boards/<board>/` and are linked from the
-board README as they are written.
+`esp32/boards/<board>/`, `linux/boards/<board>/`, or
+`arduino/boards/<board>/` and are linked from the board README as they are
+written.

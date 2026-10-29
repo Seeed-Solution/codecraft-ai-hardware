@@ -43,6 +43,7 @@ system — firmware built from this repository runs entirely on the device.
 | reTerminal E1001 | ESP32-S3 | BSP feature-complete (EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD) + 4 examples build-verified (IDF v6.0.2); on-device test pending |
 | reTerminal E1002 | ESP32-S3 | Same BSP as E1001 with the Spectra 6 color panel; build-verified (IDF v6.0.2); on-device test pending |
 | reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 examples build-verified (IDF v6.0.2); on-device test pending |
+| Wio Terminal | SAMD51 (Arduino) | 10 hardware demos build-verified (Seeeduino SAMD 1.8.6); eight on-device passes, IR emission observed; external Grove detection pending; Wi-Fi/BLE require RTL8720 eRPC firmware |
 | reTerminal (CM4) | Linux | Peripherals overlay + demos (buttons/LEDs/buzzer/sensors/RTC); hardware verification pending |
 
 See [docs/inventory.md](docs/inventory.md) for the capability matrix and
@@ -57,6 +58,7 @@ the authoritative upstream reference for every board.
 ./tools/validate.sh --static           # repository checks + host tests
 ./tools/validate.sh --esp32 <board>    # ESP-IDF build for one board
 ./tools/validate.sh --linux <board>    # Linux board checks
+./tools/validate.sh --arduino <board>  # arduino-cli build for one board
 ./tools/validate.sh                    # complete gate
 ```
 
