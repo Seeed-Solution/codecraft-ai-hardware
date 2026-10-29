@@ -1,0 +1,8 @@
+# Exact Arduino Library Manager dependencies for this board's examples.
+# The LCD library is bundled inside Seeeduino:samd 1.8.6, not listed here.
+Seeed Arduino rpcUnified@2.1.4
+Seeed_Arduino_mbedtls@3.0.2
+Seeed Arduino FS@2.1.5
+Seeed Arduino SFUD@2.0.2
+Seeed Arduino rpcWiFi@1.1.0
+Seeed Arduino rpcBLE@1.0.0
