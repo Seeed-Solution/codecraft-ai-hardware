@@ -9,7 +9,7 @@ development on Seeed devices.
 
 This is a **pure hardware** repository: board support packages (BSPs),
 standalone demos, verified hardware facts, and agent-facing development
-guidance. There is no cloud service, no device pairing, and no account
+guidance. It contains no cloud runtime, device pairing, or account
 system — firmware built from this repository runs entirely on the device.
 
 ## Who this is for
@@ -20,6 +20,19 @@ system — firmware built from this repository runs entirely on the device.
   Start at [AGENTS.md](AGENTS.md).
 - **Human developers**: use the per-board examples as a starting point for
   your own firmware. Start at [docs/README.md](docs/README.md).
+
+## CodeCraft Hub
+
+[CodeCraft Hub](https://codecraft.seeed.cc/hub/)
+is a cloud platform for sharing firmware. It lives outside this
+repository.
+
+To upload firmware for online flashing or sharing, use
+[`@seeed-studio/sensecraft-cli`](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
+to generate and upload it. Install and usage are documented on that
+page, including the agent skill that ships with the CLI. AI agents
+follow the CodeCraft Hub section in [AGENTS.md](AGENTS.md) and do this
+only when asked to upload, flash online, or share firmware.
 
 ## Repository layout
 
@@ -36,15 +49,23 @@ system — firmware built from this repository runs entirely on the device.
 
 ## Supported boards
 
-| Board | Platform | Status |
+| Board | Platform | BSP scope |
 |---|---|---|
-| SenseCAP Watcher | ESP32-S3 | BSP feature-complete (camera, display, touch, audio, knob, battery, microSD) + 8 examples build-verified (IDF v6.0.2); on-device test pending |
-| SenseCAP Indicator | ESP32-S3 | BSP (RGB display, IO expander, button, touch) + examples build-verified (IDF v6.0.2); on-device test pending |
-| reTerminal E1001 | ESP32-S3 | BSP feature-complete (EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD) + 4 examples build-verified (IDF v6.0.2); on-device test pending |
-| reTerminal E1002 | ESP32-S3 | Same BSP as E1001 with the Spectra 6 color panel; build-verified (IDF v6.0.2); on-device test pending |
-| reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 examples build-verified (IDF v6.0.2); on-device test pending |
-| Wio Terminal | SAMD51 (Arduino) | 10 hardware demos build-verified (Seeeduino SAMD 1.8.6); eight on-device passes, IR emission observed; external Grove detection pending; Wi-Fi/BLE require RTL8720 eRPC firmware |
-| reTerminal (CM4) | Linux | Peripherals overlay + demos (buttons/LEDs/buzzer/sensors/RTC); hardware verification pending |
+| SenseCAP Watcher | <code>ESP32&#8209;S3</code> | camera, display, touch, audio, knob, battery, microSD |
+| SenseCAP Indicator | <code>ESP32&#8209;S3</code> | RGB display, IO expander, button, touch |
+| reTerminal E1001 | <code>ESP32&#8209;S3</code> | EPD, keys, LED, SHT4x, battery, RTC, charger, buzzer, PDM mic, microSD |
+| reTerminal E1002 | <code>ESP32&#8209;S3</code> | E1001 BSP with the Spectra 6 color panel |
+| reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S audio, BOOT button, WS2812 LED |
+| reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 EPD, keys, SHT4x |
+| XIAO ESP32-S3 1.47" Touch Display | <code>ESP32&#8209;S3</code> | JD9853A LCD, buttons, PDM mic |
+| Wio Terminal | <code>SAMD51</code> | display, buttons, IMU, light sensor, mic, buzzer, microSD, IR emitter, Grove, Wi-Fi/BLE |
+| reTerminal (CM4) | <code>Linux</code> | peripherals overlay + demos: buttons, LEDs, buzzer, sensors, RTC |
+
+All ESP32-S3 boards are build-verified on ESP-IDF v6.0.2; on-device
+validation is pending for every board.
+
+Wio Terminal demos build on `Seeeduino:samd@1.8.6`; eight of ten have
+on-device results recorded in [docs/on-device-validation.md](docs/on-device-validation.md).
 
 See [docs/inventory.md](docs/inventory.md) for the capability matrix and
 extraction sources, [docs/on-device-validation.md](docs/on-device-validation.md)

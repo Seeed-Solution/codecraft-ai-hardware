@@ -7,7 +7,7 @@
 面向 AI agent 驱动开发的 Seeed 设备硬件能力参考仓库。
 
 这是一个**纯硬件**仓库：板级支持包（BSP）、独立示例、经过验证的硬件事实，
-以及面向 agent 的开发指引。没有云服务、没有设备配对、没有账户体系——
+以及面向 agent 的开发指引。本仓库不包含云运行时、设备配对或账户体系——
 用本仓库构建的固件完全在设备本地运行。
 
 ## 面向对象
@@ -17,6 +17,17 @@
   干预。入口是 [AGENTS.md](AGENTS.md)。
 - **人类开发者**：以每块板的示例为起点开发自己的固件。
   入口是 [docs/README.md](docs/README.md)。
+
+## CodeCraft Hub
+
+[CodeCraft Hub](https://codecraft.seeed.cc/hub/)
+是固件分享的云平台，不属于本仓库。
+
+若要上传固件做线上烧录或分享，使用
+[`@seeed-studio/sensecraft-cli`](https://sensecraft.seeed.cc/wiki/en/sensecraft-cli/)
+生成并上传。安装和用法见该页面，其中包括 CLI 自带的 agent skill。
+AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节，
+并且只在用户要求上传、线上烧录或分享固件时这样做。
 
 ## 仓库结构
 
@@ -33,15 +44,22 @@
 
 ## 支持的板卡
 
-| 板卡 | 平台 | 状态 |
+| 板卡 | 平台 | BSP 范围 |
 |---|---|---|
-| SenseCAP Watcher | ESP32-S3 | BSP 功能完整（摄像头、显示、触摸、音频、旋钮、电池、microSD）+ 8 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
-| SenseCAP Indicator | ESP32-S3 | BSP（RGB 显示、IO 扩展、按键、触摸）+ 示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
-| reTerminal E1001 | ESP32-S3 | BSP 功能完整（墨水屏、按键、LED、SHT4x、电池、RTC、充电器、蜂鸣器、PDM 麦克风、microSD）+ 4 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
-| reTerminal E1002 | ESP32-S3 | 与 E1001 相同 BSP，面板换为 Spectra 6 彩色；构建验证通过（IDF v6.0.2）；尚未上机验证 |
-| reSpeaker Lite (XIAO ESP32-S3) | ESP32-S3 | BSP + 3 个示例构建验证通过（IDF v6.0.2）；尚未上机验证 |
-| Wio Terminal | SAMD51（Arduino） | 10 个硬件示例构建验证通过（Seeeduino SAMD 1.8.6）；8 个示例上机通过、IR 发射已观察；外部 Grove 检测待验证；Wi-Fi/BLE 需 RTL8720 eRPC 固件 |
-| reTerminal (CM4) | Linux | 外设 overlay + 演示（按键/LED/蜂鸣器/传感器/RTC）；待上机验证 |
+| SenseCAP Watcher | <code>ESP32&#8209;S3</code> | 摄像头、显示、触摸、音频、旋钮、电池、microSD |
+| SenseCAP Indicator | <code>ESP32&#8209;S3</code> | RGB 显示、IO 扩展、按键、触摸 |
+| reTerminal E1001 | <code>ESP32&#8209;S3</code> | 墨水屏、按键、LED、SHT4x、电池、RTC、充电器、蜂鸣器、PDM 麦克风、microSD |
+| reTerminal E1002 | <code>ESP32&#8209;S3</code> | 与 E1001 相同 BSP，面板为 Spectra 6 彩色 |
+| reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S 音频、BOOT 按键、WS2812 LED |
+| reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 墨水屏、按键、SHT4x |
+| XIAO ESP32-S3 1.47" 触摸显示屏 | <code>ESP32&#8209;S3</code> | JD9853A LCD、按键、PDM 麦克风 |
+| Wio Terminal | <code>SAMD51</code> | 显示、按键、IMU、光传感器、麦克风、蜂鸣器、microSD、IR 发射、Grove、Wi-Fi/BLE |
+| reTerminal (CM4) | <code>Linux</code> | 外设 overlay + 演示：按键、LED、蜂鸣器、传感器、RTC |
+
+所有 ESP32-S3 板卡均在 ESP-IDF v6.0.2 上构建验证通过；所有板卡尚未上机验证。
+
+Wio Terminal 示例在 `Seeeduino:samd@1.8.6` 上构建；其中 8 个的上机结果记录在
+[docs/on-device-validation.md](docs/on-device-validation.md)。
 
 能力矩阵和抽取来源见 [docs/inventory.md](docs/inventory.md)，
 上机验证清单见 [docs/on-device-validation.md](docs/on-device-validation.md)，

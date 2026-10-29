@@ -1,0 +1,16 @@
+# reTerminal Sticky: ESP32-S3, 8 MB octal PSRAM (80 MHz).
+# Flash size: the vendor factory firmware and muse's board header say
+# 32 MB, while muse's sdkconfig configures 16 MB conservatively. 16 MB is
+# kept here because it works on either chip; see the board README.
+# Sources: Meta muse-gadget-sdk esp32/devices/sdkconfig.reterminal-sticky
+# (Apache 2.0) and esp32/components/muse/boards/board_reterminal_sticky.c.
+CONFIG_IDF_TARGET="esp32s3"
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y

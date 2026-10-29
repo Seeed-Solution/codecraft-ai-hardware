@@ -73,7 +73,52 @@ battery sense, keys, LED); only the panel differs.
 | RF | attach XIAO external antenna; 2.4 GHz Wi-Fi only | doc above | confirmed |
 | IDF version | ESP-IDF v6.0.1 per muse doc; examples build clean on v6.0.2 | doc above + local build | confirmed |
 
+
+### reTerminal Sticky (3.97" mono e-ink)
+
+| Capability | Fact | Source | Extraction status |
+|---|---|---|---|
+| SoC / memory | ESP32-S3R8 (8 MB octal PSRAM); muse configures 16 MB flash (DIO 80 MHz); the 32 MB claim on the store page is unconfirmed | `muse:esp32/devices/sdkconfig.reterminal-sticky` | confirmed (16 MB), 32 MB unverified |
+| Display | SSD1677 800x480 e-paper, used portrait 480x800; 1 bpp mono with full + fast refresh, plus a 4-gray image mode; SPI2 SCLK=13, MOSI=14, MISO=12, CS=15, DC=16, RST=17 (active low), BUSY=18 (high = busy), panel power EN=47, 20 MHz | `muse:esp32/main/epd_ssd1677.c` (MIT); protocol credited to Seeed `factory_fw` `ssd1677.c` (repo not publicly locatable, see vendor-sources.md) | **extracted** (`bsp_epd`) |
+| Input | three keys: AI=GPIO 4, Up=5, Down=6, active low | `muse:esp32/components/muse/boards/board_reterminal_sticky.c` | **extracted** (`bsp_button`) |
+| Sensors | SHT4x temperature/humidity @0x44 on I2C1 (SDA=1, SCL=0), shared with the BQ27220 fuel gauge @0x55 | `muse:esp32/main/reterminal_sht4x.c` + `board_reterminal_sticky.c` | **extracted** (`bsp_sht4x`) |
+| Audio in | PDM mic on I2S0: CLK=19, DATA=20, power EN=38 (active high) | `muse:board_reterminal_sticky.c` | pins extracted; driver not yet ported |
+| Touch | GT911 capacitive touch on I2C0 (SDA=3, SCL=2), 0x5D (fallback 0x14), power EN=42, RST=41, INT=21; Y axis flipped in software | `muse:board_reterminal_sticky.c` | pins extracted; driver not yet ported |
+| microSD | SDSPI on the panel's SPI2 bus: CS=8, power EN=10, card-detect=11 (low = inserted), MISO=12 | `muse:board_reterminal_sticky.c` | pins extracted; driver not yet ported |
+| Charger | charger enable on GPIO 39; muse drives it low at boot but the active level is unconfirmed against `factory_fw` | `muse:board_reterminal_sticky.c` | unverified until measured |
+| IDF version | BSP + examples build clean on ESP-IDF v6.0.2 | local build | confirmed |
+
+### XIAO ESP32-S3 1.47" Touch Display
+
+| Capability | Fact | Source | Extraction status |
+|---|---|---|---|
+| SoC / memory | XIAO ESP32-S3R8, 16 MB flash (DIO 80 MHz), 8 MB octal PSRAM | `muse:esp32/devices/sdkconfig.seeed-xiao-s3-147` | confirmed |
+| Display | 1.47" JD9853A (ST7789-compatible) 172x320 LCD, SPI CS=3 (D2), DC=4 (D3), SCLK=7 (D8), MOSI=9 (D10), RST=13 (D17), BL=12 (D18); mirror X, gap 34; JD9853A init sequence from Seeed_GFX2 (MIT) | `muse:esp32/components/muse/boards/board_seeed_xiao_s3_147.c` + `Seeed-Studio/Seeed_GFX2` `Driver_JD9853A.cpp` | **extracted** (`bsp_display`) |
+| Touch | AXS5106L capacitive touch @0x63 on I2C (SDA=5/D4, SCL=6/D5), INT=44 (D7) | `muse:board_seeed_xiao_s3_147.c` + Seeed_GFX2 | pins extracted; driver not yet ported |
+| Input | USR1=GPIO 11 (D19), USR2=GPIO 42 (D15), active low | `muse:board_seeed_xiao_s3_147.c` | **extracted** (`bsp_button`) |
+| Audio in | PDM mic on I2S0: CLK=1 (D0), DATA=2 (D1) | `muse:board_seeed_xiao_s3_147.c` + Seeed_GFX2 `0519_DashBoard_147_ESP32` | **extracted** (`bsp_mic`) — build-verified, levels need on-device validation |
+| microSD | CS=43 (D6) on the LCD SPI bus | `muse:board_seeed_xiao_s3_147.c` | pins extracted; driver not yet ported |
+| USB | USB-Serial/JTAG console; UART0 pins are taken by SD CS and touch INT, so no UART console fallback | `muse:esp32/devices/seeed-xiao-s3-147.md` | confirmed |
+| IDF version | BSP + examples build clean on ESP-IDF v6.0.2 | local build | confirmed |
+
 ## Arduino boards
+
+### Wio Terminal
+
+| Capability | Fact | Source | Extraction status |
+|---|---|---|---|
+| SoC / memory | ATSAMD51P19A (Cortex-M4F), 512 KB program flash, 192 KB RAM, 120 MHz default; W25Q32JVZPIM 4 MB QSPI flash | Wio Terminal schematic v1.2 sheets 02; product page; core 1.8.6 `boards.txt` | confirmed |
+| Display | 2.4-inch 320x240 ILI9341 on SPI3 (SCK=68, MOSI=67, MISO=66, CS=69, DC=70, RST=71, BL=72); `TFT_eSPI` bundled in the core | schematic sheet 07 + core `variant.h` + `Seeed_Arduino_LCD/User_Setup.h` | **extracted** (`display_buttons`) |
+| Input | A/B/C keys GPIO 28/29/30; five-way up/left/right/down/press GPIO 31/32/33/34/35; active low with pull-ups | schematic sheets 04-05 + core `variant.h` | **extracted** (`display_buttons`) |
+| IMU | LIS3DHTR, `Wire1`, SDA=78, SCL=77, address `0x18`, INT1=79 | schematic sheet 07 + core `variant.h` + Seeed_Arduino_LIS3DHTR `LIS3DHTR_DEFAULT_ADDRESS` | **extracted + measured** (`accelerometer`, 2026-10-28) |
+| Light sensor | `WIO_LIGHT`, GPIO 27 / ADC channel 15; 400-1050 nm product range | schematic sheet 05 + core `variant.h` + product page | **extracted** (`light_sensor`, raw ADC) |
+| Microphone | Analog electret + LMV358 on `WIO_MIC`, GPIO 39 / ADC channel 12 | schematic sheet 04 + core `variant.h` | **extracted** (`microphone_level`, analog envelope) |
+| Buzzer | Passive B4013AM422-042 on GPIO 12 via Q4 | schematic sheet 04 + core `variant.h` | **extracted** (`buzzer_tones`) |
+| microSD | SPI2: SCK=63, MOSI=62, MISO=61, CS=64, detect=65; product maximum 16 GB | schematic sheet 02 + core `variant.h` + product page | **extracted** (`sd_card_log`) |
+| IR emitter | 940 nm LED D10, `WIO_IR` GPIO 14 active high through Q13; back of enclosure, left of microSD slot; transmit only | schematic sheet 05 + core `variant.h` + product page + Seeed IR emitter wiki | **extracted + emission observed** (`ir_nec_sender`) |
+| Grove | J4 I2C `Wire` SDA=46/SCL=45, 3.3 V, no onboard pull-ups; J5 A0/D0 + A1/D1 | schematic sheet 05 + core `variant.h` | **extracted** (`grove_i2c_scan`, J4 only) |
+| Wireless | RTL8720DN, 2.4/5 GHz 802.11 a/b/g/n + BLE 5.0; CHIP_PU=80, IRQ0=11; RTL eRPC firmware required | schematic sheet 06 + core `variant.h` + product page + Wi-Fi firmware guide | **extracted + Wi-Fi and BLE measured** (`wifi_scan` and `ble_scan` passed on firmware 2.1.3) |
+| Arduino toolchain | `Seeeduino:samd@1.8.6`; exact libraries in `arduino/boards/wio-terminal/libraries.txt`; all 10 sketches compile | local arduino-cli build | build-verified; on-device results in `docs/on-device-validation.md` |
 
 ## Linux boards
 
