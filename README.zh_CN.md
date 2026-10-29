@@ -53,12 +53,18 @@ AI agent 遵循 [AGENTS.zh_CN.md](AGENTS.zh_CN.md) 中的 CodeCraft Hub 一节�
 | reSpeaker Lite (XIAO ESP32-S3) | <code>ESP32&#8209;S3</code> | XMOS I2S 音频、BOOT 按键、WS2812 LED |
 | reTerminal Sticky | <code>ESP32&#8209;S3</code> | SSD1677 墨水屏、按键、SHT4x |
 | XIAO ESP32-S3 1.47" 触摸显示屏 | <code>ESP32&#8209;S3</code> | JD9853A LCD、按键、PDM 麦克风 |
+| Grove Beginner Kit for Arduino（2025 后版本） | <code>ATmega328P</code> | Grove LED、蜂鸣器、OLED、按键、电位器、光、声音、DHT20、SPA06-003、IMU |
 | Wio Terminal | <code>SAMD51</code> | 显示、按键、IMU、光传感器、麦克风、蜂鸣器、microSD、IR 发射、Grove、Wi-Fi/BLE |
 | reTerminal (CM4) | <code>Linux</code> | 外设 overlay + 演示：按键、LED、蜂鸣器、传感器、RTC |
 
-所有 ESP32-S3 板卡均在 ESP-IDF v6.0.2 上构建验证通过；所有板卡尚未上机验证。
+所有 ESP32-S3 板卡均在 ESP-IDF v6.0.2 上构建验证通过；它们尚未上机验证。
 
 Wio Terminal 示例在 `Seeeduino:samd@1.8.6` 上构建；其中 8 个的上机结果记录在
+[docs/on-device-validation.md](docs/on-device-validation.md)。
+
+2025 年后版本的 Grove Beginner Kit 示例在 `arduino:avr@1.8.8` 上构建；全部
+10 个器件 demo 和 `i2c_scan` 已上机验证，包含按键、电位器、光线、声音和
+运动模块的物理动作。结果记录在
 [docs/on-device-validation.md](docs/on-device-validation.md)。
 
 能力矩阵和抽取来源见 [docs/inventory.md](docs/inventory.md)，

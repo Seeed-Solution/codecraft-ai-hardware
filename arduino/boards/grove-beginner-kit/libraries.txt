@@ -1,0 +1,5 @@
+# Arduino Library Manager pins used by the Grove Beginner Kit examples.
+U8g2@2.36.19
+Grove Temperature And Humidity Sensor@2.0.2
+Seeed Arduino SPA06@1.0.1
+Grove-3-Axis-Digital-Accelerometer-2g-to-16g-LIS3DHTR@1.2.4
