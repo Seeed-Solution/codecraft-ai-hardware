@@ -30,6 +30,10 @@ npm 发布包中的 `sensecraft-cli`：
 不要通过克隆或构建 CLI 的 GitHub 仓库来安装。仅在用户提出上传请求时这样做：
 普通的构建、刷机或板级改动不是上传请求。硬件事实仍以本仓库为准。
 
+SenseCAP Watcher 示例上传该示例的 `build/merged-binary.bin`。不要把单独的
+应用 `.bin` 放进 Hub 的固件字段。本地 `idf.py flash` 仍按 `flash_args`
+里的三段写入。
+
 ## 必需的 AI skills
 
 在本仓库进行 AI 辅助开发需要以下五个 skills：`codecraft-develop`、

@@ -36,6 +36,11 @@ an installation method. Do this only for the upload request: an ordinary
 build, flash, or board change is not a request to upload. Hardware facts
 still come from this repository.
 
+For a SenseCAP Watcher example, upload that example's
+`build/merged-binary.bin`. Leave the app-only `.bin` out of the Hub
+firmware field. Local `idf.py flash` still uses the three `flash_args`
+segments.
+
 ## Required AI skills
 
 The following five skills are required for AI-assisted development in this
