@@ -79,6 +79,23 @@ cd esp32/boards/sensecap-watcher/examples/camera_capture
 idf.py build flash monitor
 ```
 
+CodeCraft Hub writes one file at `0x0` for a non-Muse Watcher app. Build
+the merged image after `idf.py build` and upload that file, not
+`camera_capture.bin`:
+
+```sh
+python3 ../../tools/merge_image.py .
+```
+
+`build/merged-binary.bin` contains the bootloader at `0x0`, the partition
+table at `0x8000`, and the app at `0x10000`. In the Hub app set
+`flash_address` to `0x0`, leave Muse off, and leave full-chip erase off.
+The file name and URL must not contain `application`, or the page writes
+the whole image at `0x10000`. The merge stops at the end of the app, so it
+does not reach `prod_data` near `0x820000`. It does replace the factory
+firmware and the factory data from `0x9000` through the app. `idf.py flash`
+for local development still writes the three segments in `flash_args`.
+
 > **Note** — flashing erases the vendor firmware. Back it up first if you
 > want to restore it later. Measured on a retail unit (2026-10): the vendor
 > partition table sits at **0x10000** (not the usual 0x8000) with

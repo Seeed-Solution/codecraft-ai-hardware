@@ -109,6 +109,10 @@ check_esp32_board() {
     [[ -f "$ex/CMakeLists.txt" ]] || continue
     echo "  building $ex"
     ( cd "$ex" && idf.py build )
+    if [[ "$board" == "sensecap-watcher" ]]; then
+      echo "  merging $ex"
+      python3 "$ROOT/esp32/boards/sensecap-watcher/tools/merge_image.py" "$ex"
+    fi
   done
   echo "$board build: PASS"
 }
