@@ -31,4 +31,4 @@ The current Target supports **SSD1677 only**, with a logical **480x800 portrait*
 
 Mono buffers are 1 bit per pixel, MSB first (`1=white`, `0=black`). Gray4 buffers are 2 bits per pixel, MSB first (`0=black` through `3=white`). The caller owns and retains all buffers until the synchronous call returns. Call from the display-owning task, never from an ISR or a non-blocking UI callback; concurrent calls are rejected.
 
-See [`bsp_epd.h`](../targets/bsp/include/bsp_epd.h) for the binding implementation contract. No separate region-based partial-update API is currently exposed.
+See `bsp_epd.h` in the Target BSP for the binding implementation contract. No separate region-based partial-update API is currently exposed.
