@@ -1,6 +1,6 @@
 param(
     [ValidatePattern('^(latest|\d+\.\d+\.\d+)$')][string]$Version = 'latest',
-    [ValidatePattern('^[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+$')][string]$Repository = 'Links17/codecraft-ai-hardware',
+    [ValidatePattern('^[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+$')][string]$Repository = 'Seeed-Solution/codecraft-ai-hardware',
     [switch]$FromSource
 )
 $ErrorActionPreference = 'Stop'

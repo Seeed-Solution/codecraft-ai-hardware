@@ -118,8 +118,11 @@ Linux x86_64 musl, macOS arm64 and Windows x86_64 executables. Cache identity
 contains compiler/target, Rust implementation and test sources, Cargo inputs and
 the binary workflow. It excludes Device data, application sources, documentation
 and Git commit IDs. Cache hits skip Cargo compilation and run the existing test
-executables against the current checkout. Artifacts are workflow downloads; no
-release is published automatically. Native jobs use the Linux static executable,
+executables against the current checkout. Ordinary CI artifacts are workflow
+downloads. Upstream stable version tags invoke `release.yml`, which checks the
+Cargo version and main ancestry, reuses this binary workflow, and publishes all
+three binaries with checksums. See the [release procedure](rust-cli.md#maintainer-release-procedure).
+Native jobs use the Linux static executable,
 including inside the ESP-IDF container.
 
 Rust CLI source/dependency changes conservatively select all native Targets.

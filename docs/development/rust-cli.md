@@ -9,7 +9,8 @@ compiled into the executable.
 ## Install and update
 
 Download the appropriate executable from the repository's GitHub Release
-(starting with `v0.5.0`), verify it against the attached `SHA256SUMS`, and rename
+(upstream releases start with `v0.5.1`; `v0.5.0` was published in the fork),
+verify it against the attached `SHA256SUMS`, and rename
 it to `codecraft` (`codecraft.exe` on Windows). On Unix, run `chmod +x codecraft`
 and place it on your PATH. Alternatively, use a completed **CodeCraft CLI binaries**
 workflow artifact, or use the checksum-verifying installer:
@@ -22,7 +23,7 @@ codecraft --root /path/to/codecraft-ai-hardware discover
 ```
 
 The installer defaults to GitHub's latest stable Release in
-`Links17/codecraft-ai-hardware` (drafts and prereleases are excluded). It resolves
+`Seeed-Solution/codecraft-ai-hardware` (drafts and prereleases are excluded). It resolves
 the concrete `vX.Y.Z` tag once and downloads both binary and checksums from that
 version, so a concurrent new release cannot mix assets. Resolution failure stops
 installation without replacing an existing executable. Select a published version with `--version X.Y.Z`
@@ -34,10 +35,32 @@ No SDK, shell profile or PATH configuration is changed automatically.
 For source builds, use `sh tools/cli/install.sh --from-source` or
 `tools/cli/install.ps1 -FromSource`. Windows installations use `tools/cli/install.ps1`; the default destination
 is `%LOCALAPPDATA%/CodeCraft/bin`. A downloaded executable needs neither Rust nor
-Python. Source installations require Cargo and a native linker. No binary release
-is published automatically by this repository. Releases use the matching Cargo
-version and `v<version>` Git tag on a validated main commit; maintainers attach
-the three platform binaries from that commit's successful CI run and checksums.
+Python. Source installations require Cargo and a native linker.
+
+## Maintainer release procedure
+
+After the PR is merged and its required CI checks pass, push a stable `vX.Y.Z`
+tag for that validated main commit to `Seeed-Solution/codecraft-ai-hardware`.
+The tag must match `tools/cli/Cargo.toml` (and the committed Cargo lockfile).
+For a new version, update both through a reviewed PR before tagging. Do not move
+an existing published tag or reuse a version for different binaries.
+
+`.github/workflows/release.yml` rejects non-stable tags, version mismatches and
+commits outside main. It reuses the existing three-platform CLI build/test
+workflow and cache, then publishes the installer-compatible binaries and
+`SHA256SUMS` together using `gh release create --verify-tag`. GitHub CLI uploads
+assets to a draft before publishing; an upload failure must not expose a partial
+stable release. Inspect and remove only the failed draft before rerunning a
+failed publication. Existing published releases are never overwritten.
+
+The workflow runs only on upstream tag pushes, not PRs, ordinary main commits
+or fork tags. GitHub determines the latest release automatically; the workflow
+does not force a `--latest` override. Before the first upstream
+release is published, default installation fails safely; use an explicit
+`--repo Links17/codecraft-ai-hardware` / `-Repository Links17/codecraft-ai-hardware`
+for the historical fork release or build from source. Merging workflow changes
+does not itself create a tag or publish a release. Release binaries verify software checks only,
+not physical device behavior.
 
 Run the installer with the source option after changing Rust implementation/dependencies. It uses
 Cargo's incremental release build; normal `codecraft` invocations never run Cargo.
@@ -49,10 +72,10 @@ Git commit IDs, device files or documentation in the binary cache key.
 
 ## Read-only environment preflight
 
-The working-tree CLI provides `codecraft doctor --target <stack>/<device>`,
-using `--root` for a repository or exported application. This is not yet in the
-published v0.5.0 binary; use a source build for this new command. Skills check
-command availability before using it and retain native setup guidance for v0.5.0.
+CodeCraft v0.5.1 provides `codecraft doctor --target <stack>/<device>`, using
+`--root` for a repository or exported application. The historical fork's v0.5.0
+binary does not include this command. Skills check command availability before
+using it and retain native setup guidance for v0.5.0.
 
 Doctor reuses the platform build probe and reports expected Target requirements,
 actual activated-toolchain identity, and setup guidance when unavailable. Exit 0

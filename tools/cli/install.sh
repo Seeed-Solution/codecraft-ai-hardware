@@ -2,7 +2,7 @@
 # Explicit installation only; ordinary codecraft commands never install or compile.
 set -eu
 version=latest
-release_repo=Links17/codecraft-ai-hardware
+release_repo=Seeed-Solution/codecraft-ai-hardware
 from_source=false
 while [ "$#" -gt 0 ]; do
     case "$1" in

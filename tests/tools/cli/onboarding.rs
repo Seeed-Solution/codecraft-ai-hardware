@@ -51,7 +51,7 @@ fn check_installer(_shell: &str) {
 while [ $# -gt 0 ]; do case "$1" in https://*) url=$1 ;; -o) shift; output=$1 ;; esac; shift; done
 printf '%s\n' "$url" >> "$CODECRAFT_INSTALL_FIXTURES/requests"
 case "$url" in
-    */releases/latest) printf 'https://github.com/Links17/codecraft-ai-hardware/releases/tag/%s' "$(/bin/cat "$CODECRAFT_INSTALL_FIXTURES/latest-tag")" ;;
+    */releases/latest) printf 'https://github.com/Seeed-Solution/codecraft-ai-hardware/releases/tag/%s' "$(/bin/cat "$CODECRAFT_INSTALL_FIXTURES/latest-tag")" ;;
     *) /bin/cp "$CODECRAFT_INSTALL_FIXTURES/${url##*/}" "$output" ;;
 esac
 "#).unwrap();
@@ -108,12 +108,12 @@ if ($Version) { & $Installer -Version $Version } else { & $Installer }
         format!("{}  {asset}\n", "0".repeat(64)),
     )
     .unwrap();
-    assert!(!run("0.5.0").status.success());
+    assert!(!run(codecraft::VERSION).status.success());
     assert_eq!(fs::read(&installed).unwrap(), b"existing installation");
     fs::write(fixtures.join("SHA256SUMS"), &hashes).unwrap();
-    assert!(!run("0.5.1").status.success());
+    assert!(!run("99.0.0").status.success());
     assert_eq!(fs::read(&installed).unwrap(), b"existing installation");
-    fs::write(fixtures.join("latest-tag"), "v0.5.1").unwrap();
+    fs::write(fixtures.join("latest-tag"), "v99.0.0").unwrap();
     assert!(!run("").status.success());
     assert_eq!(fs::read(&installed).unwrap(), b"existing installation");
     fs::write(fixtures.join("latest-tag"), "v0.5.0-rc1").unwrap();
@@ -140,6 +140,9 @@ if ($Version) { & $Installer -Version $Version } else { & $Installer }
     let requests = fs::read_to_string(fixtures.join("requests")).unwrap();
     let urls: Vec<_> = requests.lines().collect();
     assert_eq!(urls.len(), 3, "{requests}");
+    assert!(urls
+        .iter()
+        .all(|url| url.contains("/Seeed-Solution/codecraft-ai-hardware/")));
     assert!(urls[0].ends_with("/releases/latest"));
     assert!(urls[1..]
         .iter()
