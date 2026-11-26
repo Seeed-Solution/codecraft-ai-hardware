@@ -36,9 +36,11 @@ Use the listed standalone examples as the supported development entry points.
 
 ## [reTerminal Sticky](reterminal-sticky/AGENTS.md)
 
-Compact magnetic 3.97-inch 4-level grayscale e-paper device (ESP32-S3) with touch, three buttons, environmental/motion sensors, RTC, microphone, buzzer, microSD, Wi-Fi/BLE and a 750 mAh battery.
+Compact magnetic 3.97-inch 4-level grayscale e-paper device with touch, three buttons, environmental/motion sensors, RTC, microphone, buzzer, microSD, Wi-Fi/BLE and a 750 mAh battery.
 
-Best for low-frequency, always-visible notes, weather, schedules and status dashboards. Start from the device entry's Intent routing: the Target covers the display, buttons and SHT40, and the guides in reference/ cover the other peripherals.
+Best for low-frequency, always-visible notes, weather, schedules and status dashboards. Pocket size makes it suitable for both handheld and stationary use. Stick it to magnetic surfaces, or the back of your phone. Mount it to any surface with the adhesive magnetic ring accessory.
+
+Start from the Intent routing table below. The registered Target provides the standalone display, button and SHT40 examples (`epd_hello`, `button_hello`, `sht4x`). The guides under `reference/` explain display refresh, RTC, battery, navigation, sleep, microphone, microSD and IMU implementation patterns; a guide alone does not establish a supported native interface or verified hardware behavior. Export private applications into a project workspace through the development workflow instead of editing the reference examples.
 
 ## [SenseCAP Indicator](sensecap-indicator/AGENTS.md)
 
