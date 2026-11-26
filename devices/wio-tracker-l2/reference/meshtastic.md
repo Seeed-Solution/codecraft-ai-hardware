@@ -1,5 +1,10 @@
 # Connect to an L2 running Meshtastic
 
+## Choose the firmware
+
+For a custom ESP-IDF application, the [native scan example](../targets/README.md)
+initializes Wi-Fi and prints the AP count over USB.
+
 First identify the installed firmware, UI, physical unit and intended endpoint.
 The ESP-IDF scan example runs independently. MeshCore uses a different companion
 protocol. The following operations require Meshtastic firmware.

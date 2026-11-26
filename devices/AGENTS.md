@@ -62,9 +62,9 @@ Use the standalone native sketches and their explicit physical test procedures.
 
 ## [Wio Tracker L2](wio-tracker-l2/AGENTS.md)
 
-Portable Wio-S3 LoRa tracker for off-grid messaging. This entry covers the
-L2 native Wi-Fi scan example and local connectivity workflows on L2 units
-running Meshtastic.
+Wio Tracker L2 is a board for custom LoRa trackers with a screen, GNSS, microSD
+storage and an external battery connector. Use it to build a portable off-grid
+messaging or mapping device, or to prototype an ESP32-S3 Wi-Fi application.
 
 Use the native Wi-Fi scan when developing an ESP-IDF application. For local
 operations on Meshtastic firmware, use the existing client transports and
