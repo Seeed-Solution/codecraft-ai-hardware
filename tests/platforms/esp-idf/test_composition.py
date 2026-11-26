@@ -47,8 +47,9 @@ def test_registered_examples_keep_native_dependencies_and_interface_scope():
             if 'CONFIG_SPIRAM=y' in defaults:
                 assert 'esp_psram' in (ROOT/target['path']/'examples'/example/'main/CMakeLists.txt').read_text()
         assert all_sources==set((ROOT/target['path']/'bsp/src').glob('*.c'))
-    assert count==28
+    assert count==29
     expectations={
+      ('esp-idf/wio-tracker-l2','wifi_scan'):({'bsp_wifi.c'},{'wireless'}),
       ('esp-idf/sensecap-watcher','knob_input'):({'bsp_knob.c','bsp_io_expander.c'},{'gpio','input'}),
       ('esp-idf/sensecap-watcher','touch_read'):({'bsp_display.c','bsp_touch.c','bsp_io_expander.c'},{'display','gpio','touch'}),
       ('esp-idf/reterminal-e1001','epd_hello'):({'bsp_epd.c','bsp_led.c'},{'display','led'}),

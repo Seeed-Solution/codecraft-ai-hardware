@@ -73,6 +73,14 @@
       "runner": "ubuntu-latest"
     },
     {
+      "id": "esp-idf/wio-tracker-l2",
+      "device": "wio-tracker-l2",
+      "platform": "esp-idf",
+      "toolchain": "6.0.2",
+      "chip": "esp32s3",
+      "runner": "ubuntu-latest"
+    },
+    {
       "id": "esp-idf/xiao-s3-147",
       "device": "xiao-s3-147",
       "platform": "esp-idf",
