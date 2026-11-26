@@ -100,7 +100,9 @@ esp_err_t esp_lcd_panel_draw_bitmap(esp_lcd_panel_handle_t panel,int x0,int y0,i
 const char *esp_err_to_name(esp_err_t err);
 typedef struct {int dev_addr;} esp_lcd_panel_io_i2c_config_t;
 typedef struct {int x_max,y_max,rst_gpio_num,int_gpio_num;
-    struct {int reset,interrupt;} levels;struct {int swap_xy,mirror_x,mirror_y;} flags;} esp_lcd_touch_config_t;
+    struct {int reset,interrupt;} levels;struct {int swap_xy,mirror_x,mirror_y;} flags;
+    void (*process_coordinates)(esp_lcd_touch_handle_t, uint16_t *, uint16_t *, uint16_t *, uint8_t *, uint8_t);
+} esp_lcd_touch_config_t;
 #define ESP_LCD_TOUCH_IO_I2C_FT5x06_CONFIG() ((esp_lcd_panel_io_i2c_config_t){0})
 #define ESP_LCD_TOUCH_IO_I2C_GT911_CONFIG() ((esp_lcd_panel_io_i2c_config_t){0})
 esp_err_t esp_lcd_new_panel_io_i2c(i2c_master_bus_handle_t bus,const esp_lcd_panel_io_i2c_config_t *cfg,esp_lcd_panel_io_handle_t *out);

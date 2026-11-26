@@ -4,7 +4,7 @@
 
 设备知识：[AGENTS.md](../AGENTS.md)。硬件事实在该入口及其来源中维护。
 
-在仓库根目录构建/检查：`python3 codecraft.py validate --target esp-idf/reterminal-sticky`。
+在仓库根目录构建/检查：`codecraft validate --target esp-idf/reterminal-sticky`。
 
 示例、原生接口引用和工具链选择见 `target.json`。构建结果与设备观测分别记录。
 
@@ -20,7 +20,7 @@ BSP 公共头文件位于 `bsp/include/`，实现与私有头文件位于 `bsp/s
 
 ```bash
 source ~/esp/esp-idf-v6.0.2/export.sh
-python3 codecraft.py validate --target esp-idf/reterminal-sticky
+codecraft validate --target esp-idf/reterminal-sticky
 ```
 
-导出应用使用 `python3 codecraft.py build-project .`；仓库级验证命令不能替代应用锁文件检查。
+导出应用使用 `codecraft build-project .`；仓库级验证命令不能替代应用锁文件检查。

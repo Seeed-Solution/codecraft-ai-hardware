@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[3]
-sys.path.insert(0,str(ROOT/'tools/codecraft'))
 sys.path.insert(0, str(ROOT/'tests/tools/skill_packages'))
 from skill_harness import local_skill, invoke_contract
 

@@ -24,6 +24,32 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#if !defined(CODECRAFT_DISPLAY_GX)
+#error "Select the documented GX or DX native profile"
+#endif
+
+/* Tested GX + FT6336U: both axes oppose the display, about pixel 479.
+ * Source: Links17/tellytile@86a37151fe410a9623259a7606bf620381f6d906,
+ * evidence/indicator-gx-touch-orientation.md. No inference for GT911/DX.
+ * Use a callback: esp_lcd_touch's generic mirror subtracts from x_max/y_max
+ * (480), which would map pixel zero outside the 0..479 display bounds. */
+#if CODECRAFT_DISPLAY_GX
+static void gx_coordinates(esp_lcd_touch_handle_t tp, uint16_t *x, uint16_t *y,
+                           uint16_t *strength, uint8_t *count, uint8_t maximum)
+{
+    (void)tp;
+    uint8_t valid = 0;
+    for (uint8_t i = 0; i < *count && i < maximum; ++i) {
+        if (x[i] >= BSP_LCD_H_RES || y[i] >= BSP_LCD_V_RES) continue;
+        x[valid] = BSP_LCD_H_RES - 1 - x[i];
+        y[valid] = BSP_LCD_V_RES - 1 - y[i];
+        if (strength) strength[valid] = strength[i];
+        ++valid;
+    }
+    *count = valid;
+}
+#endif
+
 static const char *TAG = "bsp_touch";
 
 static esp_lcd_touch_handle_t s_touch;
@@ -90,6 +116,9 @@ esp_err_t bsp_touch_init(esp_lcd_touch_handle_t *out_handle)
         .int_gpio_num = GPIO_NUM_NC, /* not wired; poll instead */
         .levels = { .reset = 0, .interrupt = 0 },
         .flags = { .swap_xy = 0, .mirror_x = 0, .mirror_y = 0 },
+#if CODECRAFT_DISPLAY_GX
+        .process_coordinates = found->goodix ? NULL : gx_coordinates,
+#endif
     };
 
     if (!found->goodix) {

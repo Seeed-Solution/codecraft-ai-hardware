@@ -19,7 +19,7 @@ DHT20 or SPA06-003.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example i2c_scan`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example i2c_scan`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

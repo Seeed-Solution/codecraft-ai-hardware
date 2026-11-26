@@ -15,7 +15,7 @@ Minimal digital-output test for the kit's Grove LED.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example led_blink`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example led_blink`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

@@ -22,7 +22,7 @@ uptime counter without allocating a full framebuffer.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example oled_status`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example oled_status`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

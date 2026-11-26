@@ -22,7 +22,7 @@ NEC address/command framing.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/wio-terminal --example ir_nec_sender`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/wio-terminal --example ir_nec_sender`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

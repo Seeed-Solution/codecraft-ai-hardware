@@ -1,5 +1,8 @@
 {
-  "adapter": "platforms/arduino/adapter.py",
+  "adapter": "platforms/arduino/native.rs",
+  "application_inputs": [
+    "tools/application/resource.json"
+  ],
   "ci": {
     "runner": "ubuntu-latest"
   },
@@ -58,8 +61,5 @@
       "supported": false
     }
   },
-  "runtime": [
-    "tools/codecraft/resource.json"
-  ],
-  "schema_version": 2
+  "schema_version": 3
 }

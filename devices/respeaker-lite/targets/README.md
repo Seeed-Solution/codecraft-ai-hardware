@@ -4,7 +4,7 @@
 
 Device knowledge: [AGENTS.md](../AGENTS.md). Hardware facts are maintained there and in its references.
 
-Build/check: `python3 codecraft.py validate --target esp-idf/respeaker-lite` from the repository root.
+Build/check: `codecraft validate --target esp-idf/respeaker-lite` from the repository root.
 
 See `target.json` for examples, native interface references and exact toolchain selection. Build results and device observations are separate.
 
@@ -29,4 +29,4 @@ via symlink. Native code paths below are relative to the Target directory.
 
 The executable version declaration in `target.json` requires ESP-IDF 6.0.2 for esp32s3. Activate that SDK before building.
 
-In an exported application, use `python3 codecraft.py build-project .`; reference-repository validation commands do not replace application lock checks.
+In an exported application, use `codecraft build-project .`; reference-repository validation commands do not replace application lock checks.

@@ -16,7 +16,7 @@ Observe the analog sound envelope and trigger the LED on a short sound peak.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example sound_sensor`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example sound_sensor`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

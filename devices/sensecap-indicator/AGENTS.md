@@ -109,6 +109,33 @@ revisions. Neither a verified revision list nor a board-specific panel
 identification procedure is available in this record. Do not infer the panel
 from the D1/D1S/D1L/D1Pro product label or a successful compiler result.
 
+#### GX application observations (2026-11-26)
+
+Source: [FoloTV/tellytile touch report at commit 86a3715](https://github.com/Links17/tellytile/blob/86a37151fe410a9623259a7606bf620381f6d906/evidence/indicator-gx-touch-orientation.md)
+and the project developer's report in the 2026-11-26 repair request. The tested
+unit used GX and FT6336U; PCB revision was not supplied. These are external
+application observations, not physical acceptance of this repository revision.
+
+- The developer confirmed correct brightness/frame-rate hit locations after
+  rotating both touch axes about pixel 479. The BSP applies this correction
+  only to GX with the FT6336U path, filtering coordinates outside 0..479.
+  GT911 and DX retain their mappings. Confirm four corners on other units.
+- Holding RP2040 in reset stopped provisioning beeps in the application. The
+  developer reports sensors and microSD unavailable in that mode; optional
+  reSpeaker Lite audio is independent. This is a co-processor disable policy,
+  not an independently verified buzzer mute or peripheral compatibility claim.
+- The developer reported stable playback on the tested channel with line
+  buffering, 16 MHz PCLK and 64-byte data-cache lines. Buffer depth was not
+  supplied. These are application tuning observations, not new panel limits
+  or proof of the root cause. Vendor-default 18 MHz remains the BSP default.
+- The application report identifies an LEDC fade-service error during dimming;
+  the BSP's optional PWM path uses separate set-duty/update-duty operations.
+  The report also records an I2C startup timeout and a later unexplained
+  software restart; this change does not claim to resolve those failures.
+
+Use the Target README for configuration and resource ownership. Repeat physical
+acceptance on the actual revision before claiming this BSP is hardware verified.
+
 #### Acceptance boundary
 
 Software selection must identify GX or DX explicitly in the project and lock,
@@ -269,7 +296,9 @@ Expected: ST7701S RGB bars render
 
 Run `touch_read` under the confirmed write scope and observe the selected hardware.
 
-Expected: FT6336U or GT911 probed, coordinates sane
+Expected: FT6336U or GT911 probed; press all four display corners and the
+center, checking coordinates stay in 0..479 and match the displayed location.
+Record GX/DX selection, probed controller and actual PCB revision.
 
 ## Sources
 

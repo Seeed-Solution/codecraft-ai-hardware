@@ -2,3 +2,6 @@
 # Keep the versions at their package owners.
 -r ../skills/codecraft-capabilities-asr/scripts/requirements-realtime.txt
 -r ../skills/codecraft-capabilities-image-generation/scripts/requirements.txt
+
+# Python test runtime; discovery and result handling are owned by the Rust CLI.
+pytest==8.3.5

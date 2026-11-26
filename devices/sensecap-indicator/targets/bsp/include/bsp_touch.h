@@ -20,8 +20,10 @@ extern "C" {
  *
  * Resets the touch controller via the IO expander, probes the vendor
  * address list (FT6336U @0x48/0x38, then GT911 @0x5D/0x14) and creates an
- * esp_lcd_touch handle. Returns ESP_ERR_NOT_FOUND when no known
- * controller answers. out_handle is optional and cleared on failure. A
+ * esp_lcd_touch handle. GX + FT6336U coordinates are rotated 180 degrees
+ * about pixel 479; out-of-range samples are dropped. DX/GT911 are unchanged.
+ * Source and revision limits: Device AGENTS.md, GX application observations.
+ * Returns ESP_ERR_NOT_FOUND when no known controller answers. out_handle is optional and cleared on failure. A
  * successful repeat returns the same fully created handle without reset.
  * Failed constructor cleans its touch allocation; BSP releases owned IO and
  * retains the board bus/expander. Complete cleanup permits startup retry;

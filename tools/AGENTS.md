@@ -1,49 +1,49 @@
 # Repository tooling
 
-This directory owns executable repository maintenance and portable application
-orchestration. The public entry remains `python3 codecraft.py`; read the root
-contract before changing tools. Keep installable Skills under skills/ and native
-build implementations under platforms/<stack>/.
+The public entry is `codecraft`. Read the root repository contract before edits.
+All repository tooling is implemented in tools/cli/; do not add Python backends,
+forwarding modules or duplicate project/catalog implementations. Native commands
+remain owned by platforms/<stack>/native.rs. Runtime data is read from disk.
 
-## CodeCraft tools
+## Creator and maintenance ownership
 
-codecraft/ owns the public CLI implementation, Device document parsing, source
-graphs, project exports and locks, evidence, generated indexes and host-test
-discovery. Its resource.json declares the portable tool and workflow closure.
-Context, export and evidence must use the same graph, including these tools.
-Native-only projects must not load cloud contracts or package maintenance.
+Creator catalog, dependency graph, export, lock, build and firmware orchestration
+share the same implementation with maintenance validation. Maintenance modules
+own checks, evidence, generation, CI and package transactions. Platform metadata
+and offline toolchain checks remain platform-owned. Source-bound evidence must
+include compiled CLI identity; historical records and logs remain unchanged.
 
-CI impact planning and aggregation live in codecraft/ci.py and ci_policy.py.
-They reuse the declared native roots and source graph, read both committed trees,
-and run through `python3 codecraft.py ci plan` / `ci check`. Keep them outside the
-portable resource.json closure; exported applications report CI as not_supported.
-The full Catalog graph continues to own context/export/evidence identity. Read
-docs/development/ci.md in the reference repository before changing selection or
-job results; that repository maintenance guide is not a portable dependency.
+Application exports carry native sources and portable guidance from
+tools/application/resource.json, not maintenance sources or CLI binaries. CLI
+identity is locked separately. Read docs/development/rust-cli.md for lifecycle
+and Python-runtime boundaries. Code changes require focused Rust tests under
+tests/tools/cli/; independent client/native-host tests remain under their owners.
 
-## Skill package maintenance
+## Package maintenance
 
-reCamera SDK reference production and development-package candidate review live
-under skill_packages/recamera/. Its release.json owns the installed file
-inventory; original import evidence stays in docs/recamera-skill-import.json.
-Use the public skill-reference command and explicit skill-release --skill
-selection documented in docs/development/recamera-sdk-maintenance.md. Keep these
-maintenance tools outside the installed Skill and native application exports.
+skill_packages/ retains release records, immutable imports/upstream snapshots,
+reference-generation notes and the executable conformance registry. Maintenance
+logic lives in maintenance_skills.rs, maintenance_contracts.rs and
+maintenance_reference.rs. It is not an installable Skill.
 
-skill_packages/ owns the common client helper, reviewed package inventories,
-original import provenance, upstream snapshots and candidate release tooling.
-Maintain runtime helpers here and distribute package-local copies through the
-reviewed release workflow. An independently installed Skill must run without
-this directory, sibling Skills or the hardware Catalog.
+The common Python client helper is maintained in the existing standalone LLM
+package at skills/codecraft-capabilities-llm/scripts/device_api.py. Reviewed
+candidates distribute those bytes to other independently installable packages.
+No package may import another package at runtime. Follow
+[release maintenance](../docs/development/skill-releases.md); do not refresh
+hashes to accept unreviewed changes or rewrite original import provenance.
 
-Keep original import and upstream snapshot bytes unchanged when moving tools or
-renaming a maintained package. Source paths in those records refer to the
-upstream checkout. Release records use the current package identity and point
-to the relocated provenance; they must retain original source facts. File
-hashes and distribution versions change only through reviewed candidates.
+reCamera reference generation parses SDK sources without executing them. Follow
+[SDK maintenance](../docs/development/recamera-sdk-maintenance.md). Candidate
+apply requires an exact reviewed digest, reruns offline isolated conformance,
+rejects drift and restores completed replacements on failure. Preserve recovery
+backups when rollback cannot complete. Packaging does not authorize publication.
 
-Tool tests, fixtures and mocks belong under tests/tools/codecraft/ and
-tests/tools/skill_packages/. Per-Skill conformance remains under tests/skills/.
-Use the public host runner and the root validation policy. Package maintenance
-checks run isolated clients with synthetic credentials and loopback services;
-they do not authorize API requests, installation or publication.
+## Checks and dependencies
+
+Use `codecraft validate --static` and the explicitly registered Cargo tests.
+The Rust host-test dispatcher may invoke Python/pytest for independent Python
+client and C-fixture test suites under tests/. Those are test dependencies, not
+an alternative tools implementation. No real credentials, API calls or device
+writes are authorized by a validation command. See
+[test ownership](../docs/development/testing.md) and the root check-selection rules.

@@ -40,7 +40,8 @@ The implementation separates Device facts, Platform software stacks and Skill-ow
 | `platforms/<stack>/` | Shared software-stack/runtime adapters, build helpers and reusable components; no board directories |
 | `skills/` | Flat installable Skills: codecraft-development-* development workflows and codecraft-capabilities-* cloud API clients |
 | `tools/skill_packages/` | Skill package maintenance source, package release records, immutable import provenance and release tooling |
-| `tools/codecraft/` | Shared orchestration and public CLI implementation |
+| `tools/cli/` | Standalone Rust creator CLI and shared orchestration |
+| `tools/cli/src/maintenance_*.rs` | Repository checks, evidence, CI and package maintenance |
 | `tests/` | All repository-maintained tests, fixtures and mocks, grouped by Device, Platform, Skill or Tool owner; see tests/AGENTS.md |
 | `tests/devices/<board>/` | Retained observations, source-bound evidence records and sanitized original logs |
 | `tests/devices/<board>/targets/` | Board-specific host tests, native fixtures and test doubles |
@@ -63,7 +64,7 @@ listing or README claim.
 1. Start with `git status --short --branch`; preserve existing changes.
 2. Determine whether the task is inspection, project development/build/device
    use, or a repository contribution. For mixed tasks, apply contribution
-   rules to the repository changes. Use `python3 codecraft.py discover` to find candidates and `python3 codecraft.py context --target <platform>/<device>` to collect their reference closure. Read-only questions do not require
+   rules to the repository changes. Use `codecraft discover` to find candidates and `codecraft context --target <platform>/<device>` to collect their reference closure. Read-only questions do not require
    installing toolchains or running builds.
 3. For development, identify the intended output location, board, software
    stack, and relevant hardware revision before relying on those choices.
@@ -109,7 +110,7 @@ a failed operation must be diagnosed through `codecraft-development-debug` befor
 | Skills or validation changes | `skills/README.md`, `skills/validation.md`, `docs/development/testing.md`, affected Skills and validation implementation |
 | SenseCraft platform operation or external CLI setup | `docs/development/sensecraft-cli.md`, the official installed `sensecraft-cli/SKILL.md`, and its task-specific reference |
 | CodeCraft cloud API operation | The matching `skills/codecraft-capabilities-{llm,asr,tts,image-generation}/SKILL.md` and its API reference; use only existing task authorization |
-| Repository tooling or package maintenance | `tools/AGENTS.md`, affected tool modules and their tests; keep `codecraft.py` as the public entry |
+| Repository tooling or package maintenance | `tools/AGENTS.md`, affected tool modules and their tests; keep the Rust `codecraft` binary as the public entry |
 | Commit or PR | `docs/development/ai-guide.md`, `.github/CONTRIBUTING.md`, `.github/PULL_REQUEST_TEMPLATE.md` |
 | Upload, online flashing, or sharing firmware | The CodeCraft Hub section below and the linked CLI documentation |
 
@@ -164,7 +165,7 @@ and its bundled Agent Skill. Follow [setup and routing](docs/development/sensecr
 The repository owns installation/use guidance, not this tool's authentication,
 HTTP implementation or command wrappers. Install it only for an explicitly
 requested setup or a task that needs it. Native builds do not require it.
-Repository operations still use `python3 codecraft.py`; this separately maintained
+Repository operations still use `codecraft`; this separately maintained
 tool uses its own CLI. Check its actual version/help before relying on commands.
 
 ### CodeCraft Hub
@@ -259,19 +260,19 @@ the owning layer and preserve unrelated behavior.
 - Device specifications MUST maintain one typed value per fact with independent source assertions. Follow [Device documents and shared references][device-documents] for the Markdown format and parsed schema; do not maintain translated or generated copies of hardware facts.
 - Device Markdown is an authored source. Generation MUST leave it unchanged; exports and source graphs hash its complete bytes. Facts require independent cited notes or native sources. Keep procedures in that document and observations in the central evidence area; follow [Device documents and shared references][device-documents].
 - Target metadata MUST declare native interfaces, common inputs, per-example inputs and dependencies. The Device-to-Target index MUST be derived from Target.device; duplicate backlinks are forbidden. All Target records MUST use schema v3 with an explicit variants object. Platform and adapter protocol versions remain independent.
-- Native build/configuration logic MUST live in platforms/<stack>. Shared repository tools MUST NOT branch on stack IDs to implement native operations.
-- Context, project export and evidence MUST use the same transitive dependency graph. Never filter out missing dependencies to make export pass. The graph MUST include the actual adapter and all pipeline code.
+- Native build/configuration logic MUST live in platforms/<stack>. Shared repository tools MUST NOT branch on stack IDs to implement native operations; the Rust registration module may select a platform-owned adapter.
+- Context, project export and evidence MUST use the same transitive dependency graph. Never filter out missing dependencies to make export pass. Creator graphs MUST include every native application input and bind compiled CLI identity separately in the lock. Maintenance candidates bind their compiled CLI identity and complete validation sources.
 - Application briefs MUST be owned by project.yaml. Render the marked application AGENTS region on creation/relocking, preserve custom rules outside it, and leave missing intent/BOM values unknown. Private projects MUST NOT enter reference discovery, test collection or source dependencies.
 - A project lock MUST preserve initial import provenance separately from explicitly reviewed application updates. Builds MUST check the actual toolchain against the current lock.
 - Evidence MUST name complete expected cases and the source digest, and live in tests/devices/<board>/. Preserve original log bytes, timestamps and observed results; storage changes MUST NOT refresh historical source digests. Changed source/adapter/contracts invalidate prior verification. Physical promotion additionally requires matching revision and named acceptance observations.
 - Cloud operation contracts MUST live in the consuming Skill package's contract.json. Device peripherals and native interfaces MUST NOT become cloud contracts. This repository MUST NOT implement the cloud service.
-- Skill contract validation in tools/codecraft MUST NOT import or construct the hardware Catalog. Native-only context, export and project checks MUST NOT load cloud packages or contract code. Explicit Skill selections add only their complete package and verification graph. Stable semantics, service policy and API versions remain separately reviewed. Policy may only narrow schemas; defaults require explicit permission. Follow docs/architecture/skill-contracts.md.
+- Skill contract validation in tools/cli/src/maintenance_contracts.rs MUST NOT import or construct the hardware Catalog. Native-only context, export and project checks MUST NOT load cloud packages or contract code. Explicit Skill selections add only their complete package and verification graph. Stable semantics, service policy and API versions remain separately reviewed. Policy may only narrow schemas; defaults require explicit permission. Follow docs/architecture/skill-contracts.md.
 - Cloud Skill packages MUST run independently after copying one directory. Runtime imports MUST remain inside the package. Package release records in tools/skill_packages/packages MUST pin every package file, including contract.json, and preserve original provenance. Keep inventories outside packages to avoid self-hashing. Validation MUST use offline fixtures and synthetic credentials, never real services.
 - Bundle changes MUST use candidate/check/review/apply in docs/development/skill-releases.md. Apply MUST name the reviewed digest, rerun isolated conformance and reject source drift. Package, API, semantic contract and policy versions MUST remain separately reviewed; original import provenance MUST NOT be rewritten. Packaging MUST NOT imply installation or publication.
 - ESP-IDF examples MUST keep native BSP composition, Target example scope and managed dependency locks aligned. Public headers stay in include/ and private implementation in src/. Validate actual build-source selection and portable exports; changing source layout MUST NOT silently change hardware configuration or dependency versions. See `docs/development/native-compositions.md`.
 - Hardware variants MUST come from sourced Device facts and explicit Target/native bindings. Carry the selected variant through context, export, locks, native build cases and physical evidence. A declared build default MUST NOT imply panel detection or revision compatibility; one variant's observations MUST NOT promote another. Unknown revision mappings remain unresolved. See `docs/development/hardware-variants.md`.
-- All repository-maintained tests, fixtures and mocks MUST live under tests/, grouped by source owner. MUST NOT place test directories inside devices/, platforms/, skills/ or tools/. Use the recursive public test runner; each test MUST be discovered once. Physical evidence and logs are not executable test suites. Follow `docs/development/testing.md` for the authoritative ownership map, filtering and execution rules.
-- Document and invoke repository tools through `python3 codecraft.py`. The public entry is the only repository/application CLI. It loads tools/codecraft/cli.py; native commands remain in platform adapters. New exports MUST carry the public entry and portable workflow guidance in their graph and lock. CLI contract 3 uses explicit --skills selections; project profiles and locks use schema 3 without mixed-version readers.
+- All repository-maintained tests, fixtures and mocks MUST live under tests/, grouped by source owner. MUST NOT place test directories inside devices/, platforms/, skills/ or tools/. Use the recursive public runner for Python suites and the explicit Cargo integration targets for Rust suites; each test MUST run once in its owning suite. Physical evidence and logs are not executable test suites. Follow `docs/development/testing.md` for the authoritative ownership map, filtering and execution rules.
+- Document and invoke creator operations through the standalone Rust `codecraft` CLI in tools/cli. Native implementations belong in platforms/<stack>/native.rs. Creator exports carry portable guidance, native application inputs and a separately locked CLI identity; they MUST NOT copy the CLI implementation. CLI contract 4 and creator profile/lock/graph schema 4 use explicit --skills selections. Historical evidence retains its original schema and is archived without promotion; it is not a second executable project implementation. Use `codecraft maintenance` for repository audits. Follow docs/development/rust-cli.md. Build the CLI only after Rust/dependency/compiler/target changes; data and application edits do not rebuild it.
 
 ### Required validation and delivery
 
@@ -295,7 +296,14 @@ do not become firmware changes merely because they share a source graph.
 
 When firmware and native build inputs/behavior are unchanged, Agents MUST NOT
 run native builds, set up native toolchains, or use the no-option `validate`
-command unless explicitly requested by the user. Native commands in local
+command unless explicitly requested by the user.
+
+Offline evidence checks and toolchain-version parsing changes may use focused
+host tests when declared toolchain versions, native inputs and emitted build
+commands remain unchanged. Cover accepted/rejected identities and the affected
+build preflight paths; do not infer a fresh firmware build from these tests.
+Changing a declared toolchain, native input or emitted command still requires
+native validation. Native commands in local
 Platform/example guidance are conditional on this scope selection. For merges,
 compare the final native inputs with validated parent inputs; rebuild only newly affected
 combinations. A new commit or changed source digest alone is not a rebuild
@@ -305,7 +313,7 @@ or claim a new build passed when compilation was skipped.
 This is a check-selection policy for Agents and contributors. The CLI does not
 automatically inspect the Git diff; no-option `validate` still runs all Targets
 and clean project builds. CI keeps the static/host gate and selects native Targets
-with `python3 codecraft.py ci plan`; its fixed result job checks every selected
+with `codecraft maintenance ci plan`; its fixed result job checks every selected
 platform. See [CI selection](docs/development/ci.md) for event baselines, dependency
 ownership, conservative fallbacks and explicit skips. This does not replace
 reviewing an uncommitted local diff under the scope rules above.
@@ -313,11 +321,11 @@ Select any required native checks by the actual platform:
 
 | Command | What it establishes |
 | --- | --- |
-| `python3 codecraft.py validate --static` | Repository checks and host tests |
-| `python3 codecraft.py validate --target esp-idf/<board>` | ESP-IDF example builds with an activated, board-appropriate IDF |
-| `python3 codecraft.py validate --target linux/<board>` | Linux source checks; inspect whether overlay compilation ran |
-| `python3 codecraft.py validate --target arduino/<board>` | Arduino sketches compiled with the declared core/libraries |
-| `python3 codecraft.py validate` | Explicit complete-gate run under the scope rules above; includes native and clean project builds |
+| `codecraft validate --static` | Repository checks and host tests |
+| `codecraft validate --target esp-idf/<board>` | ESP-IDF example builds with an activated, board-appropriate IDF |
+| `codecraft validate --target linux/<board>` | Linux source checks; inspect whether overlay compilation ran |
+| `codecraft validate --target arduino/<board>` | Arduino sketches compiled with the declared core/libraries |
+| `codecraft validate` | Explicit complete-gate run under the scope rules above; includes native and clean project builds |
 
 Documentation/rule changes additionally require checking referenced paths,
 commands, README language equivalence, English-only engineering documents and applicability. Shared tools, discovery,

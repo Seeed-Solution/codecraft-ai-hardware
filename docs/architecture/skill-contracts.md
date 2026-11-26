@@ -20,7 +20,7 @@ their source names; they are not runtime aliases for maintained packages.
 | skills/<id>/SKILL.md and references/api.md | Task authorization, usage and attributable service explanations |
 | skills/<id>/scripts/ | File/content checks, authentication, HTTP, streaming, media and optional archival |
 | tools/skill_packages/packages/<id>.json | Distribution version, complete package inventory, reviewed contract/API/policy versions and immutable original provenance |
-| tools/codecraft/skill_contracts.py | Repository validation, explicit export-selection checks and package graph composition |
+| tools/cli/src/maintenance_contracts.rs | Repository validation, explicit export-selection checks and package graph composition |
 | docs/skill-inventory.json | Generated ID/operation/version navigation for callers selecting a package |
 
 Contract containers use schema 2; release records use schema 1. Semantic contracts

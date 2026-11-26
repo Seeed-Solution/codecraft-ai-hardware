@@ -1,84 +1,92 @@
 {
   "include": [
     {
-      "id": "arduino/grove-beginner-kit",
+      "chip": "",
       "device": "grove-beginner-kit",
+      "id": "arduino/grove-beginner-kit",
       "platform": "arduino",
-      "toolchain": "1.5.0",
-      "chip": "",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "1.5.0"
     },
     {
-      "id": "esp-idf/respeaker-lite",
+      "chip": "esp32s3",
       "device": "respeaker-lite",
+      "id": "esp-idf/respeaker-lite",
       "platform": "esp-idf",
-      "toolchain": "6.0.2",
-      "chip": "esp32s3",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
     },
     {
-      "id": "linux/reterminal",
+      "chip": "",
       "device": "reterminal",
+      "id": "linux/reterminal",
       "platform": "linux",
-      "toolchain": "unknown",
-      "chip": "",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "unknown"
     },
     {
-      "id": "esp-idf/reterminal-e1001",
+      "chip": "esp32s3",
       "device": "reterminal-e1001",
+      "id": "esp-idf/reterminal-e1001",
       "platform": "esp-idf",
-      "toolchain": "6.0.2",
-      "chip": "esp32s3",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
     },
     {
-      "id": "esp-idf/reterminal-e1002",
+      "chip": "esp32s3",
       "device": "reterminal-e1002",
+      "id": "esp-idf/reterminal-e1002",
       "platform": "esp-idf",
-      "toolchain": "6.0.2",
-      "chip": "esp32s3",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
     },
     {
-      "id": "esp-idf/reterminal-sticky",
+      "chip": "esp32s3",
       "device": "reterminal-sticky",
+      "id": "esp-idf/reterminal-sticky",
       "platform": "esp-idf",
-      "toolchain": "6.0.2",
-      "chip": "esp32s3",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
     },
     {
-      "id": "esp-idf/sensecap-indicator",
+      "chip": "esp32s3",
       "device": "sensecap-indicator",
+      "id": "esp-idf/sensecap-indicator",
       "platform": "esp-idf",
-      "toolchain": "6.0.2",
-      "chip": "esp32s3",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
     },
     {
-      "id": "esp-idf/sensecap-watcher",
+      "chip": "esp32s3",
       "device": "sensecap-watcher",
+      "id": "esp-idf/sensecap-watcher",
       "platform": "esp-idf",
-      "toolchain": "6.0.2",
-      "chip": "esp32s3",
-      "runner": "ubuntu-latest"
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
     },
     {
-      "id": "arduino/wio-terminal",
-      "device": "wio-terminal",
-      "platform": "arduino",
-      "toolchain": "1.5.0",
       "chip": "",
-      "runner": "ubuntu-latest"
+      "device": "wio-terminal",
+      "id": "arduino/wio-terminal",
+      "platform": "arduino",
+      "runner": "ubuntu-latest",
+      "toolchain": "1.5.0"
     },
     {
-      "id": "esp-idf/xiao-s3-147",
-      "device": "xiao-s3-147",
-      "platform": "esp-idf",
-      "toolchain": "6.0.2",
       "chip": "esp32s3",
-      "runner": "ubuntu-latest"
+      "device": "wio-tracker-l2",
+      "id": "esp-idf/wio-tracker-l2",
+      "platform": "esp-idf",
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
+    },
+    {
+      "chip": "esp32s3",
+      "device": "xiao-s3-147",
+      "id": "esp-idf/xiao-s3-147",
+      "platform": "esp-idf",
+      "runner": "ubuntu-latest",
+      "toolchain": "6.0.2"
     }
   ]
 }

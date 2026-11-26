@@ -2,7 +2,7 @@
 
 # arduino/wio-terminal
 
-硬件知识：[AGENTS.md](../AGENTS.md)。阅读[工具链安装说明](README.md#toolchain)，然后在仓库根目录运行 `python3 codecraft.py validate --target arduino/wio-terminal --projects`。
+硬件知识：[AGENTS.md](../AGENTS.md)。阅读[工具链安装说明](README.md#toolchain)，然后在仓库根目录运行 `codecraft validate --target arduino/wio-terminal --projects`。
 
 Target 清单定义 FQBN、依赖版本和独立示例。使用 --example 选择一个示例。构建不会上传；实机步骤由 [Device 验收清单](../AGENTS.md#physical-acceptance)维护。
 
@@ -31,4 +31,4 @@ arduino-cli lib install --no-deps "Seeed Arduino rpcBLE@1.0.0"
 
 用 ARDUINO_DIRECTORIES_DATA、ARDUINO_DIRECTORIES_DOWNLOADS、ARDUINO_DIRECTORIES_USER 隔离安装目录。适配器对所选 core、原生工具和锁定库计算指纹，并显式传递库路径；无关 core 不进入锁文件。构建输出位于 .codecraft/builds/arduino/。
 
-导出应用使用 `python3 codecraft.py build-project .`；仓库级验证命令不能替代应用锁文件检查。
+导出应用使用 `codecraft build-project .`；仓库级验证命令不能替代应用锁文件检查。

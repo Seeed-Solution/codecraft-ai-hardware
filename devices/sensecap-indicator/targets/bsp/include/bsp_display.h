@@ -4,7 +4,9 @@
  * RGB bus through esp_lcd. Framebuffer lives in octal PSRAM. */
 #pragma once
 
+#include <stdint.h>
 #include "esp_err.h"
+#include "bsp_pins.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_panel_rgb.h"
 
@@ -43,6 +45,35 @@ extern "C" {
  * must never be freed. Framebuffer updates may tear; transfer/copy completion
  * does not prove visible frame completion. No physical recovery is verified. */
 esp_err_t bsp_display_init(esp_lcd_panel_handle_t *out_panel);
+
+/* Start with DEFAULT, then select application policy before initialization.
+ * Default preserves 18 MHz, no bounce buffer, RP2040 running and GPIO backlight.
+ * hold_rp2040_reset disables the co-processor and its attached functions;
+ * it is not a buzzer-only mute. BMP power follows the same enable policy.
+ * bounce_buffer_lines must divide 480 (0 disables); two internal RAM buffers
+ * consume lines * 480 * 2 bytes each. Clock must be 1..18 MHz; lower clocks
+ * still require application/panel verification.
+ * backlight_pwm_hz=0 retains GPIO on/off; otherwise reserves low-speed LEDC
+ * timer 0/channel 0 at 8-bit resolution for the process lifetime. Choose a
+ * frequency appropriate to the application; SDK rejects unsupported values.
+ * Reinitialization with different options returns INVALID_STATE, not success.
+ * Failed initialization may leave board reset/power and PWM resources configured;
+ * retry only during serialized startup. No fade service is needed. */
+typedef struct {
+    uint32_t pclk_hz;
+    unsigned bounce_buffer_lines;
+    bool hold_rp2040_reset;
+    uint32_t backlight_pwm_hz;
+} bsp_display_config_t;
+#define BSP_DISPLAY_CONFIG_DEFAULT() ((bsp_display_config_t){ .pclk_hz = BSP_LCD_PCLK_HZ })
+esp_err_t bsp_display_init_with_config(const bsp_display_config_t *config,
+                                     esp_lcd_panel_handle_t *out_panel);
+
+/* Ready PWM display only; percent 0..100. Serializes like backlight_set.
+ * SDK errors propagate without aborting; getter tracks last successful request,
+ * not physical brightness. GPIO-only displays return INVALID_STATE. */
+esp_err_t bsp_display_brightness_set(unsigned percent);
+unsigned bsp_display_brightness_get(void);
 
 /* Backlight on GPIO 45, active high; requires ready state. GPIO errors
  * propagate and leave physical state uncertain. Getter returns only the

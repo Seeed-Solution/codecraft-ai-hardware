@@ -29,20 +29,25 @@ Find more boards and examples in the [device directory](devices/AGENTS.md). The 
 
 ## Quick start
 
+Using Codex, Claude Code, Cursor, ZCode, WorkBuddy, Muse or another coding agent?
+Start with the [shared agent setup guide](docs/development/agent-client-setup.md).
+It provides one reusable request for new and existing applications, with optional
+native Skill or project-rule entry. Client experience testing is left to users.
+
 ### 1. Get the repository and select your board
 
-Have Git and Python 3 available. Run the following commands in your terminal:
+Have Git and the standalone CodeCraft CLI available. Install the latest stable Release binary after cloning with `sh tools/cli/install.sh` (Windows: `tools/cli/install.ps1`). Use `--from-source` (`-FromSource` on Windows) only for local CLI development. Downloaded binaries require neither Python nor Rust. See [installation and updates](docs/development/rust-cli.md).
 
 ```sh
 git clone https://github.com/Seeed-Solution/codecraft-ai-hardware.git
 cd codecraft-ai-hardware
-python3 codecraft.py discover --interface display
+codecraft discover --interface display
 ```
 
 The following walkthrough uses **reTerminal E1001 / ESP-IDF**. For another board, use its Target guide and declared software stack.
 
 ```sh
-python3 codecraft.py context --target esp-idf/reterminal-e1001
+codecraft context --target esp-idf/reterminal-e1001
 ```
 
 Read the returned context and the [E1001 setup guide](devices/reterminal-e1001/targets/README.md#toolchain). Install and activate the exact toolchain declared in [target.json](devices/reterminal-e1001/targets/target.json) before building; when working with an agent, use [codecraft-development-setup](skills/codecraft-development-setup/SKILL.md) for missing tools.
@@ -52,21 +57,22 @@ Read the returned context and the [E1001 setup guide](devices/reterminal-e1001/t
 Run from the repository root:
 
 ```sh
-python3 codecraft.py new --target esp-idf/reterminal-e1001 --example epd_hello --output projects/my-e1001-project
-python3 codecraft.py verify-project projects/my-e1001-project
+codecraft new --target esp-idf/reterminal-e1001 --example epd_hello --output projects/my-e1001-project
+codecraft verify-project projects/my-e1001-project
 ```
 
-Choose an output directory that does not already exist. `projects/` is ignored by Git so your application stays separate from the reference examples; an explicit external directory also works. `project.yaml` records your selections, and `codecraft.lock` tracks imported sources and toolchain provenance. No global CodeCraft CLI installation is needed.
+Choose an output directory that does not already exist. `projects/` is ignored by Git so your application stays separate from the reference examples; an explicit external directory also works. `project.yaml` records your selections, and `codecraft.lock` tracks imported sources and toolchain provenance. Use the installed standalone executable; project edits do not rebuild it.
 
 ### 3. Build the selected example
 
 With the declared toolchain active, run:
 
 ```sh
-python3 codecraft.py build-project projects/my-e1001-project
+codecraft lock-project projects/my-e1001-project --toolchain
+codecraft build-project projects/my-e1001-project
 ```
 
-The exported workspace also contains `codecraft.py`; from that directory, use `python3 codecraft.py build-project .`. Builds do not flash the device. To test on hardware, follow the selected [Device acceptance procedure](devices/reterminal-e1001/AGENTS.md#physical-acceptance) and [codecraft-development-device-test](skills/codecraft-development-device-test/SKILL.md), with the board and port identified and device writes explicitly authorized.
+The exported workspace records CLI identity and contains no CodeCraft Python runtime; from that directory, use `codecraft build-project .`. Builds do not flash the device. To test on hardware, follow the selected [Device acceptance procedure](devices/reterminal-e1001/AGENTS.md#physical-acceptance) and [codecraft-development-device-test](skills/codecraft-development-device-test/SKILL.md), with the board and port identified and device writes explicitly authorized.
 
 For application changes, briefs, reviewed relocking and repeat builds, follow the [portable application workflow](docs/development/application-workflow.md). Use [codecraft-development-ideate](skills/codecraft-development-ideate/SKILL.md) and `new --brief <file.json>` to record purpose, users, scenarios and a bill of materials in your project.
 
@@ -93,7 +99,7 @@ Standalone clients in [skills/](skills/README.md#cloud-capabilities) extend clou
 
 See the [free allowance table](skills/README.md#free-allowance) for monthly per-device usage and monthly totals across five devices. The features share one monthly device allowance; the rows are alternative usage estimates.
 
-To include clients in an application, CLI contract 3 uses `new --skills <selection.json>` with explicit selections; project profiles and locks use schema 3. See [project composition](skills/README.md#optional-project-composition) and the generated [Skill inventory](docs/skill-inventory.json).
+To include clients in an application, CLI contract 4 uses `new --skills <selection.json>` with explicit selections; project profiles and locks use schema 4. See [project composition](skills/README.md#optional-project-composition) and the generated [Skill inventory](docs/skill-inventory.json).
 
 [CodeCraft Hub](https://codecraft.seeed.cc/hub) is the separate firmware-sharing platform. For requested uploads, online flashing, SenseCraft device management or cloud deployment, use the external [sensecraft-cli](https://github.com/Seeed-Solution/sensecraft-cli) and its official bundled Skill. Follow [installation and task routing](docs/development/sensecraft-cli.md) for the verified version and prerequisites. Native development does not require this tool; installing a Skill or CLI does not authorize cloud operations.
 
@@ -123,14 +129,14 @@ To include clients in an application, CLI contract 3 uses `new --skills <selecti
 
 ### Contributor checks
 
-Follow the [repository contract](AGENTS.md), [maintenance entry](CONTRIBUTION.md) and [test ownership guide](docs/development/testing.md). After source metadata changes, run `python3 codecraft.py generate`; then check generation drift and static/host behavior:
+Follow the [repository contract](AGENTS.md), [maintenance entry](CONTRIBUTION.md) and [test ownership guide](docs/development/testing.md). After source metadata changes, run `codecraft maintenance generate`; then check generation drift and static/host behavior:
 
 ```sh
-python3 codecraft.py generate --check
-python3 codecraft.py validate --static
+codecraft maintenance generate --check
+codecraft validate --static
 ```
 
-Documentation-only changes do not require native builds. Firmware or native build changes need scoped validation under the [validation policy](AGENTS.md#required-validation-and-delivery); no-option `python3 codecraft.py validate` runs the complete software gate. Build results, simulation and physical observations are reported separately. Generated firmware and transient build output stay untracked; retained, sanitized evidence lives under `tests/devices/<device>/`.
+Documentation-only changes do not require native builds. Firmware or native build changes need scoped validation under the [validation policy](AGENTS.md#required-validation-and-delivery); no-option `codecraft validate` runs the complete software gate. Build results, simulation and physical observations are reported separately. Generated firmware and transient build output stay untracked; retained, sanitized evidence lives under `tests/devices/<device>/`.
 
 For standalone client package changes, follow the [candidate/check/review/apply release workflow](docs/development/skill-releases.md). Packaging does not install or publish a Skill. Remaining acceptance and simulation work is tracked in the implementation ledger linked above.
 

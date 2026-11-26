@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "resource",
+  "inputs": [
+    "LICENSE",
+    "NOTICE",
+    "docs/development/application-workflow.md",
+    "skills/codecraft-development-ideate/SKILL.md",
+    "skills/codecraft-development-develop/SKILL.md",
+    "skills/codecraft-development-setup/SKILL.md",
+    "skills/codecraft-development-build/SKILL.md",
+    "skills/codecraft-development-debug/SKILL.md",
+    "skills/codecraft-development-device-test/SKILL.md",
+    "skills/codecraft-development-discover/SKILL.md",
+    "skills/codecraft-development-validate/SKILL.md"
+  ],
+  "dependencies": []
+}

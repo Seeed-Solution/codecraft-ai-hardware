@@ -2360,6 +2360,21 @@
       "verification": "unknown"
     },
     {
+      "configuration": {},
+      "interface": "wireless",
+      "operations": {
+        "scan": {
+          "reason": "Counts access points on an initialized Wi-Fi station using a blocking passive scan.",
+          "source": "devices/wio-tracker-l2/targets/bsp/include/bsp_wifi.h",
+          "supported": true,
+          "symbol": "bsp_wifi_scan_count"
+        }
+      },
+      "resources": {},
+      "target": "esp-idf/wio-tracker-l2",
+      "verification": "unknown"
+    },
+    {
       "configuration": {
         "channels": {
           "description": "PCM channels",

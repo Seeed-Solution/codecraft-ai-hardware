@@ -22,7 +22,7 @@ and print pressure, temperature and barometric altitude.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example air_pressure_spa06`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example air_pressure_spa06`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

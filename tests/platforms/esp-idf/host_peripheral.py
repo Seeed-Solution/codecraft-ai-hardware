@@ -8,13 +8,16 @@ ROOT = Path(__file__).resolve().parents[3]
 TESTS = Path(__file__).resolve().parent
 
 
-def run_cases(board, suite, cases, original=None, tick_ms=10):
+def run_cases(board, suite, cases, original=None, tick_ms=10, variant=None):
     compiler = shutil.which('cc')
     assert compiler, 'Peripheral contract tests require a C compiler (cc)'
     target = ROOT/'devices'/board/'targets'
     tests = ROOT/'tests/devices'/board/'targets'
     source = original or target/'bsp/src'/f'bsp_{suite}.c'
     flags = ['-pthread', f'-DTEST_TICK_MS={tick_ms}']
+    if board == 'sensecap-indicator' and suite == 'touch':
+        assert variant in (None, 'gx', 'dx')
+        flags += ['-DCODECRAFT_DISPLAY_GX='+('0' if variant == 'dx' else '1')]
     if original:
         flags += ['-Wno-unused-parameter']
     if suite == 'sdcard':

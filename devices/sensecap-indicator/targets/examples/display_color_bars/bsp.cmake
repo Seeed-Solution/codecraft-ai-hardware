@@ -6,6 +6,7 @@ set(CODECRAFT_BSP_SOURCES
     "src/bsp_io_expander.c"
 )
 set(CODECRAFT_BSP_REQUIRES
+    esp_driver_ledc
     esp_driver_gpio
     esp_driver_i2c
     esp_lcd

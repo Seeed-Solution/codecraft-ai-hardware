@@ -14,7 +14,7 @@ Verify the kit's passive piezo buzzer with a reproducible tone sequence.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example buzzer_tones`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example buzzer_tones`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

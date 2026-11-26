@@ -17,10 +17,17 @@ Skill directory to install it. Repository tooling lives in
 
 ## Hardware development
 
+Use codecraft-development-develop as the general application entry. Follow the
+[shared agent setup guide](../docs/development/agent-client-setup.md) for native
+Skill discovery, a project-rule pointer or explicit document reading. Development
+Skills need the selected repository or exported application for hardware and
+workflow references; their installation directory is not that workspace. Other
+independent cloud and reCamera packages retain their own package-local guidance.
+
 The required workflows are codecraft-development-develop, codecraft-development-setup, codecraft-development-build,
 codecraft-development-device-test and codecraft-development-debug. Use codecraft-development-ideate for application
 briefs, plus codecraft-development-discover and codecraft-development-validate as needed. Shared Device
-validation and orchestration live in tools/codecraft/. Native commands remain in each
+creator orchestration lives in tools/cli/; repository audits live in tools/cli/. Native commands remain in each
 Platform. The [portable workflow](../docs/development/application-workflow.md)
 and selected Platform/workflow guidance are exported and locked with applications.
 
@@ -151,14 +158,14 @@ Activate the [host test environment](../docs/development/testing.md) before the
 following repository-root checks; dependency installation makes no API calls.
 
 ```sh
-python3 codecraft.py check-cloud-skills
-python3 codecraft.py test --path tests/tools/skill_packages/test_protocol.py
-python3 codecraft.py validate --static
+codecraft maintenance check-cloud-skills
+codecraft maintenance test --path tests/tools/skill_packages/test_protocol.py
+codecraft validate --static
 ```
 
 check-cloud-skills verifies repository packages; --skills-root checks installed
 copies. Missing, extra and symlink files fail. Caches are excluded; CLI checks use
 fresh pinned bytes without inherited PYTHONPATH. Per-Skill tests live under
-tests/skills/<skill-id>/; shared contracts live under tests/tools/codecraft/ and
+tests/skills/<skill-id>/; shared contracts live under tests/tools/cli/ and
 installation/protocol/releases under tests/tools/skill_packages/. Tests use loopback fixtures and
 synthetic credentials only. Real API acceptance remains [open](../docs/development/optimization-plan.md).

@@ -2,7 +2,7 @@
 
 Firmware merging is an optional post-build Platform operation. Device owns
 sourced hardware facts; Target declares image support; Platform owns native
-layout parsing, merging and verification; tools/codecraft owns orchestration
+layout parsing, merging and verification; tools/cli owns orchestration
 and provenance. Cloud Capabilities are unchanged.
 
 ## Scope
@@ -67,18 +67,18 @@ and [esptool](https://docs.espressif.com/projects/esptool/en/latest/esp32/esptoo
 Keep the Target's declared ESP-IDF environment activated. Repository builds:
 
 ```sh
-python3 codecraft.py validate --target esp-idf/sensecap-watcher --example battery_status
-python3 codecraft.py firmware plan --target esp-idf/sensecap-watcher --example battery_status --output .codecraft/plan.json
-python3 codecraft.py firmware merge --plan .codecraft/plan.json --output .codecraft/release
-python3 codecraft.py firmware verify .codecraft/release
+codecraft validate --target esp-idf/sensecap-watcher --example battery_status
+codecraft firmware plan --target esp-idf/sensecap-watcher --example battery_status --output .codecraft/plan.json
+codecraft firmware merge --plan .codecraft/plan.json --output .codecraft/release
+codecraft firmware verify .codecraft/release
 ```
 
 For Indicator, pass --variant dx or --variant gx during build and planning.
 Omitting the variant during planning selects the Target's declared build
 default; it does not identify the physical panel.
 
-An exported application uses `python3 codecraft.py build-project .`, followed
-by `python3 codecraft.py firmware plan --project . --output .codecraft/plan.json`.
+An exported application uses `codecraft build-project .`, followed
+by `codecraft firmware plan --project . --output .codecraft/plan.json`.
 The merge and verify commands are identical. Plans and release directories
 must be new paths. In-tree releases belong under .codecraft/ so they cannot
 enter source locks or source packages.

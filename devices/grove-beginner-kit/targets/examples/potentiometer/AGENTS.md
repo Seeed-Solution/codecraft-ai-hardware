@@ -15,7 +15,7 @@ digital action without PWM.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example potentiometer`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example potentiometer`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

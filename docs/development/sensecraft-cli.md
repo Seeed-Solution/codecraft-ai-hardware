@@ -26,7 +26,7 @@ A scoped installation also works with `npm install --prefix <external-tools-dire
 
 After npm installation, the entry is `@seeed-studio/sensecraft-cli/skills/sensecraft-cli/SKILL.md` under the selected installation's `node_modules`. For a global installation, `npm root -g` locates that parent. Link or copy the complete `skills/sensecraft-cli` directory into the Agent host's supported user Skill directory, keeping its `references/` and nested `create-app/` intact. Use the Skill shipped with the selected executable version. Do not maintain another copy of this Skill or its implementation in the hardware repository.
 
-Read that entry before a SenseCraft task, then its product-specific reference. A request to turn a local project into a Hub app uses the official nested `create-app/SKILL.md`. Repository commands remain `python3 codecraft.py`; the separately maintained external tool is invoked through its own CLI. External installation and Skill registration do not authorize login, cloud writes or hardware writes.
+Read that entry before a SenseCraft task, then its product-specific reference. A request to turn a local project into a Hub app uses the official nested `create-app/SKILL.md`. Repository commands remain `codecraft`; the separately maintained external tool is invoked through its own CLI. External installation and Skill registration do not authorize login, cloud writes or hardware writes.
 
 ## Task routing
 

@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include "driver/gpio.h"
+#include "driver/ledc.h"
 #include "esp_check.h"
 #include "esp_log.h"
 #include "esp_rom_sys.h"
@@ -34,6 +35,8 @@ static const char *TAG = "bsp_display";
 static esp_lcd_panel_handle_t s_panel;
 static bool s_backlight;
 static bool s_ready;
+static unsigned s_brightness;
+static bsp_display_config_t s_config;
 
 /* ---- 9-bit 3-wire SPI (panel register channel) ----
  * SCK/SDO are plain GPIOs, CS sits on the TCA9535 expander. The vendor
@@ -195,11 +198,12 @@ static esp_err_t st7701s_init(void)
 
 #endif /* CODECRAFT_DISPLAY_GX: DX does not send ST7701S register writes. */
 
-static esp_err_t rgb_panel_create(esp_lcd_panel_handle_t *out_panel)
+static esp_err_t rgb_panel_create(const bsp_display_config_t *config, esp_lcd_panel_handle_t *out_panel)
 {
     esp_lcd_rgb_panel_config_t panel_config = {
         .clk_src = LCD_CLK_SRC_DEFAULT,
         .data_width = 16,
+        .bounce_buffer_size_px = config->bounce_buffer_lines * BSP_LCD_H_RES,
         .disp_gpio_num = GPIO_NUM_NC,
         .pclk_gpio_num = BSP_PIN_LCD_PCLK,
         .vsync_gpio_num = BSP_PIN_LCD_VSYNC,
@@ -214,7 +218,7 @@ static esp_err_t rgb_panel_create(esp_lcd_panel_handle_t *out_panel)
             BSP_PIN_LCD_D15,
         },
         .timings = {
-            .pclk_hz = BSP_LCD_PCLK_HZ,
+            .pclk_hz = config->pclk_hz,
             .h_res = BSP_LCD_H_RES,
             .v_res = BSP_LCD_V_RES,
             .hsync_pulse_width = BSP_LCD_HSYNC_PULSE_WIDTH,
@@ -236,8 +240,24 @@ static esp_err_t rgb_panel_create(esp_lcd_panel_handle_t *out_panel)
 
 esp_err_t bsp_display_init(esp_lcd_panel_handle_t *out_panel)
 {
+    const bsp_display_config_t config = BSP_DISPLAY_CONFIG_DEFAULT();
+    return bsp_display_init_with_config(&config, out_panel);
+}
+
+esp_err_t bsp_display_init_with_config(const bsp_display_config_t *config,
+                                     esp_lcd_panel_handle_t *out_panel)
+{
     if (out_panel) *out_panel = NULL;
+    ESP_RETURN_ON_FALSE(config && config->pclk_hz > 0 && config->pclk_hz <= BSP_LCD_PCLK_HZ &&
+                        config->bounce_buffer_lines <= BSP_LCD_V_RES &&
+                        (!config->bounce_buffer_lines || BSP_LCD_V_RES % config->bounce_buffer_lines == 0),
+                        ESP_ERR_INVALID_ARG, TAG, "display config");
     if (s_ready) {
+        ESP_RETURN_ON_FALSE(config->pclk_hz == s_config.pclk_hz &&
+                            config->bounce_buffer_lines == s_config.bounce_buffer_lines &&
+                            config->hold_rp2040_reset == s_config.hold_rp2040_reset &&
+                            config->backlight_pwm_hz == s_config.backlight_pwm_hz,
+                            ESP_ERR_INVALID_STATE, TAG, "display already configured");
         if (out_panel) {
             *out_panel = s_panel;
         }
@@ -258,19 +278,23 @@ esp_err_t bsp_display_init(esp_lcd_panel_handle_t *out_panel)
     esp_rom_delay_us(5000);
     ESP_RETURN_ON_ERROR(bsp_io_expander_set_level(BSP_EXP_IO_TP_RESET, 1), TAG,
                         "tp release");
-    ESP_RETURN_ON_ERROR(
-        bsp_io_expander_set_direction(BSP_EXP_IO_RP2040_RESET, 1), TAG,
-        "rp2040 reset dir");
-    ESP_RETURN_ON_ERROR(bsp_io_expander_set_level(BSP_EXP_IO_RP2040_RESET, 1),
-                        TAG, "rp2040 release");
-    ESP_RETURN_ON_ERROR(bsp_io_expander_set_direction(BSP_EXP_IO_BMP_PWR, 1),
-                        TAG, "bmp pwr dir");
-    ESP_RETURN_ON_ERROR(bsp_io_expander_set_level(BSP_EXP_IO_BMP_PWR, 1), TAG,
-                        "bmp pwr on");
+    /* Load low before enabling an output in hold-reset mode, avoiding a
+     * transient release from the expander's previous output latch. Active-low
+     * reset and BMP enable polarity follow the vendor board source above. */
+    const int pins[] = { BSP_EXP_IO_RP2040_RESET, BSP_EXP_IO_BMP_PWR };
+    for (unsigned i = 0; i < sizeof(pins) / sizeof(pins[0]); ++i) {
+        if (config->hold_rp2040_reset) {
+            ESP_RETURN_ON_ERROR(bsp_io_expander_set_level(pins[i], 0), TAG, "co-processor hold");
+        }
+        ESP_RETURN_ON_ERROR(bsp_io_expander_set_direction(pins[i], 1), TAG, "co-processor direction");
+        if (!config->hold_rp2040_reset) {
+            ESP_RETURN_ON_ERROR(bsp_io_expander_set_level(pins[i], 1), TAG, "co-processor enable");
+        }
+    }
 
     /* Vendor order: RGB streaming first, then the ST7701S register init. */
     esp_err_t ret;
-    ESP_GOTO_ON_ERROR(rgb_panel_create(&s_panel), fail, TAG, "rgb panel");
+    ESP_GOTO_ON_ERROR(rgb_panel_create(config, &s_panel), fail, TAG, "rgb panel");
 #if CODECRAFT_DISPLAY_GX
     ESP_GOTO_ON_ERROR(st7701s_init(), fail, TAG, "st7701s init");
 #else
@@ -290,6 +314,22 @@ esp_err_t bsp_display_init(esp_lcd_panel_handle_t *out_panel)
         .intr_type = GPIO_INTR_DISABLE,
     };
     ESP_GOTO_ON_ERROR(gpio_config(&bl_conf), fail, TAG, "backlight gpio");
+    if (config->backlight_pwm_hz) {
+        /* GPIO/polarity from vendor board file cited above. Timer/channel and
+         * resolution are software resource choices, not hardware facts. */
+        const ledc_timer_config_t timer = {
+            .speed_mode = LEDC_LOW_SPEED_MODE, .timer_num = LEDC_TIMER_0,
+            .duty_resolution = LEDC_TIMER_8_BIT, .freq_hz = config->backlight_pwm_hz,
+            .clk_cfg = LEDC_AUTO_CLK,
+        };
+        const ledc_channel_config_t channel = {
+            .gpio_num = BSP_PIN_LCD_BACKLIGHT, .speed_mode = LEDC_LOW_SPEED_MODE,
+            .channel = LEDC_CHANNEL_0, .timer_sel = LEDC_TIMER_0, .duty = 0,
+        };
+        ESP_GOTO_ON_ERROR(ledc_timer_config(&timer), fail, TAG, "backlight timer");
+        ESP_GOTO_ON_ERROR(ledc_channel_config(&channel), fail, TAG, "backlight channel");
+    }
+    s_config = *config;
     s_ready = true;
 
     if (out_panel) {
@@ -312,13 +352,36 @@ esp_err_t bsp_display_backlight_set(bool on)
 {
     ESP_RETURN_ON_FALSE(s_ready, ESP_ERR_INVALID_STATE, TAG,
                         "display not initialized");
+    if (s_config.backlight_pwm_hz) return bsp_display_brightness_set(on ? 100 : 0);
     ESP_RETURN_ON_ERROR(gpio_set_level(BSP_PIN_LCD_BACKLIGHT, on ? 1 : 0),
                         TAG, "backlight");
     s_backlight = on;
+    s_brightness = on ? 100 : 0;
     return ESP_OK;
 }
 
 bool bsp_display_backlight_get(void)
 {
     return s_backlight;
+}
+
+/* Separate duty/update avoids requiring the LEDC fade service. See the
+ * pinned tellytile GX observation cited in bsp_touch.c and IDF LEDC API. */
+esp_err_t bsp_display_brightness_set(unsigned percent)
+{
+    ESP_RETURN_ON_FALSE(percent <= 100, ESP_ERR_INVALID_ARG, TAG, "brightness");
+    ESP_RETURN_ON_FALSE(s_ready && s_config.backlight_pwm_hz,
+                        ESP_ERR_INVALID_STATE, TAG, "PWM not initialized");
+    ESP_RETURN_ON_ERROR(ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0,
+                                    (percent * 255 + 50) / 100), TAG, "backlight duty");
+    ESP_RETURN_ON_ERROR(ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0),
+                        TAG, "backlight update");
+    s_brightness = percent;
+    s_backlight = percent != 0;
+    return ESP_OK;
+}
+
+unsigned bsp_display_brightness_get(void)
+{
+    return s_brightness;
 }

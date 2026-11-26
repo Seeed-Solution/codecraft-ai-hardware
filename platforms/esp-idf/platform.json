@@ -1,5 +1,9 @@
 {
-  "adapter": "platforms/esp-idf/adapter.py",
+  "adapter": "platforms/esp-idf/native.rs",
+  "application_inputs": [
+    "tools/application/resource.json",
+    "platforms/esp-idf/cmake/bsp.cmake"
+  ],
   "ci": {
     "runner": "ubuntu-latest"
   },
@@ -58,12 +62,5 @@
       "supported": false
     }
   },
-  "runtime": [
-    "tools/codecraft/resource.json",
-    "platforms/esp-idf/composition.py",
-    "platforms/esp-idf/cmake/bsp.cmake",
-    "platforms/esp-idf/variants.py",
-    "platforms/esp-idf/esp_firmware.py"
-  ],
-  "schema_version": 2
+  "schema_version": 3
 }

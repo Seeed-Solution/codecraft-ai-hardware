@@ -25,7 +25,7 @@ basics without touching the LCD bus.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/wio-terminal --example sd_card_log`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/wio-terminal --example sd_card_log`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

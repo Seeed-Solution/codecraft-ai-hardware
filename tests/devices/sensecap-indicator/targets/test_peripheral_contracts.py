@@ -9,7 +9,8 @@ def test_indicator_touch_readiness_candidates_and_io_ownership():
     cases = [[str(n)] for n in range(8)]
     cases += [['candidate', str(n)] for n in range(4)]
     cases += [[name] for name in ('missing', 'repeat', 'cleanup', 'optional')]
-    run_cases('sensecap-indicator', 'touch', cases)
+    for variant in ('gx', 'dx'):
+        run_cases('sensecap-indicator', 'touch', cases, variant=variant)
 
 
 def test_indicator_touch_reset_retains_minimum_pulse_across_tick_rates():

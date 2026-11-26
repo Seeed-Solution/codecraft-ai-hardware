@@ -14,7 +14,11 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  cli:
+    uses: ./.github/workflows/cli.yml
+
   contracts:
+    needs: cli
     runs-on: ubuntu-latest
     outputs:
       plan: ${{ steps.plan.outputs.plan }}
@@ -29,6 +33,11 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: codecraft-x86_64-unknown-linux-musl
+          path: .codecraft/bin
+      - run: chmod +x .codecraft/bin/codecraft
       - name: Install host test dependencies
         run: sudo apt-get update && sudo apt-get install -y build-essential device-tree-compiler python3-venv curl
       - name: Install isolated cloud client test dependencies
@@ -38,17 +47,17 @@ jobs:
           "$RUNNER_TEMP/codecraft-host-env/bin/python" -m pip check
           echo "$RUNNER_TEMP/codecraft-host-env/bin" >> "$GITHUB_PATH"
       - name: Discover centralized host tests
-        run: python3 codecraft.py test --list > "$RUNNER_TEMP/codecraft-host-tests.json"
-      - run: python3 codecraft.py validate --static
+        run: .codecraft/bin/codecraft maintenance test --list > "$RUNNER_TEMP/codecraft-host-tests.json"
+      - run: .codecraft/bin/codecraft validate --static
       - id: plan
         name: Select affected native Targets
         run: |
-          python3 codecraft.py ci plan --event "$GITHUB_EVENT_PATH" --event-name "$GITHUB_EVENT_NAME" \
+          .codecraft/bin/codecraft maintenance ci plan --event "$GITHUB_EVENT_PATH" --event-name "$GITHUB_EVENT_NAME" \
             --github-output "$GITHUB_OUTPUT" --summary "$GITHUB_STEP_SUMMARY" \
             --report "$RUNNER_TEMP/codecraft-ci-plan.json"
 
   esp-idf:
-    needs: contracts
+    needs: [contracts, cli]
     if: needs.contracts.outputs.esp_idf_count != '' && needs.contracts.outputs.esp_idf_count != '0'
     runs-on: ubuntu-latest
     strategy:
@@ -56,14 +65,19 @@ jobs:
       matrix: ${{ fromJSON(needs.contracts.outputs.esp_idf) }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: codecraft-x86_64-unknown-linux-musl
+          path: .codecraft/bin
+      - run: chmod +x .codecraft/bin/codecraft
       - uses: espressif/esp-idf-ci-action@9d38657f3d789ca759b2b37aaf5ceffbc42c4f0d # v1
         with:
           esp_idf_version: v${{ matrix.toolchain }}
           target: ${{ matrix.chip }}
-          command: python3 codecraft.py validate --target ${{ matrix.id }} --projects
+          command: .codecraft/bin/codecraft validate --target ${{ matrix.id }} --projects
 
   linux:
-    needs: contracts
+    needs: [contracts, cli]
     if: needs.contracts.outputs.linux_count != '' && needs.contracts.outputs.linux_count != '0'
     runs-on: ubuntu-latest
     strategy:
@@ -71,13 +85,18 @@ jobs:
       matrix: ${{ fromJSON(needs.contracts.outputs.linux) }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: codecraft-x86_64-unknown-linux-musl
+          path: .codecraft/bin
+      - run: chmod +x .codecraft/bin/codecraft
       - run: sudo apt-get update && sudo apt-get install -y device-tree-compiler
-      - run: python3 codecraft.py validate --target "$TARGET" --projects
+      - run: .codecraft/bin/codecraft validate --target "$TARGET" --projects
         env:
           TARGET: ${{ matrix.id }}
 
   arduino:
-    needs: contracts
+    needs: [contracts, cli]
     if: needs.contracts.outputs.arduino_count != '' && needs.contracts.outputs.arduino_count != '0'
     runs-on: ubuntu-latest
     strategy:
@@ -85,6 +104,11 @@ jobs:
       matrix: ${{ fromJSON(needs.contracts.outputs.arduino) }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: codecraft-x86_64-unknown-linux-musl
+          path: .codecraft/bin
+      - run: chmod +x .codecraft/bin/codecraft
       - uses: arduino/setup-arduino-cli@b3cda96fddef6af6c56b4c5efb5c47e2357935db # v2.1.0
         with:
           version: ${{ matrix.toolchain }}
@@ -105,18 +129,30 @@ jobs:
           for name, version in toolchain.get('libraries', {}).items():
               subprocess.run(['arduino-cli', 'lib', 'install', '--no-deps', name + '@' + version], check=True)
           PY
-      - run: python3 codecraft.py validate --target "$TARGET" --projects
+      - run: .codecraft/bin/codecraft validate --target "$TARGET" --projects
         env:
           TARGET: ${{ matrix.id }}
 
   ci:
     name: CI result
     if: always()
-    needs: [contracts, esp-idf, linux, arduino]
+    needs: [cli, contracts, esp-idf, linux, arduino]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        if: needs.cli.result == 'success'
+        with:
+          name: codecraft-x86_64-unknown-linux-musl
+          path: .codecraft/bin
       - name: Require every selected job to pass
         env:
           CODECRAFT_CI_NEEDS: ${{ toJSON(needs) }}
-        run: python3 codecraft.py ci check --needs-env CODECRAFT_CI_NEEDS --summary "$GITHUB_STEP_SUMMARY"
+          CODECRAFT_CLI_JOB: ${{ needs.cli.result }}
+        run: |
+          if [ "$CODECRAFT_CLI_JOB" != success ]; then
+            echo "CLI build/test job did not pass: $CODECRAFT_CLI_JOB" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          chmod +x .codecraft/bin/codecraft
+          .codecraft/bin/codecraft maintenance ci check --needs-env CODECRAFT_CI_NEEDS --summary "$GITHUB_STEP_SUMMARY"

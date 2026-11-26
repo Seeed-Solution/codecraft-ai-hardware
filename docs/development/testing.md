@@ -9,12 +9,12 @@ ignored SDK or package installations are not maintained repository suites.
 Use the public runner for discovery, focused host checks and the static gate:
 
 ```sh
-python3 codecraft.py test --list
-python3 codecraft.py test --path tests/tools/codecraft
-python3 codecraft.py test --path tests/tools/skill_packages/test_protocol.py
-python3 codecraft.py test --path tests/platforms/esp-idf/components/codecraft_sht4x
-python3 codecraft.py test --path tests/devices/sensecap-watcher/targets
-python3 codecraft.py validate --static
+codecraft maintenance test --list
+cargo test --locked --package codecraft --test migration
+codecraft maintenance test --path tests/tools/skill_packages/test_protocol.py
+codecraft maintenance test --path tests/platforms/esp-idf/components/codecraft_sht4x
+codecraft maintenance test --path tests/devices/sensecap-watcher/targets
+codecraft validate --static
 ```
 
 The full host gate needs a C11 compiler, pthreads and `dtc` on PATH. Public CLI
@@ -42,7 +42,7 @@ client dependencies must be reported rather than silently skipping their cases.
 Select checks using the [root validation policy](../../AGENTS.md#required-validation-and-delivery).
 Documentation and host-only changes do not require native firmware builds when
 native inputs/behavior are unchanged. Host tests may compile host fixtures; this
-is separate from building board firmware. No-option `python3 codecraft.py validate`
+is separate from building board firmware. No-option `codecraft validate`
 includes all native Targets and clean project builds, so it is reserved for an
 explicit full-build request or native changes affecting every Target.
 
@@ -60,7 +60,8 @@ remain separate, explicitly scoped workflows.
 
 | Location | Responsibility |
 | --- | --- |
-| `tests/tools/codecraft/` | Device Markdown parsing/validation, catalogs, source graph, generation, project exports/locks, evidence, public CLI, test discovery, documentation rules and cross-layer orchestration |
+| `tests/tools/cli/` | Rust creator CLI, standalone authoring, source locks and native orchestration; run `cargo test --locked --package codecraft` |
+| `tests/tools/cli/maintenance_*.rs` | Device/source validation, generated views, evidence, CI, host discovery and documentation contracts |
 | `tests/tools/skill_packages/` | Standalone installation/inventory, loopback protocols and reviewed release transactions |
 | `tests/skills/<skill-id>/` | Semantic contracts and direct standalone-client conformance |
 | `tests/platforms/<stack>/` | Platform-wide adapter/registration contracts and shared native test support |
@@ -73,7 +74,7 @@ devices/<device>/AGENTS.md; see [Device document rules](device-documents.md). It
 remain in the device directory. The central evidence area follows
 [tests/AGENTS.md](../../tests/AGENTS.md). Only each Device's targets/ subtree is a host-test owner; observations, records and logs are never collected as tests.
 
-The runner searches `test_*.py` recursively within the host test owners above.
+The Rust dispatcher searches `test_*.py` recursively within the host test owners above.
 For Device tests, platform filtering reads devices/<device>/targets/target.json;
 it does not infer the software stack from the test folder name. Missing or
 mismatched Target ownership fails discovery. Platform filtering includes the
@@ -84,8 +85,9 @@ use names such as `host_sensor.py`; C fixtures and SDK doubles are not Python
 test entries. `fixtures/`, `stubs/`, `mocks/`, build/cache and hidden directories are
 excluded. Imported test functions/classes are not collected as new local cases.
 
+The dispatcher uses the pinned external pytest runtime for retained Python suites.
 Plain module-level `test_*` functions and local `unittest.TestCase` methods are
-supported. unittest module/class/case fixtures retain their normal lifecycle;
+supported. tests/conftest.py rejects imported aliases and asynchronous cases. unittest module/class/case fixtures retain their normal lifecycle;
 subtest failures, fixture failures, skips and expected failures do not become
 passing results. The JSON envelope and exit codes remain 0 for all passed,
 1 for failures and 2 for skipped/unrun checks. A collection failure is reported
@@ -94,10 +96,10 @@ fixtures are not an implicit supported test format.
 
 ## Coverage
 
-CI selection cases in tests/tools/codecraft/test_ci.py cover native inputs across
+CI selection cases in tests/tools/cli/maintenance_ci.rs cover native inputs across
 all three platforms, shared resources, both sides of deletions/renames, internal
 configuration links, new/removed Targets, event baselines and aggregate-job failures.
-Run them with `python3 codecraft.py test --path tests/tools/codecraft/test_ci.py`.
+Run them with `cargo test --locked --package codecraft --test migration/test_ci.py`.
 Public CLI tests also verify that repository-only CI commands are unavailable in
 native application exports. See [CI selection](ci.md) for the workflow contract.
 
@@ -109,3 +111,40 @@ checks do not turn offline protocol results into live service acceptance.
 Their source graph explicitly includes the four per-Skill conformance directories and the shared standalone
 protocol fixture. Native application exports include production dependencies
 and cited Device observations, not test code, fixtures, records or logs.
+
+## Rust CLI checks
+
+Onboarding tests in tests/tools/cli/onboarding.rs exercise the release installer
+with offline downloads, latest-release resolution, pinned-version overrides,
+checksum/version rejection and existing-file preservation.
+They use the shell installer on Unix and PowerShell on Windows. Doctor coverage
+uses missing/fake host tools and verifies exported project bytes remain unchanged;
+these fixtures do not establish native SDK or device readiness.
+
+Run `cargo fmt --all -- --check`, `cargo clippy --locked --package codecraft --all-targets -- -D warnings` and `cargo test --locked --package codecraft` after Rust changes.
+The Python recursive runner does not discover Rust tests. CI compiles their explicit
+Cargo targets only on cache misses and runs the cached executables against current
+Device data on every run. `codecraft validate --static` runs compiled source validation and independent
+Python host/client suites; the Rust suite is a separate required CI job.
+
+## Migration regression ownership
+
+The removed Python catalog/project/graph/runtime/firmware modules have no second
+implementation. Their regression subjects are covered by authoring.rs and
+migration.rs (all-example exports, paths, source locks, origin preservation,
+briefs, native compositions, variant output and firmware bounds),
+maintenance_evidence.rs (facts, media, logs, toolchains and revision isolation),
+maintenance_ci.rs and maintenance_checks.rs (selection, gate and test lifecycle),
+and skill_maintenance.rs / skill_reference.rs (contracts and release transactions).
+Historical comparison against a second parser is replaced by source-bound tests.
+
+Set CODECRAFT_TEST_PYTHON to the isolated Python executable when running Cargo
+tests that exercise the external host-test dispatcher. Set CODECRAFT_TEST_CLI to
+the tested executable for independent client conformance. Tests never infer a
+physical pass from a software result.
+
+Python fixture lifecycle now follows the pinned pytest runtime, including module
+fixtures around plain functions. The former custom Python runner is removed;
+its implementation-specific event ordering is not retained. Full cloud release
+conformance runs in the Python host gate with its full declared dependencies,
+not in the cross-platform cached Rust binary test job.

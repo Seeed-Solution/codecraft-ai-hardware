@@ -4,7 +4,7 @@
 
 设备知识：[AGENTS.md](../AGENTS.md)。硬件事实在该入口及其来源中维护。
 
-在仓库根目录构建/检查：`python3 codecraft.py validate --target esp-idf/sensecap-watcher`。
+在仓库根目录构建/检查：`codecraft validate --target esp-idf/sensecap-watcher`。
 
 示例、原生接口引用和工具链选择见 `target.json`。构建结果与设备观测分别记录。
 
@@ -12,7 +12,7 @@ BSP 公共头文件位于 `bsp/include/`，实现与私有头文件位于 `bsp/s
 
 ## 单文件镜像
 
-执行 `python3 codecraft.py validate --target esp-idf/sensecap-watcher --example battery_status` 后，运行 `python3 codecraft.py firmware plan --target esp-idf/sensecap-watcher --example battery_status --output .codecraft/watcher-plan.json`，再运行 `python3 codecraft.py firmware merge --plan .codecraft/watcher-plan.json --output .codecraft/watcher-release` 和 `python3 codecraft.py firmware verify .codecraft/watcher-release`。保持声明的 ESP-IDF 环境处于激活状态，输出必须是新路径。factory BIN 与清单绑定成功构建、原生布局和输入哈希。此流程不会烧录或上传。
+执行 `codecraft validate --target esp-idf/sensecap-watcher --example battery_status` 后，运行 `codecraft firmware plan --target esp-idf/sensecap-watcher --example battery_status --output .codecraft/watcher-plan.json`，再运行 `codecraft firmware merge --plan .codecraft/watcher-plan.json --output .codecraft/watcher-release` 和 `codecraft firmware verify .codecraft/watcher-release`。保持声明的 ESP-IDF 环境处于激活状态，输出必须是新路径。factory BIN 与清单绑定成功构建、原生布局和输入哈希。此流程不会烧录或上传。
 
 ## Target 实现
 
@@ -24,4 +24,4 @@ BSP 公共头文件位于 `bsp/include/`，实现与私有头文件位于 `bsp/s
 
 `target.json` 要求 ESP-IDF 6.0.2、esp32s3；构建前激活该版本 SDK。
 
-导出应用使用 `python3 codecraft.py build-project .`；仓库级验证命令不能替代应用锁文件检查。
+导出应用使用 `codecraft build-project .`；仓库级验证命令不能替代应用锁文件检查。

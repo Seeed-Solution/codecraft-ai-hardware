@@ -15,7 +15,7 @@ tools/skill_packages/upstream.json; copying new source must not rewrite the orig
 
 ## Maintained inputs and versions
 
-Edit common client behavior in tools/skill_packages/device_api.py. Other package files
+Edit common client behavior in skills/codecraft-capabilities-llm/scripts/device_api.py. Other package files
 remain maintained under their own skills/codecraft-capabilities-* directories. The candidate
 builder copies the common helper into every distribution; it does not rewrite
 working package copies or their release records while preparing a candidate.
@@ -51,7 +51,7 @@ documentation-only ASR edit from package 2.0.1:
 
 Optional fields are api_version, contract_version and policy_version. These must
 match the separately reviewed values in package contract.json; omitted versions
-remain unchanged. Release record schema is 1; candidate manifest and Skill contract container schemas are 2. A shared-helper edit needs a reviewed version change
+remain unchanged. Release record schema is 1; candidate manifest schema is 3 and Skill contract container schema is 2. Candidates bind the compiled maintenance CLI and validation sources; older candidates must be re-prepared and reviewed. A shared-helper edit needs a reviewed version change
 for every affected package. Do not change versions or hashes merely to suppress
 a failing contract test.
 
@@ -60,7 +60,7 @@ a failing contract test.
 Save version overrides outside the repository and choose a new output directory:
 
 ```sh
-python3 codecraft.py skill-release prepare --versions /work/release-versions.json --output /work/skill-candidate
+codecraft maintenance skill-release prepare --versions /work/release-versions.json --output /work/skill-candidate
 ```
 
 For a reproducibility check with unchanged package inputs, omit --versions.
@@ -81,8 +81,8 @@ normal repository gate. A clean candidate does not by itself approve a release.
 ## Validate and apply
 
 ```sh
-python3 codecraft.py skill-release check --candidate /work/skill-candidate
-python3 codecraft.py skill-release apply --candidate /work/skill-candidate --review-sha256 <reviewed-64-character-digest>
+codecraft maintenance skill-release check --candidate /work/skill-candidate
+codecraft maintenance skill-release apply --candidate /work/skill-candidate --review-sha256 <reviewed-64-character-digest>
 ```
 
 check stages the candidate in a temporary repository with the exact declared
@@ -111,9 +111,9 @@ discard retained originals merely to clear an error.
 After applying, review the resulting diff and run:
 
 ```sh
-python3 codecraft.py generate
-python3 codecraft.py generate --check
-python3 codecraft.py validate --static
+codecraft maintenance generate
+codecraft maintenance generate --check
+codecraft validate --static
 ```
 
 Select any native/export builds using the
@@ -127,5 +127,5 @@ or a sibling Skill. Existing exported applications keep their locked versions
 until an explicitly reviewed application update or a new export.
 
 The full workflow is repository maintenance. Plain exported applications carry
-the public codecraft.py entry and native build support, but do not carry the
+portable workflow guidance and native build inputs, using the separately installed Rust CLI, but do not carry the
 release maintainer or its test suite; skill-release reports not_supported there.

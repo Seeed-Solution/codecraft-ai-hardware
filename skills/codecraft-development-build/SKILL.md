@@ -5,7 +5,19 @@ description: Build native firmware and run checks without flashing or publishing
 
 # Build
 
-First apply the [root validation policy](../../AGENTS.md).
+Start from the user's repository or application workspace, not this Skill's
+installation directory. Read that workspace's AGENTS.md and
+`docs/development/application-workflow.md` for workspace and task routing.
+When installed elsewhere, resolve links below from the matching Skill path in
+that workspace. If the workspace is unavailable, ask for its location and
+continue independent work that does not depend on it.
+
+First select the workspace. For a generated application, follow its AGENTS.md
+and use `codecraft build-project .` after reviewing and explicitly locking
+intended application/toolchain changes. Do not run repository-wide static or
+reference Target validation for ordinary application edits.
+
+For reference repository contributions, apply the [root validation policy](../../AGENTS.md).
 Use this workflow for requested builds or changes affecting firmware/native build
 inputs or behavior. Otherwise use static/host checks without native builds or
 toolchain setup. Run `validate --static`, then `validate --target <id>` for
@@ -16,9 +28,10 @@ request or native changes affecting every Target. A missing required prerequisit
 is not_run, never passed. No build command flashes or publishes. Diagnose failures
 before retrying.
 
-All commands above use `python3 codecraft.py <command>` from the repository root. Read the root AGENTS.md before acting.
+Commands use `codecraft <command>` from the selected repository or application root.
+Read that workspace's AGENTS.md before acting.
 
-In a generated application, use `python3 codecraft.py build-project .`; explicitly accept reviewed application/toolchain changes with `python3 codecraft.py lock-project .`. Do not use reference-Target validation to bypass an application's lock.
+In a generated application, use `codecraft build-project .`; explicitly accept reviewed application/toolchain changes with `codecraft lock-project .`. Do not use reference-Target validation to bypass an application's lock.
 
 For requested factory image delivery, keep the native toolchain activated and
 use `firmware plan --project <application> --output <new-plan.json>`,

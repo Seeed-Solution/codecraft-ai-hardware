@@ -14,7 +14,7 @@ Read the kit light sensor and use a dark threshold to switch the kit LED.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example light_sensor`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example light_sensor`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

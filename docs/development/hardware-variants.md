@@ -18,9 +18,9 @@ default only. Indicator declares GX as its build default; new
 applications should select the assembly identified from attributable evidence:
 
 ```sh
-python3 codecraft.py context --target esp-idf/sensecap-indicator --example display_color_bars --variant dx
-python3 codecraft.py new --target esp-idf/sensecap-indicator --example display_color_bars --variant dx --output /path/to/new-project
-python3 codecraft.py validate --target esp-idf/sensecap-indicator --variant dx
+codecraft context --target esp-idf/sensecap-indicator --example display_color_bars --variant dx
+codecraft new --target esp-idf/sensecap-indicator --example display_color_bars --variant dx --output /path/to/new-project
+codecraft validate --target esp-idf/sensecap-indicator --variant dx
 ```
 
 Omitting --variant from new selects the documented default and records that

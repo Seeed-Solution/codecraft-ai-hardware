@@ -6,4 +6,4 @@ These rules apply to devices/<device>/targets/. Each Device owns its Target mani
 
 The Wio Terminal and post-October-2025 Grove Beginner Kit Targets declare FQBN, exact CLI/core/library versions, board-manager URLs and standalone sketches. Hardware facts and physical observations belong to their Device. Use the declared core and explicit library selection; other installed board profiles do not establish compatibility.
 
-Every Target must declare examples, toolchain provenance, native interface references, and dependencies in target.json. Supported operations and their limits are in platform.json. Run `python3 codecraft.py validate --target arduino/<device>`. Never infer device verification from a build.
+Every Target must declare examples, toolchain provenance, native interface references, and dependencies in target.json. Supported operations and their limits are in platform.json. Run `codecraft validate --target arduino/<device>`. Never infer device verification from a build.

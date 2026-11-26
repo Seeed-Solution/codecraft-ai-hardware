@@ -1,6 +1,6 @@
 # AI development guide
 
-Read both applicable parts of the root AGENTS.md. Use `python3 codecraft.py context --target <platform>/<device>` to collect device facts, native implementations, dependencies, native interfaces and unknowns. Read the selected files for the task; a returned path is not evidence that its contents were checked. Consult primary vendor sources when hardware facts need confirmation. Keep the five required development Skills available and load the matching workflows.
+Read both applicable parts of the root AGENTS.md. Use `codecraft context --target <platform>/<device>` to collect device facts, native implementations, dependencies, native interfaces and unknowns. Read the selected files for the task; a returned path is not evidence that its contents were checked. Consult primary vendor sources when hardware facts need confirmation. Keep the five required development Skills available and load the matching workflows.
 
 ## Application and BSP boundary
 
@@ -32,7 +32,7 @@ and host-only changes with unchanged firmware and native build inputs need
 static/host checks, not firmware compilation. Native changes require builds
 only for affected Targets, examples and variants. A commit, push or merge does
 not require rebuilding unchanged, already validated native inputs. The no-option
-`python3 codecraft.py validate` command remains a full-build operation, not the
+`codecraft validate` command remains a full-build operation, not the
 default delivery check.
 
 The [CI planner](ci.md) compares committed inputs on both sides of a change and

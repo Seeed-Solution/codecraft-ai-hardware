@@ -28,6 +28,17 @@ esp_err_t esp_lcd_new_panel_io_i2c(i2c_master_bus_handle_t bus,const esp_lcd_pan
 esp_err_t esp_lcd_panel_io_del(esp_lcd_panel_io_handle_t handle){assert(handle==&io&&io&&!controller);deletions++;if(cleanup_fail)return ESP_FAIL;io=0;return ESP_OK;}
 static esp_err_t construct(esp_lcd_panel_io_handle_t handle,const esp_lcd_touch_config_t *c,esp_lcd_touch_handle_t *out,bool goodix){
     assert(handle==&io&&io&&!controller&&goodix==(candidate>=2));assert(c->x_max==480&&c->y_max==480&&c->rst_gpio_num==GPIO_NUM_NC&&c->int_gpio_num==GPIO_NUM_NC);
+    if (CODECRAFT_DISPLAY_GX && !goodix) {
+        assert(c->process_coordinates);
+        uint16_t x[]={0,479,0,479,480,12,65535},y[]={0,0,479,479,1,34,0};
+        uint16_t strength[]={1,2,3,4,5,6,7};uint8_t count=7;
+        c->process_coordinates(NULL,x,y,strength,&count,7);
+        assert(count==5&&x[0]==479&&y[0]==479&&x[1]==0&&y[1]==479);
+        assert(x[2]==479&&y[2]==0&&x[3]==0&&y[3]==0);
+        assert(x[4]==467&&y[4]==445&&strength[4]==6);
+        count=0;c->process_coordinates(NULL,x,y,NULL,&count,7);assert(count==0);
+        x[0]=0;y[0]=0;count=7;c->process_coordinates(NULL,x,y,NULL,&count,1);assert(count==1);
+    } else assert(!c->process_coordinates);
     assert(!c->flags.swap_xy&&!c->flags.mirror_x&&!c->flags.mirror_y);esp_err_t e=step();if(!e){controller=1;*out=&controller;}return e;}
 esp_err_t esp_lcd_touch_new_i2c_ft5x06(esp_lcd_panel_io_handle_t h,const esp_lcd_touch_config_t *c,esp_lcd_touch_handle_t *out){return construct(h,c,out,false);}
 esp_err_t esp_lcd_touch_new_i2c_gt911(esp_lcd_panel_io_handle_t h,const esp_lcd_touch_config_t *c,esp_lcd_touch_handle_t *out){return construct(h,c,out,true);}

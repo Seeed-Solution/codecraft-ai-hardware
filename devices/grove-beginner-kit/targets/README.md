@@ -2,7 +2,7 @@
 
 # arduino/grove-beginner-kit
 
-Device knowledge: [AGENTS.md](../AGENTS.md). Read the [toolchain setup below](#toolchain), then run `python3 codecraft.py validate --target arduino/grove-beginner-kit --projects` from the repository root.
+Device knowledge: [AGENTS.md](../AGENTS.md). Read the [toolchain setup below](#toolchain), then run `codecraft validate --target arduino/grove-beginner-kit --projects` from the repository root.
 
 The Target manifest owns the FQBN, dependency pins and standalone sketches. Select one example with --example. Builds never upload; on-device procedures belong to the [Device checklist](../AGENTS.md#physical-acceptance).
 
@@ -31,4 +31,4 @@ Use ARDUINO_DIRECTORIES_DATA, ARDUINO_DIRECTORIES_DOWNLOADS and ARDUINO_DIRECTOR
 
 Source: https://github.com/arduino/ArduinoCore-avr/tree/1.8.8
 
-In an exported application, use `python3 codecraft.py build-project .`; reference-repository validation commands do not replace application lock checks.
+In an exported application, use `codecraft build-project .`; reference-repository validation commands do not replace application lock checks.

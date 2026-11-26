@@ -6,7 +6,7 @@ hardware revisions retain their separate ownership.
 
 ```text
 platforms/esp-idf/
-  composition.py                 # metadata/build-output checks
+  composition.rs                 # metadata/build-output checks
   cmake/bsp.cmake                 # load the example's native composition
   components/                    # native components shared across boards
 devices/<board>/
@@ -73,7 +73,7 @@ Shared module tests and SDK doubles remain with their Platform or component;
 board-specific host tests live in tests/devices/<board>/targets/.
 Neither is implicitly shipped as runtime application inputs.
 
-`composition.py` checks profile syntax, local header/implementation closure,
+`composition.rs` checks profile syntax, local header/implementation closure,
 Target declarations and native component-directory selection. After a successful
 compiler command, the adapter checks `project_description.json` for the actual
 BSP sources and requirements. A compiler exit of zero with the wrong composition
@@ -81,10 +81,10 @@ is a failed validation result. The actual component list is retained with each
 native build result; registration counts alone do not establish firmware size,
 build-time improvement or physical behavior.
 
-Use `python3 codecraft.py context --target <id> --example <name>` to inspect
+Use `codecraft context --target <id> --example <name>` to inspect
 the chosen closure, and `new --target <id> --example <name> --output <new-path>`
-to export it. The export carries the native profile, helper and validator in its
-source graph and lock. Missing inputs fail rather than being silently omitted.
+to export it. The export carries the native profile and CMake helper in its
+source graph and lock; the composition validator belongs to the locked CLI binary. Missing inputs fail rather than being silently omitted.
 
 When adding an interface to an external application, import the required native
 sources, headers and dependencies, then update that application's composition,
@@ -96,8 +96,8 @@ For changes to native composition, run the composition tests and affected native
 and exported project builds:
 
 ```sh
-python3 codecraft.py test --path tests/platforms/esp-idf/test_composition.py
-python3 codecraft.py validate --target esp-idf/<board> --projects
+cargo test --locked --package codecraft --test migration
+codecraft validate --target esp-idf/<board> --projects
 ```
 
 Narrow by example/variant where applicable. Documentation about composition

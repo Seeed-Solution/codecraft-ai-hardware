@@ -5,9 +5,58 @@ root AGENTS.md defines the current task scope. Repository contribution and relea
 maintenance additionally follow the reference repository's root routing table;
 they are not application build prerequisites.
 
+## Workspace entry and routing
+
+Use the same workflow in Codex, Claude Code, Cursor, ZCode, WorkBuddy, Muse or
+another agent with file and terminal access. The agent's Skill installation
+directory is not a repository root. Start from the workspace explicitly supplied
+by the user or the open project. From a subdirectory, find the containing
+project.yaml or reference checkout; if more than one workspace is plausible,
+clarify the location before writes. Do not scan unrelated personal directories.
+
+- An application root contains project.yaml and codecraft.lock. Read its AGENTS.md,
+  reuse its target/example/variant, and preserve its custom rules and current work.
+- A reference checkout has the device/platform catalog and development Skills.
+  Read its AGENTS.md, discover a Target if needed, and create a private application
+  when the request is application development rather than a contribution.
+- An empty destination is not a reference checkout. Locate the user's reference
+  checkout before discovery or export; do not create files in an installed Skill.
+
+For an installed Skill, a link such as ../../docs/development/application-workflow.md
+means the corresponding document under the selected workspace. Read the matching
+workspace file instead of assuming the client's installation directory has that
+relative layout. Use the selected workspace's guidance and available CLI commands;
+do not copy board knowledge or overwrite local rules to repair a reference.
+
+Use codecraft-development-develop as the general application entry. Read the
+matching specialized Skill only when the current task needs it; retain the root
+contract's required Skill availability. Skill references are instructions to read
+guidance, not an assumption that every client has the same Skill invocation tool.
+
+Choose the next action from the user's current state: ideate/discover for an
+unselected application, develop for implementation, setup for missing environment,
+build for compilation, debug for a failure, validate for scoped checks and
+device-test for authorized physical work. Skip already settled decisions.
+
+Run context with the matching task and selection, for example:
+
+```sh
+codecraft --root /path/to/workspace context --target esp-idf/reterminal-e1001 --example epd_hello --task develop
+codecraft verify-project /path/to/application
+codecraft build-project /path/to/application
+```
+
+The last command is for an authorized build after the normal source/environment
+review and lock steps below; these examples are not a mandatory sequence.
+Inspect `codecraft --help` when a command is unavailable and follow the existing
+native guidance for that installed release. A missing terminal limits execution,
+not planning; report what actually ran. A remote shell does not establish access
+to local USB/serial devices. Changing clients does not require recreating a project,
+refreshing a lock or repeating authorization that is still valid within scope.
+
 ## Selection and context
 
-Run `python3 codecraft.py discover`, then `context --target <stack>/<device>`.
+Run `codecraft discover`, then `context --target <stack>/<device>`.
 Use `--task ideate`, develop, setup, build, debug, device-test, discover or validate
 to choose guidance. Every returned source is in the same dependency graph used
 by exports, locks and evidence. Read the selected Device AGENTS, Target manifest,
@@ -23,7 +72,7 @@ item, quantity and source; unknown quantity/source use null. project.yaml owns
 the brief; relocking refreshes the generated AGENTS region and preserves custom
 rules outside it. Keep application work outside the reference implementations.
 
-Project profiles and locks use schema 3. Select optional cloud clients with
+Creator project profiles and locks use schema 4. Use the standalone Rust CLI; Python and Cargo are not required for discovery, creation or source verification. Select optional cloud clients with
 `--skills <selection.json>`, containing explicit Skill IDs, configuration,
 environment decisions/reference names and resource limits. No credential values
 belong in metadata. Read each selected package's SKILL.md and contract.json;
@@ -35,10 +84,20 @@ registry or client. Original import provenance remains immutable.
 
 ## Build and validation scope
 
-Activate only the exact toolchain declared by the Target. An ESP32 Arduino
+Check `codecraft --help` for `doctor`; when available, run
+`codecraft doctor --target <stack>/<device>` from the selected root before setup.
+It reports the active toolchain and declared requirements without building or
+changing locks. The published v0.5.0 CLI does not include doctor; use the Setup
+Skill native checks with that version. Reuse a matching installation and
+activate the toolchain declared by the Target in the build shell. ESP-IDF accepts the declared
+release with optional `-dirty` local edits; the lock still fingerprints those
+edits. Prereleases and post-release commits are different SDK versions, not
+equivalent release matches. For a deliberate experiment with another release,
+change the private application's Target requirement and review/relock its
+environment; this does not establish support for the reference Target. An ESP32 Arduino
 project uses its Arduino core/FQBN/library pins, not ESP-IDF commands. Use
 `verify-project .` to inspect source integrity. After reviewed application or
-environment changes, use `lock-project .`, then `build-project .` for an
+environment changes, use `lock-project . --toolchain`, then `build-project .` for an
 authorized build. Never refresh locks or rebuild implicitly to hide drift.
 
 Unchanged firmware and native build inputs/behavior need static/host checks,

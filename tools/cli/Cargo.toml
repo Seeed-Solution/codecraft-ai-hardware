@@ -1,0 +1,61 @@
+[package]
+name = "codecraft"
+version = "0.5.0"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+autotests = false
+build = false
+
+[dependencies]
+anyhow = "=1.0.102"
+tempfile = "=3.27.0"
+quick-xml = "=0.37.5"
+rustpython-parser = "=0.4.0"
+rustpython-ast = { version = "=0.4.0", features = ["unparse", "visitor"] }
+clap = { version = "=4.6.0", features = ["derive"] }
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.149"
+sha2 = "=0.10.9"
+regex = "=1.12.3"
+walkdir = "=2.5.0"
+percent-encoding = "=2.3.2"
+shlex = "=1.3.0"
+zip = { version = "=2.4.2", default-features = false, features = ["deflate"] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "=0.2.190"
+
+[dev-dependencies]
+
+[[test]]
+name = "authoring"
+path = "../../tests/tools/cli/authoring.rs"
+
+[[test]]
+name = "migration"
+path = "../../tests/tools/cli/migration.rs"
+
+[[test]]
+name = "maintenance_evidence"
+path = "../../tests/tools/cli/maintenance_evidence.rs"
+
+[[test]]
+name = "maintenance_ci"
+path = "../../tests/tools/cli/maintenance_ci.rs"
+
+[[test]]
+name = "maintenance_checks"
+path = "../../tests/tools/cli/maintenance_checks.rs"
+
+[[test]]
+name = "skill_maintenance"
+path = "../../tests/tools/cli/skill_maintenance.rs"
+
+[[test]]
+name = "skill_reference"
+path = "../../tests/tools/cli/skill_reference.rs"
+
+[[test]]
+name = "onboarding"
+path = "../../tests/tools/cli/onboarding.rs"

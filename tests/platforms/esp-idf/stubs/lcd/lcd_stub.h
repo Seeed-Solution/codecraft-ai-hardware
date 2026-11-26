@@ -27,6 +27,7 @@ typedef struct {
     struct {int pclk_hz,h_res,v_res,hsync_pulse_width,hsync_back_porch,hsync_front_porch,
                 vsync_pulse_width,vsync_back_porch,vsync_front_porch;
             struct {unsigned pclk_active_neg:1;} flags;} timings;
+    size_t bounce_buffer_size_px;
     struct {unsigned fb_in_psram:1;} flags;
 } esp_lcd_rgb_panel_config_t;
 typedef struct {int i2c_port,sda_io_num,scl_io_num,clk_source,glitch_ignore_cnt;

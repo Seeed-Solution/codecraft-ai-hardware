@@ -25,5 +25,5 @@ Sensor public contracts are in each component's `include/`; implementation is
 in `src/`. Executable C cases and Python runners live in
 [tests/platforms/esp-idf/components/](../../../tests/platforms/esp-idf/components/).
 The SHT4x and PCF8563 runners use narrow I2C/task doubles and run through
-`python3 codecraft.py validate --static` from the repository root.
+`codecraft validate --static` from the repository root.
 These checks establish software behavior, not physical timing or sensor accuracy.

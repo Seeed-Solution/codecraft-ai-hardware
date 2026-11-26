@@ -60,6 +60,16 @@ SAMD51 terminal with LCD, buttons, sensors, microSD and separate Wi-Fi/BLE scan 
 
 Use the standalone native sketches and their explicit physical test procedures.
 
+## [Wio Tracker L2](wio-tracker-l2/AGENTS.md)
+
+Wio Tracker L2 is a board for custom LoRa trackers with a screen, GNSS, microSD
+storage and an external battery connector. Use it to build a portable off-grid
+messaging or mapping device, or to prototype an ESP32-S3 Wi-Fi application.
+
+Use the native Wi-Fi scan when developing an ESP-IDF application. For local
+operations on Meshtastic firmware, use the existing client transports and
+region configuration.
+
 ## [XIAO ESP32-S3 1.47-inch Touch Display](xiao-s3-147/AGENTS.md)
 
 Small LCD, two buttons and PDM microphone; touch and storage are outside the registered Target interface scope.

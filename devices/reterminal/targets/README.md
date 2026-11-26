@@ -4,7 +4,7 @@
 
 Device knowledge: [AGENTS.md](../AGENTS.md). Hardware facts are maintained there and in its references.
 
-Build/check: `python3 codecraft.py validate --target linux/reterminal` from the repository root.
+Build/check: `codecraft validate --target linux/reterminal` from the repository root.
 
 See `target.json` for examples, native interface references and exact toolchain selection. Build results and device observations are separate.
 
@@ -45,4 +45,4 @@ cat /sys/bus/iio/devices/iio:device*/name   # ltr303, lis331dlh
 
 Use Python 3 and dtc for host checks. On-device OS/kernel and optional gpiod versions must be recorded on the selected unit; they remain unknown until observed.
 
-In an exported application, use `python3 codecraft.py build-project .`; reference-repository validation commands do not replace application lock checks.
+In an exported application, use `codecraft build-project .`; reference-repository validation commands do not replace application lock checks.

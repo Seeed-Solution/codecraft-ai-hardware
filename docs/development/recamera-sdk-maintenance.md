@@ -7,7 +7,7 @@ See the [ownership and TODO ledger](recamera-sdk-todo.md).
 
 ## Sources and independent identities
 
-- `tools/skill_packages/recamera/api_reference.py`, `api-notes.json` and
+- `tools/cli/src/maintenance_reference.rs`, `tools/skill_packages/recamera/api-notes.json` and
   `api-http-notes.json` own reference generation and imported editorial notes.
 - The package's `scripts/api-reference-lock.json` identifies the API source
   revision, source inventory and generated pages. Original upstream descriptions
@@ -31,7 +31,7 @@ Use the public CLI from the repository, with a local SDK checkout or exported
 source tree matching the chosen reference baseline:
 
 ```sh
-python3 codecraft.py skill-reference --skill codecraft-development-recamera-pysdk --sdk-root /work/recamera-sdk --check
+codecraft maintenance skill-reference --skill codecraft-development-recamera-pysdk --sdk-root /work/recamera-sdk --check
 ```
 
 The check parses source without importing the SDK or executing application code.
@@ -42,7 +42,7 @@ After reviewing the source changes and the imported editorial notes, regenerate
 with an explicit full commit. Writes require a clean Git checkout at that commit:
 
 ```sh
-python3 codecraft.py skill-reference --skill codecraft-development-recamera-pysdk --sdk-root /work/recamera-sdk --write --revision <full-commit>
+codecraft maintenance skill-reference --skill codecraft-development-recamera-pysdk --sdk-root /work/recamera-sdk --write --revision <full-commit>
 ```
 
 The generator fails on new undocumented modules/routes and incomplete sources.
@@ -70,9 +70,9 @@ bytes change. Package versions cannot decrease. The version file accepts only
 cloud API, semantic-contract or service-policy versions.
 
 ```sh
-python3 codecraft.py skill-release prepare --skill codecraft-development-recamera-pysdk --versions /work/recamera-versions.json --output /work/recamera-candidate
-python3 codecraft.py skill-release check --skill codecraft-development-recamera-pysdk --candidate /work/recamera-candidate
-python3 codecraft.py skill-release apply --skill codecraft-development-recamera-pysdk --candidate /work/recamera-candidate --review-sha256 <reviewed-digest>
+codecraft maintenance skill-release prepare --skill codecraft-development-recamera-pysdk --versions /work/recamera-versions.json --output /work/recamera-candidate
+codecraft maintenance skill-release check --skill codecraft-development-recamera-pysdk --candidate /work/recamera-candidate
+codecraft maintenance skill-release apply --skill codecraft-development-recamera-pysdk --candidate /work/recamera-candidate --review-sha256 <reviewed-digest>
 ```
 
 Candidate preparation is read-only for the repository. Omit `--versions` only
@@ -95,10 +95,10 @@ it does not install a Skill, push Git history or publish an artifact.
 ## Required verification
 
 ```sh
-python3 codecraft.py test --path tests/skills/codecraft-development-recamera-pysdk
-python3 codecraft.py test --path tests/tools/skill_packages/recamera
-python3 codecraft.py generate --check
-python3 codecraft.py validate --static
+codecraft maintenance test --path tests/skills/codecraft-development-recamera-pysdk
+codecraft maintenance test --path tests/tools/skill_packages/recamera
+codecraft maintenance generate --check
+codecraft validate --static
 ```
 
 Use the [host environment](testing.md) for the full static gate. The focused SDK

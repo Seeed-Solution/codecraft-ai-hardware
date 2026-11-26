@@ -25,7 +25,7 @@ revision, post-October-2025.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/grove-beginner-kit --example temperature_humidity_dht20`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/grove-beginner-kit --example temperature_humidity_dht20`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

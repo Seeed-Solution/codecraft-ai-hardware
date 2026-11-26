@@ -20,7 +20,7 @@ a colour-changing bar.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/wio-terminal --example microphone_level`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/wio-terminal --example microphone_level`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

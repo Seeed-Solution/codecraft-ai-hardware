@@ -18,7 +18,7 @@ not a calibrated lux meter.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/wio-terminal --example light_sensor`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/wio-terminal --example light_sensor`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

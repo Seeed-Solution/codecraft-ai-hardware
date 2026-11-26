@@ -29,20 +29,25 @@ CodeCraft AI Hardware 汇集设备知识、原生板级支持包（BSP）、示�
 
 ## 快速开始
 
+使用 Codex、Claude Code、Cursor、ZCode、WorkBuddy、Muse 或其他编程 Agent？
+从[通用 Agent 接入指南](docs/development/agent-client-setup.md)开始。
+指南提供适用于新应用和已有项目的统一请求模板，也可通过客户端的原生 Skill
+或项目规则进入同一工作流。客户端体验测试留给用户。
+
 ### 1. 获取仓库并选择板卡
 
-准备 Git 和 Python 3，在终端运行：
+准备 Git 和独立的 CodeCraft CLI。克隆后用 `sh tools/cli/install.sh` 安装最新正式版 Release 二进制（Windows：`tools/cli/install.ps1`）。仅在本地开发 CLI 时使用 `--from-source`（Windows：`-FromSource`）。下载的二进制无需 Python 或 Rust。参见[安装与更新策略](docs/development/rust-cli.md)。
 
 ```sh
 git clone https://github.com/Seeed-Solution/codecraft-ai-hardware.git
 cd codecraft-ai-hardware
-python3 codecraft.py discover --interface display
+codecraft discover --interface display
 ```
 
 以下流程以 **reTerminal E1001 / ESP-IDF** 为例。使用其他板卡时，请遵循它的 Target 指南和声明的软件栈。
 
 ```sh
-python3 codecraft.py context --target esp-idf/reterminal-e1001
+codecraft context --target esp-idf/reterminal-e1001
 ```
 
 阅读返回的上下文和 [E1001 环境配置指南](devices/reterminal-e1001/targets/README.zh_CN.md#工具链)。构建前安装并激活 [target.json](devices/reterminal-e1001/targets/target.json) 声明的精确工具链版本；与 Agent 协作时，使用 [codecraft-development-setup](skills/codecraft-development-setup/SKILL.md) 处理缺失工具。
@@ -52,21 +57,22 @@ python3 codecraft.py context --target esp-idf/reterminal-e1001
 在仓库根目录运行：
 
 ```sh
-python3 codecraft.py new --target esp-idf/reterminal-e1001 --example epd_hello --output projects/my-e1001-project
-python3 codecraft.py verify-project projects/my-e1001-project
+codecraft new --target esp-idf/reterminal-e1001 --example epd_hello --output projects/my-e1001-project
+codecraft verify-project projects/my-e1001-project
 ```
 
-输出目录必须尚不存在。`projects/` 已被 Git 忽略，便于将自己的应用与参考示例分开；也支持显式指定仓库外目录。`project.yaml` 记录选择，`codecraft.lock` 记录导入源码与工具链来源。无需全局安装 CodeCraft CLI。
+输出目录必须尚不存在。`projects/` 已被 Git 忽略，便于将自己的应用与参考示例分开；也支持显式指定仓库外目录。`project.yaml` 记录选择，`codecraft.lock` 记录导入源码与工具链来源。使用已安装的独立可执行文件；修改项目不会重新构建 CLI。
 
 ### 3. 构建所选示例
 
 激活声明的工具链后运行：
 
 ```sh
-python3 codecraft.py build-project projects/my-e1001-project
+codecraft lock-project projects/my-e1001-project --toolchain
+codecraft build-project projects/my-e1001-project
 ```
 
-导出的工作区也包含 `codecraft.py`，在该目录内可运行 `python3 codecraft.py build-project .`。构建不会刷写设备。需要实机测试时，先确认板卡和端口并明确授权设备写入，再遵循所选[设备验收步骤](devices/reterminal-e1001/AGENTS.md#physical-acceptance)和 [codecraft-development-device-test](skills/codecraft-development-device-test/SKILL.md)。
+导出的工作区记录 CLI 身份，不携带 CodeCraft Python 运行时，在该目录内可运行 `codecraft build-project .`。构建不会刷写设备。需要实机测试时，先确认板卡和端口并明确授权设备写入，再遵循所选[设备验收步骤](devices/reterminal-e1001/AGENTS.md#physical-acceptance)和 [codecraft-development-device-test](skills/codecraft-development-device-test/SKILL.md)。
 
 应用修改、需求简述、经审阅的重新锁定和后续构建，参见[可移植应用流程](docs/development/application-workflow.md)。使用 [codecraft-development-ideate](skills/codecraft-development-ideate/SKILL.md) 和 `new --brief <file.json>`，将用途、用户、场景和物料清单记录到项目中。
 
@@ -93,7 +99,7 @@ python3 codecraft.py build-project projects/my-e1001-project
 
 每台设备每月可调用次数及 5 台设备的每月合计见[免费额度表](skills/README.zh_CN.md#免费额度)。各功能共享设备每月额度，表中各行是不同使用方式下的估算。
 
-将客户端组合进应用时，CLI 契约版本 3 使用 `new --skills <selection.json>` 显式选择；项目配置与锁文件采用 schema 3。参见[项目组合](skills/README.zh_CN.md#可选项目组合)和生成的 [Skill 索引](docs/skill-inventory.json)。
+将客户端组合进应用时，CLI 契约版本 4 使用 `new --skills <selection.json>` 显式选择；项目配置与锁文件采用 schema 4。参见[项目组合](skills/README.zh_CN.md#可选项目组合)和生成的 [Skill 索引](docs/skill-inventory.json)。
 
 [CodeCraft Hub](https://codecraft.seeed.cc/hub) 是独立的固件分享平台。用户要求上传、在线刷写、SenseCraft 设备管理或云端部署时，使用外部 [sensecraft-cli](https://github.com/Seeed-Solution/sensecraft-cli) 及其官方内置 Skill。已核实版本、前提和安装方式见[安装与任务路由](docs/development/sensecraft-cli.md)。原生开发无需此工具，安装 Skill 或 CLI 不代表授权云端操作。
 
@@ -123,14 +129,14 @@ python3 codecraft.py build-project projects/my-e1001-project
 
 ### 贡献者检查
 
-遵循[仓库合同](AGENTS.md)、[维护入口](CONTRIBUTION.md)和[测试归属指南](docs/development/testing.md)。源码元数据变化后执行 `python3 codecraft.py generate`，再检查生成结果漂移和静态/主机行为：
+遵循[仓库合同](AGENTS.md)、[维护入口](CONTRIBUTION.md)和[测试归属指南](docs/development/testing.md)。源码元数据变化后执行 `codecraft maintenance generate`，再检查生成结果漂移和静态/主机行为：
 
 ```sh
-python3 codecraft.py generate --check
-python3 codecraft.py validate --static
+codecraft maintenance generate --check
+codecraft validate --static
 ```
 
-仅修改文档时无需原生构建。固件或原生构建发生变化时，按[验证策略](AGENTS.md#required-validation-and-delivery)执行对应范围的检查；不带选项的 `python3 codecraft.py validate` 会运行完整软件门禁。构建结果、仿真和实机观察分别报告。生成的固件和临时构建产物不跟踪，留存的脱敏证据位于 `tests/devices/<device>/`。
+仅修改文档时无需原生构建。固件或原生构建发生变化时，按[验证策略](AGENTS.md#required-validation-and-delivery)执行对应范围的检查；不带选项的 `codecraft validate` 会运行完整软件门禁。构建结果、仿真和实机观察分别报告。生成的固件和临时构建产物不跟踪，留存的脱敏证据位于 `tests/devices/<device>/`。
 
 修改独立客户端包时，遵循[候选包准备、检查、审阅与应用流程](docs/development/skill-releases.md)。打包不等于安装或发布 Skill。尚未完成的验收和仿真工作见上方实施进度文档。
 

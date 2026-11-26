@@ -30,3 +30,8 @@ def test_indicator_dx_avoids_register_writes_and_retains_failure_recovery():
     cases=[['0'],['null'],['unready']]+[[str(n)] for n in range(1,16)]
     cases += [['20'],['20','40']]
     run_cases('sensecap-indicator','display',cases,variant='dx')
+
+
+def test_indicator_explicit_display_policy_and_pwm_errors():
+    for variant in ('gx', 'dx'):
+        run_cases('sensecap-indicator', 'display', [['config'], ['config','22'], ['config','23']], variant=variant)

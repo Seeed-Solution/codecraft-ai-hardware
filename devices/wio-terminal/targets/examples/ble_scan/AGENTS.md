@@ -40,7 +40,7 @@ stack reports ready, so never call `ble_start()` while a scan is in progress.
 
 ## Build
 
-From the repository root, run `python3 codecraft.py validate --target arduino/wio-terminal --example ble_scan`. The exact core and libraries are declared in target.json.
+From the repository root, run `codecraft validate --target arduino/wio-terminal --example ble_scan`. The exact core and libraries are declared in target.json.
 
 ## Expected behavior
 

@@ -4,7 +4,7 @@
 
 设备知识：[AGENTS.md](../AGENTS.md)。硬件事实在该入口及其来源中维护。
 
-在仓库根目录构建/检查：`python3 codecraft.py validate --target linux/reterminal`。
+在仓库根目录构建/检查：`codecraft validate --target linux/reterminal`。
 
 示例、原生接口引用和工具链选择见 `target.json`。构建结果与设备观测分别记录。
 
@@ -29,4 +29,4 @@ cat /sys/bus/iio/devices/iio:device*/name   # ltr303, lis331dlh
 
 主机检查使用 Python 3 与 dtc。设备 OS/kernel 和可选 gpiod 版本必须在目标设备记录，观察前保持未知。
 
-导出应用使用 `python3 codecraft.py build-project .`；仓库级验证命令不能替代应用锁文件检查。
+导出应用使用 `codecraft build-project .`；仓库级验证命令不能替代应用锁文件检查。

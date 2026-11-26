@@ -43,14 +43,14 @@ Skill owner.
    build evidence. Use the appropriate command below only for affected native scope:
 
    ```bash
-   python3 codecraft.py validate --target <platform>/<device>
-   python3 codecraft.py validate --target <platform>/<device> --projects
+   codecraft validate --target <platform>/<device>
+   codecraft validate --target <platform>/<device> --projects
    ```
 
    Narrow native checks with `--example` / `--variant` where applicable; add
    `--projects` when native export contents or build behavior changes. These
    native commands are alternatives, not a mandatory sequence. Use no-option
-   `python3 codecraft.py validate` for an explicit full-build request or native
+   `codecraft validate` for an explicit full-build request or native
    changes affecting every Target. Opening a PR or merging already validated
    inputs does not itself require recompilation. Report omitted checks as
    `skipped` with the scope reason, not as fresh build success.

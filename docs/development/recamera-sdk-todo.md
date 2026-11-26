@@ -98,7 +98,7 @@ isolated host-test environment (Pillow 13.0.0 and websockets 15.0.1).
 | SDK candidate maintenance | passed: all 9 cases, including source/candidate drift, immutable import identity, incomplete checks and rollback |
 | Candidate/check/review/apply | passed: package 1.1.0 records all 105 installed files; application commands, builder/API revisions and original import remain unchanged |
 | Final-source candidate check | passed: 5 isolated cases, no further package changes after apply |
-| Full static/host gate | passed: `python3 codecraft.py validate --static`, 286 passed, no failed/skipped/unrun rows |
+| Full static/host gate | passed: `codecraft validate --static`, 286 passed, no failed/skipped/unrun rows |
 | Generation / Skill structure / whitespace | passed: `generate --check`, skill-creator `quick_validate.py` and `git diff --check` |
 | Native builds and standalone complete gate | skipped: no firmware or native build inputs/behavior changed; no board toolchain was installed or activated |
 | Host Kit execution / model conversion / simulator / physical device / live API | not_run: not part of this maintenance validation; no device revision, runtime or behavior was promoted |

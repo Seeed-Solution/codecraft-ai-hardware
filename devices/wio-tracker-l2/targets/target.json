@@ -1,0 +1,69 @@
+{
+  "dependencies": [],
+  "device": "wio-tracker-l2",
+  "example_dependencies": {
+    "wifi_scan": [
+      "devices/wio-tracker-l2/targets/examples/wifi_scan/dependencies.lock",
+      "devices/wio-tracker-l2/targets/examples/wifi_scan/main/idf_component.yml"
+    ]
+  },
+  "example_inputs": {
+    "wifi_scan": [
+      "devices/wio-tracker-l2/targets/examples/wifi_scan",
+      "devices/wio-tracker-l2/targets/bsp/include/bsp_wifi.h",
+      "devices/wio-tracker-l2/targets/bsp/src/bsp_wifi.c"
+    ]
+  },
+  "examples": [
+    "wifi_scan"
+  ],
+  "firmware": {
+    "formats": [
+      "bin"
+    ],
+    "purpose": "factory",
+    "security": "unsigned-unencrypted"
+  },
+  "id": "esp-idf/wio-tracker-l2",
+  "inputs": [
+    "devices/wio-tracker-l2/targets/bsp/CMakeLists.txt",
+    "devices/wio-tracker-l2/targets/bsp/idf_component.yml",
+    "devices/wio-tracker-l2/targets/bsp/include/bsp_pins.h",
+    "devices/wio-tracker-l2/targets/README.md",
+    "devices/wio-tracker-l2/targets/README.zh_CN.md"
+  ],
+  "interfaces": [
+    {
+      "configuration": {},
+      "example_implementation": {
+        "wifi_scan": [
+          "devices/wio-tracker-l2/targets/bsp/include/bsp_wifi.h"
+        ]
+      },
+      "id": "wireless",
+      "implementation": [],
+      "limitations": [
+        "Requires exclusive use of the station during scanning. Physical behavior is unverified."
+      ],
+      "operations": {
+        "scan": {
+          "reason": "Counts access points on an initialized Wi-Fi station using a blocking passive scan.",
+          "source": "devices/wio-tracker-l2/targets/bsp/include/bsp_wifi.h",
+          "supported": true,
+          "symbol": "bsp_wifi_scan_count"
+        }
+      },
+      "resources": {}
+    }
+  ],
+  "path": "devices/wio-tracker-l2/targets",
+  "platform": "esp-idf",
+  "schema_version": 3,
+  "toolchain": {
+    "name": "esp-idf",
+    "source": "devices/wio-tracker-l2/targets/README.md",
+    "target": "esp32s3",
+    "version": "6.0.2"
+  },
+  "variants": {}
+}

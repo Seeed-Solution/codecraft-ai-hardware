@@ -4,7 +4,7 @@
 
 Device knowledge: [AGENTS.md](../AGENTS.md). Hardware facts are maintained there and in its references.
 
-Build/check: `python3 codecraft.py validate --target esp-idf/sensecap-watcher` from the repository root.
+Build/check: `codecraft validate --target esp-idf/sensecap-watcher` from the repository root.
 
 See `target.json` for examples, native interface references and exact toolchain selection. Build results and device observations are separate.
 
@@ -12,7 +12,7 @@ BSP public headers live in `bsp/include/`; implementation and private headers li
 
 ## Single-file image
 
-After `python3 codecraft.py validate --target esp-idf/sensecap-watcher --example battery_status`, run `python3 codecraft.py firmware plan --target esp-idf/sensecap-watcher --example battery_status --output .codecraft/watcher-plan.json`, then `python3 codecraft.py firmware merge --plan .codecraft/watcher-plan.json --output .codecraft/watcher-release` and `python3 codecraft.py firmware verify .codecraft/watcher-release`. Keep the declared ESP-IDF environment activated. Outputs must be new. The factory BIN and manifest bind the successful build, native layout and input hashes. The workflow never flashes or uploads.
+After `codecraft validate --target esp-idf/sensecap-watcher --example battery_status`, run `codecraft firmware plan --target esp-idf/sensecap-watcher --example battery_status --output .codecraft/watcher-plan.json`, then `codecraft firmware merge --plan .codecraft/watcher-plan.json --output .codecraft/watcher-release` and `codecraft firmware verify .codecraft/watcher-release`. Keep the declared ESP-IDF environment activated. Outputs must be new. The factory BIN and manifest bind the successful build, native layout and input hashes. The workflow never flashes or uploads.
 
 ## Target implementation
 
@@ -26,4 +26,4 @@ owns the bus, device handle, shared display rail and reset routing.
 
 The executable version declaration in `target.json` requires ESP-IDF 6.0.2 for esp32s3. Activate that SDK before building.
 
-In an exported application, use `python3 codecraft.py build-project .`; reference-repository validation commands do not replace application lock checks.
+In an exported application, use `codecraft build-project .`; reference-repository validation commands do not replace application lock checks.

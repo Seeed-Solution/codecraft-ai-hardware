@@ -1,2 +1,6 @@
+# Source graphs, package inventories and retained evidence hash exact bytes.
+# Do not let platform-specific checkout settings rewrite line endings.
+* -text
+
 # Retained compiler logs preserve hashed bytes, including console padding.
 tests/devices/*/logs/*.log -whitespace

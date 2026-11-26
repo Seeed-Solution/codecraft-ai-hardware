@@ -6,10 +6,9 @@ from pathlib import Path
 import sys
 import wave
 ROOT=Path(__file__).resolve().parents[3]
-sys.path.insert(0,str(ROOT/'tools/codecraft'))
 sys.path.insert(0, str(ROOT/'tests/tools/skill_packages'))
 from skill_harness import local_skill, invoke_contract
-from skill_contracts import load_package, payload, policy
+from skill_harness import load_package, payload, policy
 
 SID='codecraft-capabilities-asr'
 OP='transcribe'

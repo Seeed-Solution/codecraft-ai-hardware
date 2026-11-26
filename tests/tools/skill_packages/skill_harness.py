@@ -4,10 +4,39 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+import os
+import subprocess
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(ROOT/'tools/codecraft'))
-from skill_contracts import load_package, registrations, policy, payload
+def rust_contract(*args):
+    executable = os.environ.get('CODECRAFT_TEST_CLI')
+    assert executable, 'Rust contract CLI must be supplied by the host runner'
+    run = subprocess.run([executable, '--root', str(ROOT), 'maintenance',
+                          'skill-contract', *args], capture_output=True, text=True, timeout=30)
+    assert run.returncode == 0, run.stdout + run.stderr
+    return json.loads(run.stdout)['data']
+
+
+def load_package(root, sid):
+    value = rust_contract('package', '--skill', sid)
+    return value['record'], value['contract']
+
+
+def registrations(root):
+    return {p.stem: json.loads(p.read_text())
+            for p in (root / 'tools/skill_packages/packages').glob('*.json')}
+
+
+def policy(contract, files):
+    return rust_contract('package', '--skill', contract['id'])['effective']
+
+
+def payload(schema, value, label="payload"):
+    with tempfile.TemporaryDirectory() as folder:
+        path = Path(folder) / 'payload.json'
+        path.write_text(json.dumps({'schema': schema, 'value': value}))
+        rust_contract('payload', '--input', str(path))
 
 
 @contextmanager
