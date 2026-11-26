@@ -32,11 +32,26 @@ screen, exposing rows of holes. An amber display flex is visible on the right.
 The base L2 is supplied without an enclosure and accepts an external Li-ion
 battery. [Official model comparison][models]
 
-Bare-board length, width, thickness, mass, ingress rating and supported rotation
-angles are unverified. The front photograph does not locate the individual
-buttons, USB-C, Grove, battery connector or microSD slot along the board edges.
-The folded-antenna dimensions and weight in the series specification are not
-identified as bare-board measurements.
+**Dimensions and weight.** Seeed specifies **87.5 mm long × 69 mm wide ×
+26.6 mm thick** with the LoRa antenna folded, and a device weight of **171.5 g**.
+These are the assembled device figures. The base L2 comparison lists no shell
+and an external battery. Its PCB outline, populated thickness and weight are
+not dimensioned separately. The cited specification gives no ingress rating.
+[Specification][mechanical-spec] · [Model comparison][models]
+
+**Controls and connectors.** Hold the screen facing you, with the text upright
+and USB-C at the bottom. The vendor labels the illustrated assembly **Wio
+Tracker L2 Pro**. The component-side PCB view looks from the back, so its left
+edge corresponds to the right edge in the front view.
+
+| Where to look | What the official diagrams label |
+| --- | --- |
+| Right edge, top to bottom | Power switch → User/Boot button → microSD slot → RST (reset) button. |
+| Bottom edge, component-side view, left to right | Grove → solar connector → USB-C on the PCB. The enclosure drawing labels the Grove and USB-C openings. |
+| Component side, lower right in the rear view | Speaker connector above battery connector. |
+
+The series specification also lists a wake-up button. Its location is not
+labelled in either diagram. [Annotated PCB layout][pcb-view] · [Annotated exterior][controls-view]
 
 ## Platform
 
@@ -165,6 +180,9 @@ Expected: Both transports identify the same node and report the same region.
 - [Seeed L2 introduction — board specifications and signal assignments][vendor]
 - [Version comparison — base L2 configuration and purchase availability][models]
 - [Official L2 front photograph — bare-board display assembly][front]
+- [Seeed specification — folded dimensions and assembled weight][mechanical-spec]
+- [Seeed PCB diagram — component-side controls and connectors][pcb-view]
+- [Seeed exterior diagram — front-facing button order][controls-view]
 - [Seeed getting-started guide — Meshtastic pairing and network configuration][getting-started]
 - [Hardware notes — source assertions for the specifications][notes]
 - [Pin reference — grouped wiring and boot constraints][pins]
@@ -189,3 +207,7 @@ Expected: Both transports identify the same node and report the same region.
 [example]: targets/examples/wifi_scan/main/main.c
 [client]: targets/clients/l2_meshtastic.py
 [target]: targets/target.json
+
+[mechanical-spec]: https://wiki.seeedstudio.com/meshtastic_wio_tracker_l2_intro/#specification
+[pcb-view]: https://files.seeedstudio.com/wiki/SenseCAP/Wio_Tracker_L2/L2DeviceComponent9.7(1).png
+[controls-view]: https://files.seeedstudio.com/wiki/SenseCAP/Wio_Tracker_L2/L2DeviceComponent29.7(2).png
